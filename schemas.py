@@ -1,22 +1,29 @@
 import enum
-from pydantic import BaseModel, Field
-from typing import Optional
+from pydantic import BaseModel, Field, validator
+from typing import Optional, List
+
+class UserBase(BaseModel):
+    username: str = Field(..., description="username", max_length=24)
+    password: str = Field(..., min_length=8, description="user password")
+    available_money: float
+
+    @validator("password")
+    def validate_password(cls, value):
+        # Check if the username contains at least one uppercase letter
+        if not any(char.isupper() for char in value):
+            raise ValueError("Password must contain at least one uppercase letter")
+
+        # Check if the username contains at least one special character
+        if not any(char in "!@#$%^&*().,;`+<>" for char in value):
+            raise ValueError("Password must contain at least one special character")
+
+        return value
 
 
-'''Ejemplo
-class TeamBase(BaseModel):
-    name: str
-    country: str
-    description: Optional[str] = None
-
-
-class TeamCreate(TeamBase):
+class UserCreate(UserBase):
     pass
 
 
-class Team(TeamBase):
-    id: int
-
+class User(UserBase):
     class Config:
         orm_mode = True
-'''
