@@ -41,5 +41,11 @@ def read_user(username: str):
 
 # Create new user
 @app.post("/user")
-def create_user(user: schemas.UserCreate):
-    return {"user create_user function from repository"}
+def create_user(user: str):
+    return {"use create_user function from repository"}
+
+
+# Delete an user by username
+@app.delete("/user/{username}")
+def delete_user(user: str):
+    return {"use delete_user function from repository"}
