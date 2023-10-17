@@ -12,15 +12,15 @@
           </p>
           <div class="form-group">
             <label for="username">Username</label>
-            <input type="text" id="username" v-model="username" class="form-control smaller-input"
+            <input type="text" id="username" v-model="addUserForm.username" class="form-control smaller-input"
                    placeholder="Username" required>
           </div>
           <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" id="password" v-model="password" class="form-control smaller-input"
+            <input type="password" id="password" v-model="addUserForm.password" class="form-control smaller-input"
                    placeholder="Password" required>
           </div>
-          <button @click="signin" class="btn btn-primary">SIGN UP</button>
+          <button @click="createUser" class="btn btn-primary">SIGN UP</button>
         </div>
         <div class="signin-form" v-else>
           <h2>Create new Account</h2>
@@ -61,7 +61,6 @@ export default {
       creatingAccount: false,
       money_available: null,
       addUserForm: {
-        email: null,
         password: null,
         username: null
       },
@@ -73,7 +72,6 @@ export default {
       this.creatingAccount = true
       this.addUserForm.username = null
       this.addUserForm.password = null
-      this.addUserForm.email = null
     },
     checkLogin () {
       const path = 'http://127.0.0.1:8000/account/' + this.addUserForm.email
@@ -96,16 +94,16 @@ export default {
       this.$router.push({path: '/'})
       window.location.reload()
     },
-    createAccount () {
-      const path = 'http://127.0.0.1:8000/account'
+    createUser () {
+      const path = 'http://127.0.0.1:8000/user'
       const parameters = {
         username: this.addUserForm.username,
         password: this.addUserForm.password,
-        email: this.addUserForm.email
+        available_money: 0
+
       }
       axios.post(path, parameters)
         .then((res) => {
-          res.data.available_money = 200
           console.log('Account created')
           alert('Account created successfully')
           this.changeView()
