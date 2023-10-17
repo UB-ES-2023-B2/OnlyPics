@@ -1,7 +1,9 @@
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 
-import repository, models, schemas
+#import repository
+import models, schemas
+
 from database import SessionLocal, engine
 
 models.Base.metadata.create_all(bind=engine) # Creem la base de dades amb els models que hem definit a SQLAlchemy
