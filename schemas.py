@@ -1,5 +1,4 @@
 import enum
-from models import sports_list, categories_list
 from pydantic import BaseModel, Field
 from typing import Optional
 
