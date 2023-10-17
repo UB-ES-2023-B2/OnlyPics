@@ -40,6 +40,14 @@ templates = Jinja2Templates(directory="frontend/dist")
 async def serve_index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
+@app.get("/login")
+async def login(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+@app.get("/signup")
+async def signup(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
 
 # Get all users
 @app.get("/users/")
