@@ -6,10 +6,24 @@ import models, schemas
 import repository
 
 from database import SessionLocal, engine
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, Request
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 
 models.Base.metadata.create_all(bind=engine)  # Creem la base de dades amb els models que hem definit a SQLAlchemy
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[""],
+    allow_credentials=True,
+    allow_methods=[""],
+    allow_headers=["*"],
+)
+
+app.mount("/static", StaticFiles(directory="frontend/dist/static"), name="static")
 
 
 # Dependency to get a DB session
@@ -21,9 +35,10 @@ def get_db():
         db.close()
 
 
+templates = Jinja2Templates(directory="frontend/dist")
 @app.get("/")
-async def read_root():
-    return {"Hello": "World"}
+async def serve_index(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 # Get all users
