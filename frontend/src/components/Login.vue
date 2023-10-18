@@ -23,21 +23,21 @@
           <button @click="createUser" class="btn btn-primary">SIGN UP</button>
         </div>
         <div class="signin-form" v-else>
-          <h2>Create new Account</h2>
+          <h2>Log In</h2>
           <p class="text-center">
             New? <a href="#" @click="toggleView">Sign In</a>
           </p>
           <div class="form-group">
             <label for="username">Username</label>
-            <input type="text" id="username" v-model="username" class="form-control smaller-input"
+            <input type="text" id="username" v-model="addUserForm.username" class="form-control smaller-input"
                    placeholder="Username" required>
           </div>
           <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" id="password" v-model="password" class="form-control smaller-input"
+            <input type="password" id="password" v-model="addUserForm.password" class="form-control smaller-input"
                    placeholder="Password" required>
           </div>
-          <button @click="signIn" class="btn btn-primary">LOG IN</button>
+          <button @click="checkLogin" class="btn btn-primary">LOG IN</button>
         </div>
       </div>
     </div>
@@ -74,7 +74,7 @@ export default {
       this.addUserForm.password = null
     },
     checkLogin () {
-      const path = 'http://127.0.0.1:8000/account/' + this.addUserForm.email
+      const path = 'http://127.0.0.1:8000/userN/' + this.addUserForm.username
       axios.get(path)
         .then((res) => {
           this.logged = true
@@ -82,8 +82,9 @@ export default {
           this.money_available = res.data.money_available
           this.$router.push({
             path: '/',
-            query: {email: this.email, logged: this.logged, money_available: this.money_available}
+            query: {money_available: this.money_available}
           })
+          alert('Login done')
         })
         .catch((error) => {
           console.error(error)
@@ -106,12 +107,13 @@ export default {
         .then((res) => {
           console.log('Account created')
           alert('Account created successfully')
-          this.changeView()
+          this.$router.push({path: '/'})
+          window.location.reload()
         })
         .catch((error) => {
           console.log('Se ha producido un error')
           console.log(error)
-          alert('This username already exists')
+          alert('Error creating the account')
         })
     },
     toggleView () {
