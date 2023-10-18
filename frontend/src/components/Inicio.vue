@@ -2,7 +2,6 @@
   <div>
     <!-- Encabezado -->
     <div class="header">
-      <h1>Onlypics</h1>
       <div class="filters">
         <!-- Filtrado -->
         <div class="filter">
