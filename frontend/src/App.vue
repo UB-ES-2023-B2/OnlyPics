@@ -1,13 +1,16 @@
 <template>
   <div id="app">
     <img src="./assets/logo.png">
+    <HeaderMenu/>
     <router-view/>
   </div>
 </template>
 
 <script>
+import HeaderMenu from '@/components/HeaderMenu.vue'
 export default {
-  name: 'App'
+  name: 'App',
+  components: {HeaderMenu}
 }
 </script>
 
