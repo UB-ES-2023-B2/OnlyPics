@@ -20,6 +20,10 @@
             <input type="password" id="password" v-model="addUserForm.password" class="form-control smaller-input"
                    placeholder="Password" required>
           </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" v-model="email" class="form-control smaller-input" placeholder="Email" required>
+          </div>
           <button @click="createUser" class="btn btn-primary">SIGN UP</button>
         </div>
         <div class="signin-form" v-else>
@@ -28,9 +32,8 @@
             New? <a href="#" @click="toggleView">Sign In</a>
           </p>
           <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" v-model="addUserForm.username" class="form-control smaller-input"
-                   placeholder="Username" required>
+            <label for="email">Email</label>
+            <input type="email" id="email" v-model="email" class="form-control smaller-input" placeholder="Email" required>
           </div>
           <div class="form-group">
             <label for="password">Password</label>
@@ -62,7 +65,8 @@ export default {
       money_available: null,
       addUserForm: {
         password: null,
-        username: null
+        username: null,
+        email: null
       },
       view: true
     }
@@ -72,9 +76,10 @@ export default {
       this.creatingAccount = true
       this.addUserForm.username = null
       this.addUserForm.password = null
+      this.addUserForm.email = null
     },
     checkLogin () {
-      const path = 'http://127.0.0.1:8000/userN/' + this.addUserForm.username
+      const path = 'http://127.0.0.1:8000/userN/' + this.addUserForm.email
       axios.get(path)
         .then((res) => {
           this.logged = true
@@ -100,6 +105,7 @@ export default {
       const parameters = {
         username: this.addUserForm.username,
         password: this.addUserForm.password,
+        email: this.addUserForm.email,
         available_money: 0
 
       }
@@ -154,8 +160,6 @@ export default {
   max-width: 300px;
   margin: 20px;
   padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
   display: flex;
   flex-direction: column;
   justify-content: center;
