@@ -136,9 +136,11 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%; /* Fes que l'amplada sigui del 100% de la pantalla */
+  max-width: 100%; /* Assegura't que no superi l'amplada de la pantalla */
+  box-sizing: border-box; /* Inclou els marges i borde en l'amplada total */
   height: 100vh;
-  flex-wrap: wrap;
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
 }
 

@@ -1,8 +1,8 @@
 <template>
   <div>
+    <HeaderMenu title="Random"/>
     <!-- Encabezado -->
     <div class="header">
-      <h1>Onlypics</h1>
       <div class="filters">
         <!-- Filtrado -->
         <div class="filter">
@@ -36,12 +36,16 @@
         </div>
       </div>
     </div>
+    <footer-view/>
   </div>
 </template>
 
 <script>
+import HeaderMenu from '@/components/HeaderMenu.vue'
+import FooterView from '@/components/FooterView.vue'
 export default {
   name: 'PaginaInicio',
+  components: {FooterView, HeaderMenu},
   data () {
     return {
       filtro: 'ambas', // Valor por defecto del filtro
@@ -78,7 +82,6 @@ export default {
 /* Estilos CSS */
 .header {
   text-align: center;
-  margin-bottom: 20px;
 }
 
 .filters {
