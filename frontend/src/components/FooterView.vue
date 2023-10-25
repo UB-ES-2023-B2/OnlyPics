@@ -8,7 +8,6 @@
           <li><router-link to="/account">Account</router-link></li>
         </ul>
       </div>
-
       <div class="footer-section">
         <h2>Contact</h2>
         <p>Adress: ***</p>
@@ -20,8 +19,8 @@
 
 <script>
 export default {
-  name: 'FooterView',
-};
+  name: 'FooterView'
+}
 </script>
 
 <style scoped>
@@ -34,10 +33,10 @@ footer {
 .footer-content {
   display: flex;
   justify-content: space-between;
-	align-items: center;
   max-width: 1200px;
-	height: 100px;
   margin: 0 auto;
+  height: 120px;
+  align-items: center;
 }
 
 .footer-section {
@@ -57,5 +56,4 @@ a {
   text-decoration: none;
   color: #fff;
 }
-
 </style>

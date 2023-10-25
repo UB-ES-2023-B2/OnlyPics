@@ -58,17 +58,19 @@ h2 {
   align-items: center;
   justify-content: center;
   gap: 50px;
-  height: 100px;
+  height: 80px;
+}
+
+header {
+  background-color: #365b6d;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 header a{
   text-decoration: none;
   list-style: none;
   color: white;
-}
-
-header {
-  background-color: #365b6d;
 }
 
 /*SEARCH-BAR*/
