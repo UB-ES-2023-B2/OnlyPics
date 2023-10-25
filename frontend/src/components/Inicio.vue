@@ -1,6 +1,6 @@
 <template>
   <div>
-    <HeaderMenu title="Random"/>
+    <HeaderMenu title="Random" money="0.0"/>
     <!-- Encabezado -->
     <div class="header">
       <div class="filters">

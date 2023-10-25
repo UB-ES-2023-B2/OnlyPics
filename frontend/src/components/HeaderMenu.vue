@@ -11,6 +11,7 @@
         </div>
         <a href="#" class="buy-icon">
           <img src="@/assets/icono-carro.png" alt="Carro" @click="descargar" class="buy-button">
+          <p class="nav-money">{{ money }} €</p>
         </a>
         <!--<router-link to="/">Log In</router-link>-->
         <div class="dropdown">
@@ -39,7 +40,8 @@
 export default {
   name: 'HeaderMenu',
   props: {
-    title: String
+    title: String,
+    money: Number
   }
 }
 </script>
@@ -148,7 +150,7 @@ header a{
 }
 
 .buy-button {
-  width: 40px;
+  width: 30px;
 }
 
 </style>
