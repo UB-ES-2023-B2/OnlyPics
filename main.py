@@ -23,8 +23,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-#app.mount("/static", StaticFiles(directory="frontend/dist/static"), name="static")
-app.mount("/static", StaticFiles(directory="frontend/static"), name="static")
+app.mount("/static", StaticFiles(directory="frontend/dist/static"), name="static")
 
 
 # Dependency to get a DB session
