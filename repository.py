@@ -19,6 +19,7 @@ def create_team(db: Session, team: schemas.TeamCreate):
     return db_team
 '''
 
+
 # Get user by his ID
 def get_user(db: Session, user_id: int):
     return db.query(models.User).filter(models.User.id == user_id).first()
@@ -29,6 +30,11 @@ def get_user_by_username(db: Session, username: str):
     return db.query(models.User).filter(models.User.username == username).first()
 
 
+# Get user by his email
+def get_user_by_email(db: Session, email: str):
+    return db.query(models.User).filter(models.User.email == email).first()
+
+
 # Get all users
 def get_users(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.User).offset(skip).limit(limit).all()
@@ -36,7 +42,7 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
 
 # Add new user
 def create_user(db: Session, user: schemas.UserCreate):
-    db_user = models.User(username=user.username, available_money=user.available_money)
+    db_user = models.User(username=user.username, available_money=user.available_money, email=user.email)
     db_user.password = user.password
 
     try:
@@ -48,10 +54,12 @@ def create_user(db: Session, user: schemas.UserCreate):
         db.rollback()
         return {"message": "An error occurred creating the account.", "error": str(e)}, 500
 
+
 def update_user(db: Session, db_user: models.User, user: schemas.UserCreate):
     try:
         db_user.username = user.username
         db_user.password = user.password
+        db_user.email = user.email
         db_user.available_money = user.available_money
         db.commit()
         db.refresh(db_user)
