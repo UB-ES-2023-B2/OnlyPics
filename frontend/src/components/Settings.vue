@@ -2,7 +2,7 @@
   <div>
     <!-- Encabezado -->
 
-    <!-- TODO Botón para ir a la ventana de Inicio -->
+    <!-- Botón para ir a la ventana de Inicio -->
 
     <div class="bloque">
       <div class="user-info-form">
