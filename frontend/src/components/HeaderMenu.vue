@@ -5,8 +5,8 @@
         <h1><router-link to="/inicio">OnlyPics</router-link></h1>
         <div class="search-bar">
             <div class="search-bar">
-              <input type="text" placeholder="Cerca..." class="search-input">
-              <button class="search-button">Cerca</button>
+              <input type="text" placeholder="Search..." class="search-input">
+              <button class="search-button">Search</button>
             </div>
         </div>
         <a href="#" class="buy-icon">

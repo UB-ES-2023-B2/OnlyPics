@@ -1,25 +1,25 @@
 <template>
   <div>
-    <HeaderMenu title="Random" money="0.0"/>
+    <HeaderMenu title="Random" :money="userState.user.available_money"/>
     <!-- Encabezado -->
     <div class="header">
       <div class="filters">
         <!-- Filtrado -->
         <div class="filter">
-          <label>Filtrar por:</label>
+          <label>Filter by:</label>
           <select v-model="filtro">
-            <option value="publicas">Públicas</option>
-            <option value="privadas">Privadas</option>
-            <option value="ambas">Ambas</option>
+            <option value="publicas">Public</option>
+            <option value="privadas">Private</option>
+            <option value="ambas">Both</option>
           </select>
         </div>
 
         <!-- Orden -->
         <div class="orden">
-          <label>Ordenar por:</label>
+          <label>Sort by:</label>
           <select v-model="orden">
-            <option value="popularidad">Popularidad</option>
-            <option value="coste">Coste</option>
+            <option value="popularidad">Popularity</option>
+            <option value="coste">Cost</option>
           </select>
         </div>
       </div>
@@ -43,8 +43,14 @@
 <script>
 import HeaderMenu from '@/components/HeaderMenu.vue'
 import FooterView from '@/components/FooterView.vue'
+import userState from '@/userState'
 export default {
   name: 'PaginaInicio',
+  computed: {
+    userState () {
+      return userState
+    }
+  },
   components: {FooterView, HeaderMenu},
   data () {
     return {
