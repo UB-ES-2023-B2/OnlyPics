@@ -2,24 +2,31 @@
   <footer>
     <div class="footer-content">
       <div class="footer-section">
-        <h2>Links</h2>
+        <h2>Navigation</h2>
         <ul>
-          <li><router-link to="/">Home</router-link></li>
-          <li><router-link to="/account">Account</router-link></li>
+          <li><router-link to="/inicio">Home  <i class="fas fa-house" style="margin-left: 7px"></i></router-link></li>
+          <li><router-link to="/account">Account <i class="fas fa-circle-user" style="margin-left: 7px"></i></router-link></li>
         </ul>
       </div>
       <div class="footer-section">
         <h2>Contact</h2>
-        <p>Adress: ***</p>
-        <p>E-mail: ***</p>
+        <p>Barcelona, Spain<i class="fa-solid fa-location-dot" style="margin-left: 10px"></i></p>
+        <p style="margin-left: 30px">{{userState.user.email}} <i class="fa-solid fa-envelope" style="margin-left: 7px"></i></p>
       </div>
     </div>
   </footer>
 </template>
 
 <script>
+import userState from '@/userState'
+
 export default {
-  name: 'FooterView'
+  name: 'FooterView',
+  computed: {
+    userState () {
+      return userState
+    }
+  }
 }
 </script>
 
@@ -37,6 +44,7 @@ footer {
   margin: 0 auto;
   height: 120px;
   align-items: center;
+  font-family: 'Courgette', cursive;
 }
 
 .footer-section {
