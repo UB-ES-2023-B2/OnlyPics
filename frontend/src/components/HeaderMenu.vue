@@ -17,7 +17,7 @@
         <div class="dropdown">
           <button class="dropbtn">{{ userState.user.username }} <i class="fas fa-user" style="margin-left: 7px"></i></button>
           <div class="dropdown-content">
-            <a href="#">Profile <i class="fas fa-circle-user" style="margin-left: 20px"></i></a>
+            <router-link to="/profile">Profile <i class="fas fa-circle-user" style="margin-left: 20px"></i></router-link>
             <a href="#">Settings <i class="fas fa-cog" style="margin-left: 10px"></i></a>
             <a href="/">Log Out <i class="fas fa-sign-out-alt" style="margin-left: 13px"></i></a>
           </div>
@@ -27,8 +27,8 @@
         <h2>{{ title }}</h2>
         <nav>
           <router-link to="/inicio">Home</router-link> /
-          <router-link to="/account">Search</router-link> /
-          <router-link to="/">{{ title }}</router-link>
+          <a href ="#">Search</a> /
+          <a href="#">{{ title }}</a>
         </nav>
       </div>
     </header>

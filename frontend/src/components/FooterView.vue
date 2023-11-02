@@ -5,7 +5,7 @@
         <h2>Navigation</h2>
         <ul>
           <li><router-link to="/inicio">Home  <i class="fas fa-house" style="margin-left: 7px"></i></router-link></li>
-          <li><router-link to="/account">Account <i class="fas fa-circle-user" style="margin-left: 7px"></i></router-link></li>
+          <li><router-link to="/profile">Account <i class="fas fa-circle-user" style="margin-left: 7px"></i></router-link></li>
         </ul>
       </div>
       <div class="footer-section">
