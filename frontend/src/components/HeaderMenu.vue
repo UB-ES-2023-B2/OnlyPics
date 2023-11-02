@@ -12,7 +12,7 @@
          <div class="shopping-cart" style="margin-top: 10px">
           <a href="#"><i class="fa-sharp fas fa-cart-shopping fa-xl" style="margin-left: 10px"></i></a>
          </div>
-          <p class="nav-money">35{{ money }}<i class="fa-solid fa-sack-dollar fa-bounce" style="margin-left: 7px"></i></p>
+          <p class="nav-money">{{ money }}<i class="fa-solid fa-sack-dollar fa-bounce" style="margin-left: 7px"></i></p>
         <!--<router-link to="/">Log In</router-link>-->
         <div class="dropdown">
           <button class="dropbtn">{{ userState.user.username }} <i class="fas fa-user" style="margin-left: 7px"></i></button>
