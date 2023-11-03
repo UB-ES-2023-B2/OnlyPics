@@ -12,32 +12,35 @@
           </p>
           <div class="form-group">
             <label for="username">Username</label>
-            <input type="text" id="username" v-model="username" class="form-control smaller-input"
+            <input type="text" id="username" v-model="addUserForm.username" class="form-control smaller-input"
                    placeholder="Username" required>
           </div>
           <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" id="password" v-model="password" class="form-control smaller-input"
+            <input type="password" id="password" v-model="addUserForm.password" class="form-control smaller-input"
                    placeholder="Password" required>
           </div>
-          <button @click="signin" class="btn btn-primary">SIGN UP</button>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" v-model="addUserForm.email" class="form-control smaller-input" placeholder="Email" required>
+          </div>
+          <button @click="createUser" class="btn btn-primary">SIGN UP</button>
         </div>
         <div class="signin-form" v-else>
-          <h2>Create new Account</h2>
+          <h2>Log In</h2>
           <p class="text-center">
             New? <a href="#" @click="toggleView">Sign In</a>
           </p>
           <div class="form-group">
             <label for="username">Username</label>
-            <input type="text" id="username" v-model="username" class="form-control smaller-input"
-                   placeholder="Username" required>
+            <input type="username" id="username" v-model="addUserForm.username" class="form-control smaller-input" placeholder="Username" required>
           </div>
           <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" id="password" v-model="password" class="form-control smaller-input"
+            <input type="password" id="password" v-model="addUserForm.password" class="form-control smaller-input"
                    placeholder="Password" required>
           </div>
-          <button @click="signIn" class="btn btn-primary">LOG IN</button>
+          <button @click="checkLogin" class="btn btn-primary">LOG IN</button>
         </div>
       </div>
     </div>
@@ -61,9 +64,9 @@ export default {
       creatingAccount: false,
       money_available: null,
       addUserForm: {
-        email: null,
         password: null,
-        username: null
+        username: null,
+        email: null
       },
       view: true
     }
@@ -76,16 +79,23 @@ export default {
       this.addUserForm.email = null
     },
     checkLogin () {
-      const path = 'http://127.0.0.1:8000/account/' + this.addUserForm.email
+      const path = 'http://127.0.0.1:8000/userN/' + this.addUserForm.username
+
+      // Send a request to get the user's information
       axios.get(path)
         .then((res) => {
-          this.logged = true
-          console.log(path)
-          this.money_available = res.data.money_available
-          this.$router.push({
-            path: '/',
-            query: {email: this.email, logged: this.logged, money_available: this.money_available}
-          })
+          // Check if the provided password matches the user's password
+          if (this.addUserForm.password === res.data.password) {
+            // Password is correct, navigate to the "/inicio" page
+            this.$router.push({
+              path: '/inicio',
+              query: { money_available: res.data.available_money }
+            })
+            alert('Succesfully logged')
+          } else {
+            // Password is incorrect, show an error message
+            alert('Incorrect Password')
+          }
         })
         .catch((error) => {
           console.error(error)
@@ -96,24 +106,26 @@ export default {
       this.$router.push({path: '/'})
       window.location.reload()
     },
-    createAccount () {
-      const path = 'http://127.0.0.1:8000/account'
+    createUser () {
+      const path = 'http://127.0.0.1:8000/user'
       const parameters = {
         username: this.addUserForm.username,
         password: this.addUserForm.password,
-        email: this.addUserForm.email
+        email: this.addUserForm.email,
+        available_money: 0
+
       }
       axios.post(path, parameters)
         .then((res) => {
-          res.data.available_money = 200
           console.log('Account created')
           alert('Account created successfully')
-          this.changeView()
+          this.$router.push({path: '/'})
+          window.location.reload()
         })
         .catch((error) => {
           console.log('Se ha producido un error')
           console.log(error)
-          alert('This username already exists')
+          alert('Error creating the account')
         })
     },
     toggleView () {
@@ -130,9 +142,11 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%; /* Fes que l'amplada sigui del 100% de la pantalla */
+  max-width: 100%; /* Assegura't que no superi l'amplada de la pantalla */
+  box-sizing: border-box; /* Inclou els marges i borde en l'amplada total */
   height: 100vh;
-  flex-wrap: wrap;
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
 }
 
@@ -154,8 +168,6 @@ export default {
   max-width: 300px;
   margin: 20px;
   padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
   display: flex;
   flex-direction: column;
   justify-content: center;
