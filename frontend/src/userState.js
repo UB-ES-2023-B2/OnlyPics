@@ -7,7 +7,8 @@ const userState = {
     profile_pic: null,
     biography: null,
     name: null,
-    lastname: null
+    lastname: null,
+    photos: []
   }
 }
 export default userState

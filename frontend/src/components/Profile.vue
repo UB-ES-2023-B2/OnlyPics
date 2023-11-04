@@ -23,10 +23,13 @@
     </div>
     <!-- Uploaded Pics Grid -->
     <div class="pics-grid">
-      <!-- Display user's uploaded pics in a grid -->
-      <!-- You can iterate through the pics and display them here -->
+      <p>{{userState.user.photos}}</p>
+      <div v-for="photo in userState.user.photos" :key="photo.id" class="photo">
+        <p>{{ photo.url }}</p>
+        <img :src="require('@/assets/' + photo.url)" :alt="photo.title || 'Image Description'">
+        <p>{{ photo.title }}</p>
+      </div>
     </div>
-
     <footer-view />
   </div>
 </template>
@@ -35,14 +38,33 @@
 import FooterView from '@/components/FooterView.vue'
 import userState from '@/userState'
 import HeaderMenu from '@/components/HeaderMenu.vue'
+import axios from 'axios'
 
 export default {
   name: 'Profile',
   components: {HeaderMenu, FooterView},
-  computed: {
-    userState () {
-      return userState
+  data () {
+    return {
+      userState: userState
     }
+  },
+  methods: {
+    async fetchUserPhotos (username) {
+      try {
+        const response = await axios.get('/user/' + username + '/photos')
+        const photos = response.data
+        console.log(photos)
+        return photos
+      } catch (error) {
+        console.error('Error fetching user photos', error)
+      }
+    }
+  },
+  created () {
+    const username = userState.user.username
+    const photos = this.fetchUserPhotos(username)
+    this.userState.user.photos = photos
+    console.log(userState.user.photos)
   }
 }
 </script>
@@ -110,5 +132,11 @@ export default {
 
   .pics-grid {
     /* Add styles for the pics grid here */
+    font-family: 'Courgette', cursive;
+    margin-top: 60px;
+    font-size: 20px;
+    text-align: left;
+    margin-left: 30px;
+
   }
 </style>

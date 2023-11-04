@@ -78,6 +78,14 @@ def delete_user(db: Session, db_user: models.User):
         db.rollback()
         return {"message": "An error occurred deleting the account.", "error": str(e)}, 500
 
+def get_user_photos(db: Session, db_user: models.User):
+    try:
+        db_photos = db_user.photos
+        return db_photos
+    except Exception as e:
+        db.rollback()
+        return {"message": "An error occurred retrieving the user's photos.", "error": str(e)}, 500
+
 
 def get_photo(db: Session, photo_id: int):
     return db.query(models.Photo).filter(models.Photo.id == photo_id).first()
@@ -97,7 +105,9 @@ def get_user_by_photo(db: Session, photo: models.Photo):
 
 def create_photo(db: Session, photo: schemas.PhotoCreate, user_id: str):
     db_photo = models.Photo(url=photo.url, title=photo.title, price=photo.price, user_id=user_id)
+    db_user = db.query(models.User).filter(models.User.username == user_id).first()
     try:
+        db_user.photos.append(db_photo)
         db.add(db_photo)
         db.commit()
         db.refresh(db_photo)
