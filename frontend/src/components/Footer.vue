@@ -8,6 +8,7 @@
           <li><router-link to="/account">Account</router-link></li>
         </ul>
       </div>
+
       <div class="footer-section">
         <h2>Contact</h2>
         <p>Adress: ***</p>
@@ -19,7 +20,7 @@
 
 <script>
 export default {
-  name: 'FooterView'
+  name: 'Footer'
 }
 </script>
 
@@ -28,6 +29,7 @@ footer {
   background-color: #2c3e50;
   color: #fff;
   padding: 20px 0;
+  margin-top: 40px;
 }
 
 .footer-content {
@@ -35,8 +37,6 @@ footer {
   justify-content: space-between;
   max-width: 1200px;
   margin: 0 auto;
-  height: 120px;
-  align-items: center;
 }
 
 .footer-section {
@@ -56,4 +56,5 @@ a {
   text-decoration: none;
   color: #fff;
 }
+
 </style>

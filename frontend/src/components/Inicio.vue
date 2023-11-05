@@ -1,5 +1,6 @@
 <template>
   <body style="background-color: #EEA3FF;">
+      <HeaderMenu title="Random" money="0.0"/>
       <!-- Encabezado -->
       <div class="header">
         <div class="filter-button-container">
@@ -55,12 +56,18 @@
         </div>
       </div>
   </body>
+  </div>
+    <footer-view/>
+  </div>
 </template>
 
 
 <script>
+import HeaderMenu from '@/components/HeaderMenu.vue'
+import FooterView from '@/components/FooterView.vue'
 export default {
   name: 'PaginaInicio',
+  components: {FooterView, HeaderMenu},
   data () {
     return {
       mostrarFiltros: false, //Variable para controlar la visibilidad de los filtros
@@ -156,7 +163,6 @@ export default {
 
 .header {
   text-align: center;
-  margin-bottom: 20px;
 }
 
 .filter-button-container {

@@ -22,7 +22,7 @@
           </div>
           <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" id="email" v-model="email" class="form-control smaller-input" placeholder="Email" required>
+            <input type="email" id="email" v-model="addUserForm.email" class="form-control smaller-input" placeholder="Email" required>
           </div>
           <button @click="createUser" class="btn btn-primary">SIGN UP</button>
         </div>
@@ -32,8 +32,8 @@
             New? <a href="#" @click="toggleView">Sign In</a>
           </p>
           <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" v-model="email" class="form-control smaller-input" placeholder="Email" required>
+            <label for="username">Username</label>
+            <input type="username" id="username" v-model="addUserForm.username" class="form-control smaller-input" placeholder="Username" required>
           </div>
           <div class="form-group">
             <label for="password">Password</label>
@@ -79,17 +79,23 @@ export default {
       this.addUserForm.email = null
     },
     checkLogin () {
-      const path = 'http://127.0.0.1:8000/userN/' + this.addUserForm.email
+      const path = 'http://127.0.0.1:8000/userN/' + this.addUserForm.username
+
+      // Send a request to get the user's information
       axios.get(path)
         .then((res) => {
-          this.logged = true
-          console.log(path)
-          this.money_available = res.data.money_available
-          this.$router.push({
-            path: '/',
-            query: {money_available: this.money_available}
-          })
-          alert('Login done')
+          // Check if the provided password matches the user's password
+          if (this.addUserForm.password === res.data.password) {
+            // Password is correct, navigate to the "/inicio" page
+            this.$router.push({
+              path: '/inicio',
+              query: { money_available: res.data.available_money }
+            })
+            alert('Succesfully logged')
+          } else {
+            // Password is incorrect, show an error message
+            alert('Incorrect Password')
+          }
         })
         .catch((error) => {
           console.error(error)
@@ -136,9 +142,11 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%; /* Fes que l'amplada sigui del 100% de la pantalla */
+  max-width: 100%; /* Assegura't que no superi l'amplada de la pantalla */
+  box-sizing: border-box; /* Inclou els marges i borde en l'amplada total */
   height: 100vh;
-  flex-wrap: wrap;
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
 }
 
