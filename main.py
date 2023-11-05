@@ -36,13 +36,17 @@ def get_db():
 
 
 templates = Jinja2Templates(directory="frontend/dist")
+
+
 @app.get("/")
 async def serve_index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
+
 @app.get("/login")
 async def login(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
+
 
 @app.get("/signup")
 async def signup(request: Request):
@@ -54,8 +58,9 @@ async def signup(request: Request):
 def read_users(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     return repository.get_users(db, skip=skip, limit=limit)
 
+
 # Get user by username
-@app.get("/userN/{username}", response_model=schemas.User)
+@app.get("/userN/{username}")
 def read_user(username: str, db: Session = Depends(get_db)):
     user = repository.get_user_by_username(db, username=username)
     if not user:
@@ -63,8 +68,17 @@ def read_user(username: str, db: Session = Depends(get_db)):
     return user
 
 
+# Get user by email
+@app.get("/user/{email}")
+def read_user(email: str, db: Session = Depends(get_db)):
+    user = repository.get_user_by_email(db, email=email)
+    if not user:
+        raise HTTPException(status_code=404, detail="Email not found")
+    return user
+
+
 # Create new user
-@app.post("/user",summary="Create new user", response_model=schemas.User)
+@app.post("/user", summary="Create new user", response_model=schemas.User)
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db_user = repository.get_user_by_username(db, username=user.username)
     if db_user:
@@ -72,7 +86,8 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     else:
         return repository.create_user(db=db, user=user)
 
-@app.put('/userN/{username}')
+
+@app.put('/userN/{username}', response_model=schemas.User)
 def update_user(username: str, user_update: schemas.UserCreate, db: Session = Depends(get_db)):
     user = repository.get_user_by_username(db, username=username)
     if not user:
@@ -80,8 +95,9 @@ def update_user(username: str, user_update: schemas.UserCreate, db: Session = De
     updated_user = repository.update_user(db=db, db_user=user, user=user_update)
     return updated_user
 
+
 # Delete a user by username
-@app.delete("/user/{username}")
+@app.delete("/user/{username}", response_model=schemas.User)
 def delete_user(username: str, db: Session = Depends(get_db)):
     db_user = repository.get_user_by_username(db=db, username=username)
     if db_user:
@@ -91,23 +107,35 @@ def delete_user(username: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Account not found")
 
 
+@app.get("/user/{username}/photos")
+def read_user_photos(username: str, db: Session = Depends(get_db)):
+    db_user = repository.get_user_by_username(db=db, username=username)
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User not found")
+    else:
+        return repository.get_user_photos(db=db, db_user=db_user)
+
+
 @app.get("/photos/")
 def read_photos(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     return repository.get_photos(db, skip=skip, limit=limit)
 
-@app.get("/photos/{photo_title}", response_model=schemas.Photo)
-def read_photo_by_title(photo_title: str,db: Session = Depends(get_db)):
+
+@app.get("/photos/{photo_title}")
+def read_photo_by_title(photo_title: str, db: Session = Depends(get_db)):
     photo = repository.get_photo_by_title(db, photo_title=photo_title)
     if not photo:
         raise HTTPException(status_code=404, detail="Photo not found")
     return photo
 
-@app.get("/photos/{photo_id}/", response_model=schemas.Photo)
+
+@app.get("/photos/{photo_id}/")
 def read_photo_by_id(photo_id: int, db: Session = Depends(get_db)):
     photo = repository.get_photo(db, photo_id=photo_id)
     if not photo:
         raise HTTPException(status_code=404, detail="Photo not found")
     return photo
+
 
 @app.post("/photos/")
 def create_photo(photo: schemas.PhotoCreate, user_id: str, db: Session = Depends(get_db)):
@@ -116,13 +144,15 @@ def create_photo(photo: schemas.PhotoCreate, user_id: str, db: Session = Depends
         raise HTTPException(status_code=400, detail="Photo already Exists, Use put for updating")
     return repository.create_photo(db=db, photo=photo, user_id=user_id)
 
+
 @app.delete("/photos/{photo_id}/", response_model=schemas.Photo)
 def delete_photo(photo_id: int, db: Session = Depends(get_db)):
     photo = repository.get_photo(db, photo_id)
     if not photo:
         raise HTTPException(status_code=404, detail="Photo not found")
-    repository.delete_photo(db,photo)
+    repository.delete_photo(db, photo)
     return "Photo deleated"
+
 
 @app.put("/photos/{photo_id}/", response_model=schemas.Photo)
 def update_photo(photo_id: int, photo_update: schemas.PhotoBase, user_id: str, db: Session = Depends(get_db)):
