@@ -5,21 +5,21 @@
         <h1><router-link to="/inicio">OnlyPics</router-link></h1>
         <div class="search-bar">
             <div class="search-bar">
-              <input type="text" placeholder="Cerca..." class="search-input">
-              <button class="search-button">Cerca</button>
+              <input type="text" placeholder="Search..." class="search-input">
+              <button class="search-button">Search</button>
             </div>
         </div>
-        <a href="#" class="buy-icon">
-          <img src="@/assets/icono-carro.png" alt="Carro" @click="descargar" class="buy-button">
-          <p class="nav-money">{{ money }} €</p>
-        </a>
+         <div class="shopping-cart" style="margin-top: 10px">
+          <a href="#"><i class="fa-sharp fas fa-cart-shopping fa-xl" style="margin-left: 10px"></i></a>
+         </div>
+          <p class="nav-money">{{ money }}<i class="fa-solid fa-sack-dollar fa-bounce" style="margin-left: 7px"></i></p>
         <!--<router-link to="/">Log In</router-link>-->
         <div class="dropdown">
-          <button class="dropbtn">My Account</button>
+          <button class="dropbtn">{{ userState.user.username }} <i class="fas fa-user" style="margin-left: 7px"></i></button>
           <div class="dropdown-content">
-            <a href="#">Profile</a>
-            <a href="#">Settings</a>
-            <a href="/">Log Out</a>
+            <router-link to="/profile">Profile <i class="fas fa-circle-user" style="margin-left: 20px"></i></router-link>
+            <router-link to="/settings">Settings <i class="fas fa-cog" style="margin-left: 10px"></i></router-link>
+            <a href="/">Log Out <i class="fas fa-sign-out-alt" style="margin-left: 13px"></i></a>
           </div>
         </div>
       </div>
@@ -27,21 +27,26 @@
         <h2>{{ title }}</h2>
         <nav>
           <router-link to="/inicio">Home</router-link> /
-          <router-link to="/account">Search</router-link> /
-          <router-link to="/">{{ title }}</router-link>
+          <a href ="#">Search</a> /
+          <a href="#">{{ title }}</a>
         </nav>
       </div>
     </header>
   </div>
 </template>
-
 <script>
+import userState from '@/userState'
 
 export default {
   name: 'HeaderMenu',
   props: {
     title: String,
     money: Number
+  },
+  computed: {
+    userState () {
+      return userState
+    }
   }
 }
 </script>
@@ -49,10 +54,12 @@ export default {
 <style scoped>
 h1 {
   color: white;
+  font-family: 'Courgette', cursive;
 }
 
 h2 {
   color: #a2c0c0;
+  font-family: 'Courgette', cursive;
 }
 
 .nav-bar {
@@ -61,6 +68,7 @@ h2 {
   justify-content: center;
   gap: 50px;
   height: 80px;
+  font-family: 'Courgette', cursive;
 }
 
 header {
@@ -73,6 +81,7 @@ header a{
   text-decoration: none;
   list-style: none;
   color: white;
+  font-family: 'Courgette', cursive;
 }
 
 /*SEARCH-BAR*/
@@ -108,7 +117,7 @@ header a{
   background-color: #568591;
   border-radius: 4px;
   color: white;
-  padding: 8px;
+  padding: 10px;
   border: none;
   cursor: pointer;
 }
@@ -148,9 +157,11 @@ header a{
 .dropdown:hover .dropdown-content {
   display: block;
 }
-
-.buy-button {
-  width: 30px;
+.nav-money {
+  color: white; /* Set the text color to white */
+  margin-top: 30px;
+  margin-left: -15px;
+  font-size: 17px;
+  font-family: 'Courgette', cursive;
 }
-
 </style>

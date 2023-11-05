@@ -50,6 +50,7 @@
 <script>
 
 import axios from 'axios'
+import userState from '@/userState'
 
 export default {
   name: 'LogIn',
@@ -87,9 +88,15 @@ export default {
           // Check if the provided password matches the user's password
           if (this.addUserForm.password === res.data.password) {
             // Password is correct, navigate to the "/inicio" page
+            // Update userState
+            userState.user = {
+              username: res.data.username,
+              password: res.data.password,
+              available_money: res.data.available_money,
+              email: res.data.email
+            }
             this.$router.push({
-              path: '/inicio',
-              query: { money_available: res.data.available_money }
+              path: '/inicio'
             })
             alert('Succesfully logged')
           } else {

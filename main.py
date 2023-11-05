@@ -60,7 +60,7 @@ def read_users(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
 
 
 # Get user by username
-@app.get("/userN/{username}", response_model=schemas.User)
+@app.get("/userN/{username}")
 def read_user(username: str, db: Session = Depends(get_db)):
     user = repository.get_user_by_username(db, username=username)
     if not user:
@@ -69,7 +69,7 @@ def read_user(username: str, db: Session = Depends(get_db)):
 
 
 # Get user by email
-@app.get("/userN/{email}", response_model=schemas.User)
+@app.get("/user/{email}")
 def read_user(email: str, db: Session = Depends(get_db)):
     user = repository.get_user_by_email(db, email=email)
     if not user:
@@ -87,7 +87,7 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
         return repository.create_user(db=db, user=user)
 
 
-@app.put('/userN/{username}')
+@app.put('/userN/{username}', response_model=schemas.User)
 def update_user(username: str, user_update: schemas.UserCreate, db: Session = Depends(get_db)):
     user = repository.get_user_by_username(db, username=username)
     if not user:
@@ -97,7 +97,7 @@ def update_user(username: str, user_update: schemas.UserCreate, db: Session = De
 
 
 # Delete a user by username
-@app.delete("/user/{username}")
+@app.delete("/user/{username}", response_model=schemas.User)
 def delete_user(username: str, db: Session = Depends(get_db)):
     db_user = repository.get_user_by_username(db=db, username=username)
     if db_user:
@@ -107,12 +107,21 @@ def delete_user(username: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Account not found")
 
 
+@app.get("/user/{username}/photos")
+def read_user_photos(username: str, db: Session = Depends(get_db)):
+    db_user = repository.get_user_by_username(db=db, username=username)
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User not found")
+    else:
+        return repository.get_user_photos(db=db, db_user=db_user)
+
+
 @app.get("/photos/")
 def read_photos(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     return repository.get_photos(db, skip=skip, limit=limit)
 
 
-@app.get("/photos/{photo_title}", response_model=schemas.Photo)
+@app.get("/photos/{photo_title}")
 def read_photo_by_title(photo_title: str, db: Session = Depends(get_db)):
     photo = repository.get_photo_by_title(db, photo_title=photo_title)
     if not photo:
@@ -120,7 +129,7 @@ def read_photo_by_title(photo_title: str, db: Session = Depends(get_db)):
     return photo
 
 
-@app.get("/photos/{photo_id}/", response_model=schemas.Photo)
+@app.get("/photos/{photo_id}/")
 def read_photo_by_id(photo_id: int, db: Session = Depends(get_db)):
     photo = repository.get_photo(db, photo_id=photo_id)
     if not photo:
@@ -141,9 +150,8 @@ def delete_photo(photo_id: int, db: Session = Depends(get_db)):
     photo = repository.get_photo(db, photo_id)
     if not photo:
         raise HTTPException(status_code=404, detail="Photo not found")
-    repository.delete_photo(db, photo)
-    return "Photo deleated"
-
+    else:
+        return repository.delete_photo(db, photo)
 
 @app.put("/photos/{photo_id}/", response_model=schemas.Photo)
 def update_photo(photo_id: int, photo_update: schemas.PhotoBase, user_id: str, db: Session = Depends(get_db)):
