@@ -22,12 +22,12 @@
       <p class="text-latest"> Latest Pics </p>
     </div>
     <!-- Uploaded Pics Grid -->
-    <div class="pics-grid">
-      <p>{{userState.user.photos}}</p>
-      <div v-for="photo in userState.user.photos" :key="photo.id" class="photo">
-        <p>{{ photo.url }}</p>
-        <img :src="require('@/assets/' + photo.url)" :alt="photo.title || 'Image Description'">
-        <p>{{ photo.title }}</p>
+    <div class="pics-grid" v-if="photos">
+      <div v-for="photo in photos" :key="photo.id" class="photo">
+          <img :src="require('@/assets/' + photo.url)" :alt="photo.title || 'Image Description'">
+        <div class="image-container">
+          <p>{{ photo.title }}</p>
+        </div>
       </div>
     </div>
     <footer-view />
@@ -45,31 +45,50 @@ export default {
   components: {HeaderMenu, FooterView},
   data () {
     return {
-      userState: userState
+      userState: userState,
+      photos: []
     }
   },
   methods: {
-    async fetchUserPhotos (username) {
+    fetchUserPhotos (username) {
       try {
-        const response = await axios.get('/user/' + username + '/photos')
-        const photos = response.data
-        console.log(photos)
-        return photos
+        const path = 'http://127.0.0.1:8000/user/' + username + '/photos'
+
+        axios.get(path)
+          .then((response) => {
+            // Check if the request was successful
+            if (response.status === 200) {
+              // Assuming the photos are in response.data.photos, replace this with the actual data structure.
+              this.photos = response.data
+              console.log(this.photos)
+
+              // Set userState.user.photos with the resolved data
+              this.userState.user.photos = this.photos
+            } else {
+              console.error('Error fetching user photos: Invalid response status')
+            }
+          })
+          .catch((error) => {
+            console.error('Error fetching user photos', error)
+          })
       } catch (error) {
-        console.error('Error fetching user photos', error)
+        console.error('Error in the try-catch block', error)
       }
     }
   },
   created () {
     const username = userState.user.username
-    const photos = this.fetchUserPhotos(username)
-    this.userState.user.photos = photos
+    this.fetchUserPhotos(username)
     console.log(userState.user.photos)
   }
 }
 </script>
 
 <style scoped>
+* {
+  box-sizing: border-box;
+}
+
   .profile {
     font-family: 'Arial', sans-serif;
     /* Add your overall styles for the profile page here */
@@ -131,12 +150,36 @@ export default {
   }
 
   .pics-grid {
-    /* Add styles for the pics grid here */
-    font-family: 'Courgette', cursive;
-    margin-top: 60px;
-    font-size: 20px;
-    text-align: left;
-    margin-left: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  /* Add styles for the pics grid here */
+  font-family: 'Courgette', cursive;
+  margin-top: 60px;
+  font-size: 20px;
+  text-align: right;
+  margin-left: 28px;
+    margin-right: 30px;
+}
 
-  }
+.photo {
+  width: calc(33.33% - 10px); /* 10px is the gap between columns, adjust as needed */
+  margin-bottom: 20px; /* Add spacing between rows */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  object-fit: contain;
+  align-self: flex-start;
+}
+
+.image-container {
+  max-width: 100%;
+  background-color: #365b6d;
+  text-align: center; /* Center the image within the container */
+  padding: 10px 20px; /* Add padding around the image for separation */
+  color: #a2c0c0
+}
+
+img {
+  width: 100%;
+  height: auto; /* Maintain aspect ratio */
+}
 </style>

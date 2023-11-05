@@ -118,8 +118,13 @@ def create_photo(db: Session, photo: schemas.PhotoCreate, user_id: str):
 
 
 def delete_photo(db: Session, photo: models.Photo):
-    db.query(models.Photo).filter(models.Photo.id == photo.id).delete()
-    db.commit()
+    try:
+        db.delete(photo)
+        db.commit()
+        return photo
+    except Exception as e:
+        db.rollback()
+        return {"message": "An error occurred deleting the photo.", "error": str(e)}, 500
 
 
 def put_photo(db: Session, photo: models.Photo, photo_2: schemas.PhotoCreate, user_id: str):

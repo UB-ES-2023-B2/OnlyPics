@@ -18,7 +18,7 @@
           <button class="dropbtn">{{ userState.user.username }} <i class="fas fa-user" style="margin-left: 7px"></i></button>
           <div class="dropdown-content">
             <router-link to="/profile">Profile <i class="fas fa-circle-user" style="margin-left: 20px"></i></router-link>
-            <a href="#">Settings <i class="fas fa-cog" style="margin-left: 10px"></i></a>
+            <router-link to="/settings">Settings <i class="fas fa-cog" style="margin-left: 10px"></i></router-link>
             <a href="/">Log Out <i class="fas fa-sign-out-alt" style="margin-left: 13px"></i></a>
           </div>
         </div>

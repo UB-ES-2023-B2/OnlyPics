@@ -150,9 +150,8 @@ def delete_photo(photo_id: int, db: Session = Depends(get_db)):
     photo = repository.get_photo(db, photo_id)
     if not photo:
         raise HTTPException(status_code=404, detail="Photo not found")
-    repository.delete_photo(db, photo)
-    return "Photo deleated"
-
+    else:
+        return repository.delete_photo(db, photo)
 
 @app.put("/photos/{photo_id}/", response_model=schemas.Photo)
 def update_photo(photo_id: int, photo_update: schemas.PhotoBase, user_id: str, db: Session = Depends(get_db)):
