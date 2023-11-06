@@ -4,11 +4,7 @@
       <h2 class="title">POST IMAGE</h2>
       <input type="file" ref="fileInput" style="display: none" @change="handleFileSelect" />
       <button @click="openFileSelector">Seleccionar una imagen</button>
-
-      <!-- Mostrar la imagen seleccionada con un tamaño máximo -->
       <img :src="selectedImage" v-if="selectedImage" alt="Imagen seleccionada" class="max-width-image" />
-
-      <!-- Campo de entrada para el título de la imagen -->
       <input type="text" v-model="imageTitle" placeholder="Título de la imagen" />
 
       <div class="checkboxes">
@@ -22,7 +18,7 @@
 
       <!-- Botones al final de la página -->
       <div class="botones">
-        <button @click="postImg">POST</button>
+        <button @click="uploadImage">POST</button>
         <button @click="cancel">Cancel</button>
       </div>
     </div>
@@ -39,7 +35,9 @@ export default {
     return {
       selectedImage: null,
       selectedOption: 'public',
-      imageTitle: ''
+      imageTitle: '',
+      imagePrice: 0,
+      userId: 'joanv'
     }
   },
   methods: {
@@ -49,26 +47,30 @@ export default {
     handleFileSelect (event) {
       const file = event.target.files[0]
       if (file) {
-        const reader = new FileReader()
-        reader.onload = (e) => {
-          this.selectedImage = e.target.result
-        }
-        reader.readAsDataURL(file)
+        this.selectedImage = URL.createObjectURL(file)
       }
     },
-    postImg () {
-      const postUrl = 'http://127.0.0.1:8000/photos'
-      const postData = {
-        image: this.selectedImage,
-        title: this.imageTitle
-      }
+    uploadImage () {
+      const formData = new FormData()
+      formData.append('image', this.selectedImage)
+      formData.append('title', this.imageTitle)
+      formData.append('price', this.imagePrice)
+
+      const baseUrl = 'http://127.0.0.1:8000/photos/'
+      const queryParams = `?user_id=${this.userId}`
+      const finalUrl = baseUrl + queryParams
+
       axios
-        .post(postUrl, postData)
+        .post(finalUrl, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
         .then((response) => {
-          console.log('Solicitud POST exitosa', response.data)
+          console.log('Image posted successfully', response.data)
         })
         .catch((error) => {
-          console.error('Error al realizar la solicitud POST', error)
+          console.error('Error', error)
         })
     },
     cancel () {
