@@ -38,12 +38,13 @@ class UserCreate(UserBase):
 
 class User(UserBase):
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class PhotoBase(BaseModel):
     url: str
     title: str
     price: int
+    likes: int
 
 class PhotoCreate(PhotoBase):
     pass

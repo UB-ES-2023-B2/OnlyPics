@@ -27,6 +27,13 @@ class Photo(Base):
     url = Column(String(30), unique=True)
     title = Column(String(30))
     price = Column(Integer)
+    likes = Column(Integer)
 
     user_id = Column(String, ForeignKey('users.username'))
     user = relationship('User', back_populates='photos')
+
+    def __init__(self, url, title, price):
+        self.url = username
+        self.title = title
+        self.price = email
+        self.likes = 0
