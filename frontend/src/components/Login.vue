@@ -8,7 +8,8 @@
         <div class="signin-form" v-if="view">
           <h2>Create new Account</h2>
           <p class="text-center">
-            Already Registered? <a href="#" @click="toggleView">Log In</a>
+            Already Registered?
+            <a href="#" @click="toggleView">Log In</a>
           </p>
           <div class="form-group">
             <label for="username">Username</label>
