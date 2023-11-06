@@ -108,7 +108,7 @@ def delete_user(username: str, db: Session = Depends(get_db)):
 
 
 @app.get("/photos/")
-def read_photos(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+def read_photos(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return repository.get_photos(db, skip=skip, limit=limit)
 
 

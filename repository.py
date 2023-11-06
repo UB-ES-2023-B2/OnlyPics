@@ -96,7 +96,7 @@ def get_user_by_photo(db: Session, photo: models.Photo):
 
 
 def create_photo(db: Session, photo: schemas.PhotoCreate, user_id: str):
-    db_photo = models.Photo(url=photo.url, title=photo.title, price=photo.price, user_id=user_id)
+    db_photo = models.Photo(url=photo.url, title=photo.title, price=photo.price, user_id=user_id, likes=photo.likes)
     try:
         db.add(db_photo)
         db.commit()

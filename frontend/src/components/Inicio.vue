@@ -43,12 +43,12 @@
             <div class="card">
               <div class="usuario-info">
               👤 <!-- Este es el emoji de usuario -->
-              <span>Usuario</span>
+              <span>{{ imagen.user_id }}</span>
               </div>
-              <img class="card-img-top" :src="imagen.url" alt="">
+              <img class="card-img-top" :src="require('@/assets/' + imagen.url)" alt="">
               <div class="card-body">
-                <h5 class="card-title">{{ imagen.titulo }}</h5>
-                <p class="card-text">{{ imagen.precio }}🪙</p>
+                <h5 class="card-title">{{ imagen.title }}</h5>
+                <p class="card-text">{{ imagen.price }}🪙</p>
                 <p class="card-text">{{ imagen.likes }}❤</p>
               </div>
             </div>
@@ -56,7 +56,7 @@
         </div>
       </div>
   </body>
-  </div>
+  <div>
     <footer-view/>
   </div>
 </template>
@@ -65,6 +65,8 @@
 <script>
 import HeaderMenu from '@/components/HeaderMenu.vue'
 import FooterView from '@/components/FooterView.vue'
+import axios from 'axios';
+
 export default {
   name: 'PaginaInicio',
   components: {FooterView, HeaderMenu},
@@ -73,29 +75,7 @@ export default {
       mostrarFiltros: false, //Variable para controlar la visibilidad de los filtros
       filtrar: null,
       orden: null,
-      imagenesAleatorias: [
-        // Aquí deberías tener una lista de objetos con información de tus imágenes
-        {id: 1, url: require('../assets/alley-8289479_1280.png'), titulo: 'Aslley', precio: 50, likes: 50},
-        {id: 2, url: require('../assets/barbary-macaque-8142917_1280.png'), titulo: 'Barbary macaque', precio: 0, likes: 30},
-        {id: 3, url: require('../assets/bear-8275920_640.png'), titulo: 'Bear', precio: 0, likes: 25},
-        {id: 4, url: require('../assets/dragon-fly-8229773_640.png'), titulo: 'Dragon fly', precio: 15, likes: 30},
-        {id: 5, url: require('../assets/flowers-7954719_1280.png'), titulo: 'Flowers', precio: 0, likes: 100},
-        {id: 6, url: require('../assets/free-photo-of-corazon-firmar-pared-forma.png'), titulo: 'Frase', precio: 96, likes: 150},
-        {id: 7, url: require('../assets/free-photo-of-mar-ciudad-barco-italia.png'), titulo: 'Italia', precio: 0, likes: 0},
-        {id: 8, url: require('../assets/free-photo-of-silueta-modelo-en-pie-esfera.png'), titulo: 'Esfera', precio: 18, likes: 46},
-        {id: 9, url: require('../assets/mantis-8194123_1280.png'), titulo: 'Mantis', precio: 0, likes: 22},
-        {id: 10, url: require('../assets/pexels-photo-5185446.png'), titulo: 'Patos', precio: 25, likes: 15},
-        {id: 11, url: require('../assets/pexels-photo-10322825.png'), titulo: 'Cúpula', precio: 0, likes: 36},
-        {id: 12, url: require('../assets/pexels-photo-10376281.png'), titulo: 'Flores', precio: 0,likes: 150},
-        {id: 13, url: require('../assets/pexels-photo-10870571.png'), titulo: 'Casa en la nieve', precio: 12, likes: 3000},
-        {id: 14, url: require('../assets/pexels-photo-12562449.png'), titulo: 'Mar', precio: 56, likes: 200},
-        {id: 15, url: require('../assets/pexels-photo-12809204.png'), titulo: 'Wind surf', precio: 44, likes: 5},
-        {id: 16, url: require('../assets/pexels-photo-14653888.png'), titulo: 'Flores', precio: 88, likes: 1},
-        {id: 17, url: require('../assets/pexels-photo-18602619.png'), titulo: 'Bizcocho', precio: 0, likes: 22},
-        {id: 18, url: require('../assets/residential-8278516_1280.png'), titulo: 'Montaña', precio: 0, likes: 43},
-        {id: 19, url: require('../assets/torii-8254663_1280.png'), titulo: 'Oriental', precio: 12, likes: 189},
-        {id: 20, url: require('../assets/train-8302635_640.png'), titulo: 'Train', precio: 22, likes: 202}
-      ]
+      photos: []
     }
   },
   methods: {
@@ -105,13 +85,35 @@ export default {
     aplicarFiltros(){
       this.mostrarFiltros = false;
     },
+    backendPhotos(){
+      try{
+        const path = 'http://127.0.0.1:8000/photos/'
+
+        axios.get(path)
+          .then((response) => {
+            //Check if the request was successful
+            if(response.status === 200){
+              //Assuming the photos are in response.data.photos, replace this with the actual data structure
+              this.photos = response.data
+              console.log(this.photos)
+            } else{
+              console.error('Error getting the backend photos: Invalid response status')
+            }
+          })
+          .catch((error) => {
+            console.error('Error getting the backend photos', error)
+          })
+      } catch (error) {
+        console.error('Error in the try-catch block', error)
+      }
+    },
     mostrarImagenesFiltradas(){
-      let imagenesMostrar = [...this.imagenesAleatorias]
+      let imagenesMostrar = [...this.photos]
 
       if (this.filtrar === 'publicas') {
-        imagenesMostrar = imagenesMostrar.filter(imagen => imagen.precio === 0);
+        imagenesMostrar = imagenesMostrar.filter(imagen => imagen.price === 0);
       } else if (this.filtrar === 'privadas') {
-        imagenesMostrar = imagenesMostrar.filter(imagen => imagen.precio > 0);
+        imagenesMostrar = imagenesMostrar.filter(imagen => imagen.price > 0);
       }
 
       // Ordenar por popularidad o coste
@@ -120,12 +122,16 @@ export default {
       } else if (this.orden === 'popularidad_des') {
         imagenesMostrar.sort((a, b) => b.likes - a.likes);
       } else if (this.orden === 'precio_as') {
-        imagenesMostrar.sort((a, b) => a.precio - b.precio);
+        imagenesMostrar.sort((a, b) => a.price - b.price);
       } else if (this.orden === 'precio_des') {
-        imagenesMostrar.sort((a, b) => b.precio - a.precio);
+        imagenesMostrar.sort((a, b) => b.price - a.price);
       }
       return imagenesMostrar;
     }
+  },
+  created(){
+    this.backendPhotos()
+    console.log(this.photos)
   }
 }
 </script>

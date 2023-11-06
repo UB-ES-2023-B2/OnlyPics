@@ -32,8 +32,9 @@ class Photo(Base):
     user_id = Column(String, ForeignKey('users.username'))
     user = relationship('User', back_populates='photos')
 
-    def __init__(self, url, title, price):
-        self.url = username
+    def __init__(self, url, title, price, user_id, likes):
+        self.url = url
         self.title = title
-        self.price = email
-        self.likes = 0
+        self.price = price
+        self.likes = likes
+        self.user_id = user_id
