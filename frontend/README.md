@@ -1,6 +1,6 @@
 # frontend
 
-> frontend de onlypics
+> A Vue.js project
 
 ## Build Setup
 
