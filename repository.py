@@ -127,9 +127,7 @@ def delete_photo(db: Session, photo: models.Photo):
         return {"message": "An error occurred deleting the photo.", "error": str(e)}, 500
 
 
-def put_photo(db: Session, photo: models.Photo, photo_2: schemas.PhotoCreate, user_id: str):
-    if photo_2.user_id and photo_2.user_id != user_id:
-        raise ValueError("No puedes cambiar el usuario asociado a la foto.")
+def put_photo(db: Session, photo: models.Photo, photo_2: schemas.PhotoBase, user_id: str):
     photo.url = photo_2.url
     photo.title = photo_2.title
     photo.price = photo_2.price

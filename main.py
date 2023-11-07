@@ -123,7 +123,7 @@ def read_photos(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
 
 @app.get("/photos/{photo_title}")
 def read_photo_by_title(photo_title: str, db: Session = Depends(get_db)):
-    photo = repository.get_photo_by_title(db, photo_title=photo_title)
+    photo = repository.get_photo_by_title(db, photo_title)
     if not photo:
         raise HTTPException(status_code=404, detail="Photo not found")
     return photo
@@ -153,10 +153,10 @@ def delete_photo(photo_id: int, db: Session = Depends(get_db)):
     else:
         return repository.delete_photo(db, photo)
 
-@app.put("/photos/{photo_id}/", response_model=schemas.Photo)
+@app.put("/photos/{photo_id}/")
 def update_photo(photo_id: int, photo_update: schemas.PhotoBase, user_id: str, db: Session = Depends(get_db)):
     photo = repository.get_photo(db, photo_id)
     if photo:
-        return repository.update_photo(db, photo=photo, photo_update=photo_update, user_id=user_id)
+        return repository.put_photo(db, photo=photo, photo_2=photo_update, user_id=user_id)
     else:
         return repository.create_photo(db=db, photo=photo, user_id=user_id)
