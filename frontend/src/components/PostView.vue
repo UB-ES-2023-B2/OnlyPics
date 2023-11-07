@@ -51,27 +51,29 @@ export default {
       }
     },
     uploadImage () {
-      const formData = new FormData()
-      formData.append('image', this.selectedImage)
-      formData.append('title', this.imageTitle)
-      formData.append('price', this.imagePrice)
+      const parameters = {
+        url: this.selectedImage,
+        title: this.imageTitle,
+        price: this.imagePrice
+      }
 
-      const baseUrl = 'http://127.0.0.1:8000/photos/'
-      const queryParams = `?user_id=${this.userId}`
-      const finalUrl = baseUrl + queryParams
+      const baseUrl = 'http://127.0.0.1:8000/photos/?user_id=joanv'
+      console.log(parameters)
 
-      axios
-        .post(finalUrl, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        })
+      const config = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+
+      axios.post(baseUrl, parameters, config)
         .then((response) => {
           console.log('Image posted successfully', response.data)
         })
         .catch((error) => {
           console.error('Error', error)
         })
+      this.$emit('cancel')
     },
     cancel () {
       this.$emit('cancel')
