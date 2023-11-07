@@ -8,7 +8,9 @@ const userState = {
     biography: null,
     name: null,
     lastname: null,
-    photos: []
+    photos: [],
+    profile: null,
+    birthDate: null
   }
 }
 export default userState
