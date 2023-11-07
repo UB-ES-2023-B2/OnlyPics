@@ -42,7 +42,7 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
 
 # Add new user
 def create_user(db: Session, user: schemas.UserCreate):
-    db_user = models.User(username=user.username, available_money=user.available_money, email=user.email)
+    db_user = models.User(username=user.username, available_money=user.available_money, email=user.email, name='', lastname='', biography='', birthDate=None, profile=None)
     db_user.password = user.password
 
     try:
