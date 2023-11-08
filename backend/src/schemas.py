@@ -9,6 +9,7 @@ class PhotoBase(BaseModel):
     title: str
     price: int
 
+"""
     @validator("url")
     def validate_photo_url(cls, value):
         # Regular expression pattern for a valid image URL
@@ -18,7 +19,7 @@ class PhotoBase(BaseModel):
         if not re.search(image_url_pattern, value, re.IGNORECASE):
             raise ValueError("Invalid image URL format. Supported formats: jpg, jpeg, png, gif, bmp, tiff")
 
-        return value
+        return value"""
 
 
 class PhotoCreate(PhotoBase):

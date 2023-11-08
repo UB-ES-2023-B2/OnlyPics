@@ -103,7 +103,7 @@ def get_user_by_photo(db: Session, photo: models.Photo):
     return photo.user
 
 
-def create_photo(db: Session, photo: schemas.PhotoCreate, user_id: str):
+def create_photo(db: Session,  user_id: str, photo: schemas.PhotoCreate):
     db_photo = models.Photo(url=photo.url, title=photo.title, price=photo.price, user_id=user_id)
     db_user = db.query(models.User).filter(models.User.username == user_id).first()
     try:

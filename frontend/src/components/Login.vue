@@ -126,7 +126,7 @@ export default {
         .then((res) => {
           console.log('Account created')
           alert('Account created successfully')
-          this.$router.push({path: '/inicio'})
+          this.$router.push({path: '/'})
           window.location.reload()
         })
         .catch((error) => {

@@ -24,7 +24,7 @@
     <!-- Uploaded Pics Grid -->
     <div class="pics-grid" v-if="photos">
       <div v-for="photo in photos" :key="photo.id" class="photo">
-          <img :src="require('@/assets/' + photo.url)" :alt="photo.title || 'Image Description'">
+          <img class="card-img-top" :src="photo.url" alt="">
         <div class="image-container">
           <p>{{ photo.title }}</p>
         </div>
@@ -52,7 +52,7 @@ export default {
   methods: {
     fetchUserPhotos (username) {
       try {
-        const path = 'http://127.0.0.1:8000/user/' + username + '/photos'
+        const path = '/user/' + username + '/photos'
 
         axios.get(path)
           .then((response) => {
