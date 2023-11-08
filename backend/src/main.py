@@ -1,9 +1,11 @@
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 
-# import repository
 import models, schemas
 import repository
+import os
+import sys
+
 
 from database import SessionLocal, engine
 from fastapi.middleware.cors import CORSMiddleware
@@ -17,13 +19,24 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[""],
+    allow_origins=["http://localhost:8080"],
     allow_credentials=True,
-    allow_methods=[""],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
-app.mount("/static", StaticFiles(directory="frontend/dist/static"), name="static")
+# Obtén la ruta absoluta del directorio en el que se encuentra main.py
+# (__file__ contiene la ruta actual de main.py)
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+
+# Para que el docker localice los modulos
+sys.path.append(project_root)
+
+# Construye la ruta relativa al archivo estático
+static_file_path = os.path.join(project_root, "frontend/dist/static")
+static_file_path2 = os.path.join(project_root, "frontend/dist")
+
+app.mount("/static", StaticFiles(directory='/app/dist/static'), name="static")
 
 
 # Dependency to get a DB session
@@ -35,7 +48,7 @@ def get_db():
         db.close()
 
 
-templates = Jinja2Templates(directory="frontend/dist")
+templates = Jinja2Templates(directory='/app/dist')
 
 
 @app.get("/")

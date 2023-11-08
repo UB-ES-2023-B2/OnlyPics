@@ -80,7 +80,7 @@ export default {
       this.addUserForm.email = null
     },
     checkLogin () {
-      const path = 'http://127.0.0.1:8000/userN/' + this.addUserForm.username
+      const path = '/userN/' + this.addUserForm.username
 
       // Send a request to get the user's information
       axios.get(path)
@@ -114,7 +114,7 @@ export default {
       window.location.reload()
     },
     createUser () {
-      const path = 'http://127.0.0.1:8000/user'
+      const path = '/user'
       const parameters = {
         username: this.addUserForm.username,
         password: this.addUserForm.password,
@@ -126,7 +126,7 @@ export default {
         .then((res) => {
           console.log('Account created')
           alert('Account created successfully')
-          this.$router.push({path: '/'})
+          this.$router.push({path: '/inicio'})
           window.location.reload()
         })
         .catch((error) => {
