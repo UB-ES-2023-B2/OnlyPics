@@ -59,7 +59,7 @@ export default {
         user_id: this.userId
       }
 
-      const baseUrl = '/photos'
+      const baseUrl = process.env.VUE_APP_BACKEND_URL + '/photos'
       console.log(parameters)
 
       const config = {

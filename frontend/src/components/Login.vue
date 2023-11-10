@@ -80,7 +80,7 @@ export default {
       this.addUserForm.email = null
     },
     checkLogin () {
-      const path = '/userN/' + this.addUserForm.username
+      const path = process.env.VUE_APP_BACKEND_URL + '/userN/' + this.addUserForm.username
 
       // Send a request to get the user's information
       axios.get(path)
@@ -114,7 +114,7 @@ export default {
       window.location.reload()
     },
     createUser () {
-      const path = '/user'
+      const path = process.env.VUE_APP_BACKEND_URL + '/user'
       const parameters = {
         username: this.addUserForm.username,
         password: this.addUserForm.password,

@@ -56,7 +56,7 @@ export default {
   },
   methods: {
     guardarInformacion () {
-      const path = 'http://127.0.0.1:8000/user' // Reemplaza con la URL de tu servidor para actualizar la información
+      const path = process.env.VUE_APP_BACKEND_URL + '/user' // Reemplaza con la URL de tu servidor para actualizar la información
       const usuarioActualizado = {
         email: this.email,
         username: this.username
@@ -75,7 +75,7 @@ export default {
         })
     },
     borrarCuenta () {
-      const path = 'http://127.0.0.1:8000/user' // Reemplaza con la URL de tu servidor para eliminar cuentas
+      const path = process.env.VUE_APP_BACKEND_URL + '/user' // Reemplaza con la URL de tu servidor para eliminar cuentas
       const email = this.email // O cualquier otra forma de identificar al usuario
 
       if (confirm('¿Estás seguro de que deseas eliminar tu cuenta?')) {
