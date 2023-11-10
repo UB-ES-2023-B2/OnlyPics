@@ -114,7 +114,7 @@ export default {
       window.location.reload()
     },
     createUser () {
-      const path = process.env.VUE_APP_BACKEND_URL + '/user'
+      const path = 'VUE_APP_BACKEND_URL=onlypics.azurewebsites.net' + '/user'
       const parameters = {
         username: this.addUserForm.username,
         password: this.addUserForm.password,
