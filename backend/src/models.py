@@ -12,12 +12,12 @@ class User(Base):
     password = Column(String(), nullable=False)
     available_money = Column(Float, nullable=False)
 
+    name = Column(String(15), nullable=False)
+    lastname = Column(String(20), nullable=False)
+    biography = Column(String(500), nullable=False)
+    profile = Column('Photo', nullable=False)
     photos = relationship('Photo', back_populates ='user')
-
-    def __init__(self, username, email, available_money=0):
-        self.username = username
-        self.available_money = available_money
-        self.email = email
+    birthDate = Column(DateTime, nullable=False)
 
 
 class Photo(Base):
