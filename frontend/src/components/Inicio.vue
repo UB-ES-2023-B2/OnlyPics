@@ -1,7 +1,7 @@
 <template>
   <div>
     <div style="background-color: #EEA3FF;">
-      <HeaderMenu title="Random" money="0.0"/>
+      <HeaderMenu title="Random" money="0"/>
       <!-- Encabezado -->
       <div class="header">
         <div class="filter-button-container">
