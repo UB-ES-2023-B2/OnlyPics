@@ -27,6 +27,7 @@ class Photo(Base):
     url = Column(String(30), unique=True)
     title = Column(String(30))
     price = Column(Integer)
+    likes = Column(Integer)
     user_id = Column(String, ForeignKey('users.username'), nullable=False)
     user = relationship('User', back_populates='photos')
 

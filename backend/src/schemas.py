@@ -8,6 +8,7 @@ class PhotoBase(BaseModel):
     url: str
     title: str
     price: int
+    likes: int
 
     @validator("url")
     def validate_photo_url(cls, value):
@@ -42,7 +43,7 @@ class UserBase(BaseModel):
     name: str
     lastname: str
     biography: str
-    birthDate: DateTime
+    birthDate: date
     profile: Photo
 
     @validator("password")
@@ -75,4 +76,4 @@ class UserCreate(UserBase):
 
 class User(UserBase):
     class Config:
-        orm_mode = True
+        from_attributes = True
