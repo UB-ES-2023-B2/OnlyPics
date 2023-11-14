@@ -57,7 +57,7 @@ export default {
         price: this.imagePrice
       }
 
-      const currentUser = 'joanv' // Pots canviar-ho per obtenir el nom d'usuari desitjat
+      const currentUser = 'joanv' // username de l'usuari que fal el post
 
       const baseUrl = `http://127.0.0.1:8000/photos/?user_id=${currentUser}`
       console.log(parameters)
