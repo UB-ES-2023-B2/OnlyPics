@@ -4,16 +4,18 @@
       <div class="nav-bar">
         <h1><router-link to="/inicio">OnlyPics</router-link></h1>
         <div class="search-bar">
-            <div class="search-bar">
-              <input type="text" placeholder="Search..." class="search-input">
-              <button class="search-button">Search</button>
-            </div>
+          <div class="search-bar">
+            <input type="text" placeholder="Search..." class="search-input">
+            <button class="search-button">Search</button>
+          </div>
         </div>
-         <div class="shopping-cart" style="margin-top: 10px">
+        <div class="shopping-cart" style="margin-top: 10px">
           <a href="#"><i class="fa-sharp fas fa-cart-shopping fa-xl" style="margin-left: 10px"></i></a>
-         </div>
-          <p class="nav-money">{{ money }}<i class="fa-solid fa-sack-dollar fa-bounce" style="margin-left: 7px"></i></p>
-        <!--<router-link to="/">Log In</router-link>-->
+        </div>
+        <p class="nav-money">{{ money }}<i class="fa-solid fa-sack-dollar fa-bounce" style="margin-left: 7px"></i></p>
+
+        <button @click="toggleOverlay()" class="round-button">+</button>
+        <PostView v-if="showOverlay" @cancel="toggleOverlay()"/>
         <div class="dropdown">
           <button class="dropbtn">{{ userState.user.username }} <i class="fas fa-user" style="margin-left: 7px"></i></button>
           <div class="dropdown-content">
@@ -36,6 +38,7 @@
 </template>
 <script>
 import userState from '@/userState'
+import PostView from '@/components/PostView.vue'
 
 export default {
   name: 'HeaderMenu',
@@ -46,6 +49,17 @@ export default {
   computed: {
     userState () {
       return userState
+    }
+  },
+  data () {
+    return {
+      showOverlay: false
+    }
+  },
+  components: { PostView },
+  methods: {
+    toggleOverlay () {
+      this.showOverlay = !this.showOverlay
     }
   }
 }
@@ -164,4 +178,24 @@ header a{
   font-size: 17px;
   font-family: 'Courgette', cursive;
 }
+
+/* Botó per pública imatge*/
+.round-button {
+  display: inline-block;
+  background-color: #568591;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;
+}
+
+.round-button:hover {
+background-color: #0c5460;
+}
+
 </style>
