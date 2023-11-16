@@ -8,7 +8,7 @@ class PhotoBase(BaseModel):
     url: str
     title: str
     price: int
-
+    likes: int
     @validator("url")
     def validate_photo_url(cls, value):
         # Regular expression pattern for a valid image URL
@@ -70,4 +70,5 @@ class UserCreate(UserBase):
 
 class User(UserBase):
     class Config:
-        orm_mode = True
+        from_attributes = True
+
