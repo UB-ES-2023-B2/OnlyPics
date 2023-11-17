@@ -16,9 +16,11 @@ models.Base.metadata.create_all(bind=engine)  # Creem la base de dades amb els m
 
 app = FastAPI()
 
+origins = ["https://kind-ground-086ce7103.4.azurestaticapps.net", "http://localhost:8080"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://kind-ground-086ce7103.4.azurestaticapps.net"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

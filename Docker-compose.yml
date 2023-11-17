@@ -3,6 +3,7 @@ version: '3.8'
 services:
 
   backend:
+    image: joanmaceo/onlypicsbackend8:latest
     build: ./backend
     ports:
       - 8000:8000
