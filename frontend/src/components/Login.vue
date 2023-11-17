@@ -115,7 +115,7 @@ export default {
       window.location.reload()
     },
     createUser () {
-      const path = 'onlypics.azurewebsites.net' + '/user'
+      const path = '/user'
       const parameters = {
         username: this.addUserForm.username,
         password: this.addUserForm.password,
