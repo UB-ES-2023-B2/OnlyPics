@@ -26,16 +26,16 @@ app.add_middleware(
 
 # Obtén la ruta absoluta del directorio en el que se encuentra main.py
 # (__file__ contiene la ruta actual de main.py)
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+#project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 
 # Para que el docker localice los modulos
-sys.path.append(project_root)
+#sys.path.append(project_root)
 
 # Construye la ruta relativa al archivo estático
-static_file_path = os.path.join(project_root, "frontend/dist/static")
-static_file_path2 = os.path.join(project_root, "frontend/dist")
+#static_file_path = os.path.join(project_root, "frontend/dist/static")
+#static_file_path2 = os.path.join(project_root, "frontend/dist")
 
-app.mount("/static", StaticFiles(directory='/app/dist/static'), name="static")
+#app.mount("/static", StaticFiles(directory='/app/dist/static'), name="static")
 
 
 # Dependency to get a DB session
@@ -47,22 +47,25 @@ def get_db():
         db.close()
 
 
-templates = Jinja2Templates(directory='/app/dist')
+#templates = Jinja2Templates(directory='/app/dist')
 
 
 @app.get("/")
 async def serve_index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    #return templates.TemplateResponse("index.html", {"request": request})
+    pass
 
 
 @app.get("/login")
 async def login(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    #return templates.TemplateResponse("index.html", {"request": request})
+    pass
 
 
 @app.get("/signup")
 async def signup(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    #return templates.TemplateResponse("index.html", {"request": request})
+    pass
 
 
 # Get all users
