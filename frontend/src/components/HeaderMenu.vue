@@ -4,16 +4,16 @@
       <div class="nav-bar">
         <h1><router-link to="/inicio">OnlyPics</router-link></h1>
         <div class="search-bar">
-            <div class="search-bar">
-              <input type="text" placeholder="Cerca..." class="search-input"/>
-              <button class="search-button">Cerca</button>
-            </div>
+          <div class="search-bar">
+            <input type="text" placeholder="Search..." class="search-input">
+            <button class="search-button">Search</button>
+          </div>
         </div>
-        <a href="#" class="buy-icon">
-          <img src="@/assets/icono-carro.png" alt="Carro" class="buy-button"/>
-          <p class="nav-money">{{ money }} €</p>
-        </a>
-        <!--Container vista penjar foto-->
+        <div class="shopping-cart" style="margin-top: 10px">
+          <a href="#"><i class="fa-sharp fas fa-cart-shopping fa-xl" style="margin-left: 10px"></i></a>
+        </div>
+        <p class="nav-money">{{ money }}<i class="fa-solid fa-sack-dollar fa-bounce" style="margin-left: 7px"></i></p>
+
         <button @click="toggleOverlay()" class="round-button">+</button>
         <PostView v-if="showOverlay" @cancel="toggleOverlay()"/>
         <div class="dropdown">
@@ -36,11 +36,10 @@
     </header>
   </div>
 </template>
-
 <script>
-import PostView from '@/components/PostView.vue'
 import userState from '@/userState'
-/* eslint-disable */
+import PostView from '@/components/PostView.vue'
+
 export default {
   name: 'HeaderMenu',
   props: {
