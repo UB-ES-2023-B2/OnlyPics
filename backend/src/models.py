@@ -11,7 +11,11 @@ class User(Base):
     email = Column(String(), unique=True, nullable=False)
     password = Column(String(), nullable=False)
     available_money = Column(Float, nullable=False)
-
+    #name = Column(String(20), nullable=True)
+    #lastname = Column(String(20), nullable=True)
+    #biography = Column(String(150), nullable=True)
+    #date_birth = Column(Date, nullable=True)
+    #profile_pic = Column(String(50), nullable=False)
     photos = relationship('Photo', back_populates ='user')
 
     def __init__(self, username, email, available_money=0):
