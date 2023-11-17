@@ -6,10 +6,14 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import userState from './userState'
+import axios from 'axios'
 
 Vue.config.productionTip = false
 
 userState.user.available_money = 0
+
+axios.defaults.withCredentials = true
+axios.defaults.baseURL = 'https://onlypics.onrender.com/'
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

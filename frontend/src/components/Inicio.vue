@@ -58,14 +58,14 @@
   </body>
   <div>
     <footer-view/>
-  </div>
+  </body>
 </template>
 
 <script>
 import HeaderMenu from '@/components/HeaderMenu.vue'
 import FooterView from '@/components/FooterView.vue'
 import userState from '@/userState'
-import axios from 'axios';
+import axios from 'axios'
 
 export default {
   name: 'PaginaInicio',

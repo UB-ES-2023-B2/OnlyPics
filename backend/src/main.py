@@ -6,7 +6,6 @@ import repository
 import os
 import sys
 
-
 from database import SessionLocal, engine
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, Request
@@ -17,9 +16,11 @@ models.Base.metadata.create_all(bind=engine)  # Creem la base de dades amb els m
 
 app = FastAPI()
 
+origins = ["https://kind-ground-086ce7103.4.azurestaticapps.net", "http://localhost:8080"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8080"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -27,16 +28,16 @@ app.add_middleware(
 
 # Obtén la ruta absoluta del directorio en el que se encuentra main.py
 # (__file__ contiene la ruta actual de main.py)
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+#project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 
 # Para que el docker localice los modulos
-sys.path.append(project_root)
+#sys.path.append(project_root)
 
 # Construye la ruta relativa al archivo estático
-static_file_path = os.path.join(project_root, "frontend/dist/static")
-static_file_path2 = os.path.join(project_root, "frontend/dist")
+#static_file_path = os.path.join(project_root, "frontend/dist/static")
+#static_file_path2 = os.path.join(project_root, "frontend/dist")
 
-app.mount("/static", StaticFiles(directory='/app/dist/static'), name="static")
+#app.mount("/static", StaticFiles(directory='/app/dist/static'), name="static")
 
 
 # Dependency to get a DB session
@@ -48,22 +49,25 @@ def get_db():
         db.close()
 
 
-templates = Jinja2Templates(directory='/app/dist')
+#templates = Jinja2Templates(directory='/app/dist')
 
 
 @app.get("/")
-async def serve_index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+async def serve_index():
+    #return templates.TemplateResponse("index.html", {"request": request})
+    pass
 
 
 @app.get("/login")
-async def login(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+async def login():
+    #return templates.TemplateResponse("index.html", {"request": request})
+    pass
 
 
 @app.get("/signup")
-async def signup(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+async def signup():
+    #return templates.TemplateResponse("index.html", {"request": request})
+    pass
 
 
 # Get all users
