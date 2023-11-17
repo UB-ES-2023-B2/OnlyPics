@@ -49,7 +49,7 @@
               <div class="card-body">
                 <h5 class="card-title">{{ imagen.title }}</h5>
                 <p class="card-text">{{ imagen.price }}🪙</p>
-                <p class="card-text">{{ imagen.likes }}❤</p>
+                <p class="card-text">{{ imagen.likes}}❤</p>
               </div>
             </div>
           </div>
