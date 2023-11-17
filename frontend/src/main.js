@@ -13,7 +13,7 @@ Vue.config.productionTip = false
 userState.user.available_money = 0
 
 axios.defaults.withCredentials = true
-axios.defaults.baseURL = 'onlypics.azurewebsites.net'
+axios.defaults.baseURL = 'https://onlypics.onrender.com/'
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
