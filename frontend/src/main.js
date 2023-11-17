@@ -13,7 +13,7 @@ Vue.config.productionTip = false
 userState.user.available_money = 0
 
 axios.defaults.withCredentials = true
-axios.defaults.baseURL = 'http://localhost:8000/'
+axios.defaults.baseURL = 'onlypics.azurewebsites.net'
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
