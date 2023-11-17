@@ -51,19 +51,19 @@ def get_db():
 
 
 @app.get("/")
-async def serve_index(request: Request):
+async def serve_index():
     #return templates.TemplateResponse("index.html", {"request": request})
     pass
 
 
 @app.get("/login")
-async def login(request: Request):
+async def login():
     #return templates.TemplateResponse("index.html", {"request": request})
     pass
 
 
 @app.get("/signup")
-async def signup(request: Request):
+async def signup():
     #return templates.TemplateResponse("index.html", {"request": request})
     pass
 
