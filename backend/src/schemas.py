@@ -2,7 +2,7 @@ import enum
 from pydantic import BaseModel, Field, validator
 import re
 from typing import Optional, List
-
+#from datetime import date
 
 class PhotoBase(BaseModel):
     url: str
@@ -39,6 +39,12 @@ class UserBase(BaseModel):
     email: str = Field(..., description="email")
     available_money: float
     photos: List[Photo] = []  # Add the 'photos' attribute
+    #name: str
+    #lastname: str
+    #biography: str
+    #profile_pic: Photo
+    #birthDate: date
+
 
     @validator("password")
     def validate_password(cls, value):

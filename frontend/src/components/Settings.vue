@@ -59,20 +59,19 @@ export default {
   components: {HeaderMenu, FooterView},
   data () {
     return {
-      userState: userState,
       name: userState.user.name,
       lastname: userState.user.lastname,
       biography: userState.user.biography,
       username: userState.user.username,
       birthDate: userState.user.birthDate,
-      profile: userState.user.profile,
+      profile_pic: userState.user.profile_pic,
       email: userState.user.email,
-      newPassword: userState.user.password
+      password: userState.user.password
     }
   },
   methods: {
     saveInformation () {
-      const path = 'http://127.0.0.1:8000/user' // Reemplaza con la URL de tu servidor para actualizar la información
+      const path = 'http://127.0.0.1:8000/userN/' + userState.user.username // Reemplaza con la URL de tu servidor para actualizar la información
       const updateUser = {
         email: this.email,
         username: this.username,
@@ -80,8 +79,8 @@ export default {
         lastname: this.lastname,
         biography: this.biography,
         birthDate: this.birthDate,
-        password: this.newPassword,
-        profile: this.profile
+        password: this.password,
+        profile_pic: this.profile_pic
         // Agrega otros campos que desees actualizar
       }
 
