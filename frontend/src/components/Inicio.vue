@@ -92,7 +92,7 @@ export default {
     },
     backendPhotos(){
       try{
-        const path = 'http://127.0.0.1:8000/photos/'
+        const path = '/photos/'
 
         axios.get(path)
           .then((response) => {

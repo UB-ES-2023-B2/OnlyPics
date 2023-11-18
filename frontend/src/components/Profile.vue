@@ -52,7 +52,7 @@ export default {
   methods: {
     fetchUserPhotos (username) {
       try {
-        const path = process.env.VUE_APP_BACKEND_URL + '/user/' + username + '/photos'
+        const path = '/user/' + username + '/photos'
 
         axios.get(path)
           .then((response) => {

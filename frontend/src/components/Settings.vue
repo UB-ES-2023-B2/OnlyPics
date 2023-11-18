@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     saveInformation () {
-      const path = 'http://127.0.0.1:8000/userN/' + userState.user.username // Reemplaza con la URL de tu servidor para actualizar la información
+      const path = '/userN/' + userState.user.username // Reemplaza con la URL de tu servidor para actualizar la información
       const updateUser = {
         email: this.email,
         username: this.username,
@@ -96,7 +96,7 @@ export default {
         })
     },
     deleteAccount () {
-      const path = 'http://127.0.0.1:8000/user' // Reemplaza con la URL de tu servidor para eliminar cuentas
+      const path = '/user' // Reemplaza con la URL de tu servidor para eliminar cuentas
       const email = this.email // O cualquier otra forma de identificar al usuario
 
       if (confirm('¿Are you sure you want to delete your account??')) {
