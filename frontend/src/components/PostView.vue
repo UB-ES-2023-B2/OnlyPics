@@ -59,7 +59,7 @@ export default {
         user_id: this.userId
       }
 
-      const baseUrl = '/photos1'
+      const baseUrl = '/photos'
       console.log(parameters)
 
       const config = {
