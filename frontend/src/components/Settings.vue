@@ -59,14 +59,15 @@ export default {
   components: {HeaderMenu, FooterView},
   data () {
     return {
+      userState: userState,
       name: userState.user.name,
       lastname: userState.user.lastname,
       biography: userState.user.biography,
       username: userState.user.username,
       birthDate: userState.user.birthDate,
-      profile_pic: userState.user.profile_pic,
+      profile: userState.user.profile,
       email: userState.user.email,
-      password: userState.user.password
+      newPassword: userState.user.password
     }
   },
   methods: {
@@ -79,8 +80,8 @@ export default {
         lastname: this.lastname,
         biography: this.biography,
         birthDate: this.birthDate,
-        password: this.password,
-        profile_pic: this.profile_pic
+        password: this.newPassword,
+        profile: this.profile
         // Agrega otros campos que desees actualizar
       }
 
@@ -96,11 +97,11 @@ export default {
         })
     },
     deleteAccount () {
-      const path = '/user' // Reemplaza con la URL de tu servidor para eliminar cuentas
-      const email = this.email // O cualquier otra forma de identificar al usuario
+      const path = '/userN/' + userState.user.username // Reemplaza con la URL de tu servidor para eliminar cuentas
+      const username = this.username // O cualquier otra forma de identificar al usuario
 
       if (confirm('¿Are you sure you want to delete your account??')) {
-        axios.delete(path, { data: { email } })
+        axios.delete(path, { data: { username } })
           .then((res) => {
             console.log('Deleted account')
             alert('Your account has been successfully deleted.')
