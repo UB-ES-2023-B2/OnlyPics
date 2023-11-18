@@ -52,7 +52,7 @@ export default {
   methods: {
     fetchUserPhotos (username) {
       try {
-        const path = '/user/' + username + '/photos'
+        const path = '/user0/' + username + '/photos'
 
         axios.get(path)
           .then((response) => {
