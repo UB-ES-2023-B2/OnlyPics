@@ -8,7 +8,7 @@
       <!-- Profile Pic -->
       <div class="profile-pic">
         <img :src="userState.user.profile_pic || null">
-        <i v-if="!userState.user.profile_pic" class="fas fa-circle-user fa-10x"></i>
+        <i v-if="!userState.user.profile_pic || userState.user.profile_pic=='profile_pic.jpg'" class="fas fa-circle-user fa-10x"></i>
       </div>
 
       <!-- User Info -->

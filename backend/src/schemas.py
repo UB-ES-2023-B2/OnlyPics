@@ -2,13 +2,15 @@ import enum
 from pydantic import BaseModel, Field, validator
 import re
 from typing import Optional, List
-#from datetime import date
+from datetime import date
+
 
 class PhotoBase(BaseModel):
     url: str
     title: str
     price: int
     likes: int
+
     @validator("url")
     def validate_photo_url(cls, value):
         # Regular expression pattern for a valid image URL
@@ -39,12 +41,11 @@ class UserBase(BaseModel):
     email: str = Field(..., description="email")
     available_money: float
     photos: List[Photo] = []  # Add the 'photos' attribute
-    #name: str
-    #lastname: str
-    #biography: str
-    #profile_pic: Photo
-    #birthDate: date
-
+    name: str
+    lastname: str
+    biography: str
+    profile_pic: str
+    date_birth: date
 
     @validator("password")
     def validate_password(cls, value):

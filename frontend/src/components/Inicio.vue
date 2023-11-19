@@ -1,5 +1,6 @@
 <template>
-  <body style="background-color: #EEA3FF;">
+  <div>
+    <body style="background-color: #EEA3FF;">
       <HeaderMenu title="Random" :money="userState.user.available_money"/>
       <!-- Encabezado -->
       <div class="header">
@@ -42,8 +43,8 @@
           <div v-for="imagen in mostrarImagenesFiltradas()" :key="imagen.id" class="col-md-4">
             <div class="card">
               <div class="usuario-info">
-              👤 <!-- Este es el emoji de usuario -->
-              <span>{{ imagen.user_id }}</span>
+                👤 <!-- Este es el emoji de usuario -->
+                <span>{{ imagen.user_id }}</span>
               </div>
               <img class="card-img-top" :src="require('@/assets/' + imagen.url)" alt="">
               <div class="card-body">
@@ -55,10 +56,9 @@
           </div>
         </div>
       </div>
-  </body>
-  <div>
+    </body>
     <footer-view/>
-  </body>
+  </div>
 </template>
 
 <script>

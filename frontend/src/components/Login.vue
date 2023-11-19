@@ -62,6 +62,12 @@ export default {
       username: null,
       token: null,
       is_admin: null,
+      name: null,
+      lastname: null,
+      biography: null,
+      profile_pic: null,
+      date_birth:null,
+      photos:null,
       creatingAccount: false,
       money_available: null,
       addUserForm: {
@@ -94,7 +100,13 @@ export default {
               username: res.data.username,
               password: res.data.password,
               available_money: res.data.available_money,
-              email: res.data.email
+              email: res.data.email,
+              photos: res.data.photos,
+              name: res.data.name,
+              lastname: res.data.lastname,
+              biography: res.data.biography,
+              profile_pic: res.data.profile_pic,
+              data_birth: res.data.date_birth
             }
             this.$router.push({
               path: '/inicio'
@@ -120,17 +132,23 @@ export default {
         username: this.addUserForm.username,
         password: this.addUserForm.password,
         email: this.addUserForm.email,
-        available_money: 0
-
+        available_money: 0,
+        photos: [],
+        name: "Name",
+        lastname: "Lastname",
+        biography: "Biography",
+        profile_pic: "profile_pic.jpg",
+        date_birth: "2000-01-01"
       }
       axios.post(path, parameters)
         .then((res) => {
+          console.log(parameters)
           console.log('Account created')
           alert('Account created successfully')
-          this.$router.push({path: '/'})
-          window.location.reload()
+          this.toggleView()
         })
         .catch((error) => {
+          console.log(parameters)
           console.log('Se ha producido un error')
           console.log(error)
           alert('Error creating the account')

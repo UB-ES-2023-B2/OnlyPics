@@ -17,7 +17,7 @@
         <button @click="toggleOverlay()" class="round-button">+</button>
         <PostView v-if="showOverlay" @cancel="toggleOverlay()"/>
         <div class="dropdown">
-          <button class="dropbtn">{{ userState.user.username }} </button>
+          <button class="dropbtn">{{ userState.user.username }} <i class="fas fa-user" style="margin-left: 7px"></i></button>
           <div class="dropdown-content">
             <router-link to="/profile">Profile <i class="fas fa-circle-user" style="margin-left: 20px"></i></router-link>
             <router-link to="/settings">Settings <i class="fas fa-cog" style="margin-left: 10px"></i></router-link>
@@ -67,10 +67,12 @@ export default {
 
 <style scoped>
 h1 {
+  font-family: 'Courgette', cursive;
   color: white;
 }
 
 h2 {
+  font-family: 'Courgette', cursive;
   color: #a2c0c0;
 }
 
@@ -80,9 +82,11 @@ h2 {
   justify-content: center;
   gap: 50px;
   height: 80px;
+  font-family: 'Courgette', cursive;
 }
 
 header {
+  font-family: 'Courgette', cursive;
   background-color: #365b6d;
   padding-top: 20px;
   padding-bottom: 20px;
@@ -92,6 +96,7 @@ header a{
   text-decoration: none;
   list-style: none;
   color: white;
+  font-family: 'Courgette', cursive;
 }
 
 /*SEARCH-BAR*/
@@ -101,7 +106,13 @@ header a{
     border-radius: 4px;
     padding: 2px;
 }
-
+.nav-money {
+  color: white; /* Set the text color to white */
+  margin-top: 30px;
+  margin-left: -15px;
+  font-size: 17px;
+  font-family: 'Courgette', cursive;
+}
 .search-input {
     flex: 1;
     border: none;
@@ -127,7 +138,7 @@ header a{
   background-color: #568591;
   border-radius: 4px;
   color: white;
-  padding: 8px;
+  padding: 10px;
   border: none;
   cursor: pointer;
 }
