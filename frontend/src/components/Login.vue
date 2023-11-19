@@ -134,10 +134,10 @@ export default {
         email: this.addUserForm.email,
         available_money: 0,
         photos: [],
-        name: "Name",
-        lastname: "Lastname",
-        biography: "Biography",
-        profile_pic: "profile_pic.jpg",
+        name: "",
+        lastname: "",
+        biography: "",
+        profile_pic: "",
         date_birth: "2000-01-01"
       }
       axios.post(path, parameters)

@@ -14,6 +14,7 @@
       <!-- User Info -->
       <div class="user-info">
         <h1 class="username"> {{ userState.user.username }} </h1>
+        <p class="name" v-if=userState.user.name>{{ userState.user.name }} {{userState.user.lastname}}</p>
         <p class="biography" v-if=userState.user.biography>{{ userState.user.biography }}</p>
         <p class="biography" v-else>Biography</p>
       </div>
@@ -145,7 +146,6 @@ export default {
   .biography {
     font-family: 'Courgette', cursive;
     margin-top: 20px;
-    margin-left: 10px;
     /* Add styles for the biography here */
   }
 

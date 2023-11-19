@@ -29,7 +29,7 @@
         <h2>{{ title }}</h2>
         <nav>
           <router-link to="/inicio">Home</router-link> /
-          <router-link to="/account">Search</router-link> /
+          <router-link to="/profile">Search</router-link> /
           <router-link to="/">{{ title }}</router-link>
         </nav>
       </div>
