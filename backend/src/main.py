@@ -16,7 +16,7 @@ models.Base.metadata.create_all(bind=engine)  # Creem la base de dades amb els m
 
 app = FastAPI()
 
-origins = ["https://kind-ground-086ce7103.4.azurestaticapps.net", "http://localhost:8080"]
+origins = ["https://blue-grass-0a70c6f03.4.azurestaticapps.net", "http://localhost:8080"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -155,11 +155,11 @@ def read_photo_by_id(photo_id: int, db: Session = Depends(get_db)):
 
 
 @app.post("/photos/")
-def create_photo(photo: schemas.PhotoCreate, user_id: str, db: Session = Depends(get_db)):
+def create_photo(photo: schemas.PhotoCreate, db: Session = Depends(get_db)):
     db_photo = repository.get_photo_by_title(db, title=photo.title)
     if db_photo:
         raise HTTPException(status_code=400, detail="Photo already Exists, Use put for updating")
-    return repository.create_photo(db=db, photo=photo, user_id=user_id)
+    return repository.create_photo(db=db, photo=photo)
 
 
 @app.delete("/photos/{photo_id}/", response_model=schemas.Photo)

@@ -90,9 +90,9 @@ def get_user_by_photo(db: Session, photo: models.Photo):
     return photo.user
 
 
-def create_photo(db: Session, photo: schemas.PhotoCreate, user_id: str):
-    db_photo = models.Photo(url=photo.url, title=photo.title, price=photo.price, user_id=user_id, likes=photo.likes)
-    db_user = db.query(models.User).filter(models.User.username == user_id).first()
+def create_photo(db: Session, photo: schemas.PhotoCreate):
+    db_photo = models.Photo(user_id=photo.user_id, url=photo.url, title=photo.title, price=photo.price, likes=photo.likes)
+    db_user = db.query(models.User).filter(models.User.username == db_photo.user_id).first()
     try:
         db_user.photos.append(db_photo)
         db.add(db_photo)

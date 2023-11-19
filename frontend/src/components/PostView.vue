@@ -56,24 +56,20 @@ export default {
         url: this.selectedImage,
         title: this.imageTitle,
         price: this.imagePrice,
-        user_id: this.userId
+        user_id: this.userId,
+        likes: 0
       }
 
-      const baseUrl = '/photos'
+      const path = '/photos'
       console.log(parameters)
 
-      const config = {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }
-
-      axios.post(baseUrl, parameters, config)
+      axios.post(path, parameters)
         .then((response) => {
           console.log('Image posted successfully', response.data)
         })
         .catch((error) => {
           console.error('Error', error)
+          console.error(parameters)
         })
       this.$emit('cancel')
     },
