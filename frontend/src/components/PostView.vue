@@ -15,6 +15,11 @@
           <input type="radio" v-model="selectedOption" value="private" /> Private
         </label>
       </div>
+      <div class="price">
+        <label v-if="selectedOption === 'private'"> Price:
+          <input type="number" v-model="imagePrice" min="0"/>
+        </label>
+      </div>
 
       <!-- Botones al final de la página -->
       <div class="botones">
@@ -63,6 +68,7 @@ export default {
 
       if (error) {
         console.error('Error al subir la imagen:', error.message);
+        alert(error.message)
         return;
       }
 
@@ -164,6 +170,11 @@ input[type="text"] {
   padding: 10px;
   margin-top: 10px;
   border-radius: 3px;
+}
+
+.price input {
+  margin: 5px auto;
+  width: 80px; /* Ajusta el tamaño según tus necesidades */
 }
 
 </style>
