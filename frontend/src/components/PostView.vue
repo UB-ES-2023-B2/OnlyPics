@@ -29,6 +29,11 @@
 
 import axios from 'axios'
 import userState from '@/userState'
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = 'https://pnrmoqedbmcpxehltqvy.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBucm1vcWVkYm1jcHhlaGx0cXZ5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwMDI1NDgxMywiZXhwIjoyMDE1ODMwODEzfQ.VkkazTWbRULNBVgwu56bjdHqSwzUnHriNNOs_6PpqEQ';
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default {
   name: 'PostView',
@@ -45,13 +50,28 @@ export default {
     openFileSelector () {
       this.$refs.fileInput.click()
     },
-    handleFileSelect (event) {
+    async handleFileSelect (event) {
       const file = event.target.files[0]
-      if (file) {
-        this.selectedImage = URL.createObjectURL(file)
+      const rutaEnStorage = file.name
+      const rutaAssets = 'https://pnrmoqedbmcpxehltqvy.supabase.co/storage/v1/object/public/Assets/'
+
+      // Subir la imagen al almacenamiento de Supabase
+      const { data, error } = await supabase
+        .storage
+        .from('Assets')
+        .upload(rutaEnStorage, file);
+
+      if (error) {
+        console.error('Error al subir la imagen:', error.message);
+        return;
       }
+
+      console.log('Imagen subida exitosamente:', data.Key);
+
+      this.selectedImage = rutaAssets + rutaEnStorage
+      console.log('URL de la imagen:', this.selectedImage);
     },
-    uploadImage () {
+    async uploadImage () {
       const parameters = {
         url: this.selectedImage,
         title: this.imageTitle,

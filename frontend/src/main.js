@@ -7,6 +7,12 @@ import App from './App'
 import router from './router'
 import userState from './userState'
 import axios from 'axios'
+import { createClient } from '@supabase/supabase-js';
+
+
+const supabaseUrl = 'https://pnrmoqedbmcpxehltqvy.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBucm1vcWVkYm1jcHhlaGx0cXZ5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwMDI1NDgxMywiZXhwIjoyMDE1ODMwODEzfQ.VkkazTWbRULNBVgwu56bjdHqSwzUnHriNNOs_6PpqEQ';
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 Vue.config.productionTip = false
 

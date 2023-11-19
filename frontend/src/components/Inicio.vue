@@ -1,64 +1,64 @@
 <template>
-  <body style="background-color: #EEA3FF;">
-      <HeaderMenu title="Random" :money="userState.user.available_money"/>
-      <!-- Encabezado -->
-      <div class="header">
-        <div class="filter-button-container">
-          <button v-if="!this.mostrarFiltros" @click="mostrarFiltrosDialog">Filtrar y Ordenar</button>
-          <div v-if="this.mostrarFiltros" class="filter-modal">
-            <div class="filter-content">
-              <!-- Filtrado -->
-              <div class="filter-selection">
-                <h3>Filtrar por</h3>
-                <select v-model="filtrar">
-                  <option value="publicas">Públicas</option>
-                  <option value="privadas">Privadas</option>
-                  <option value="ambas">Ambas</option>
-                </select>
-              </div>
+  <div class="inicio">
+    <body style="background-color: #EEA3FF;">
+        <HeaderMenu title="Random" :money="userState.user.available_money"/>
+        <!-- Encabezado -->
+        <div class="header">
+          <div class="filter-button-container">
+            <button v-if="!mostrarFiltros" @click="mostrarFiltrosDialog">Filtrar y Ordenar</button>
+            <div v-if="mostrarFiltros" class="filter-modal">
+              <div class="filter-content">
+                <!-- Filtrado -->
+                <div class="filter-selection">
+                  <h3>Filtrar por</h3>
+                  <select v-model="filtrar">
+                    <option value="publicas">Públicas</option>
+                    <option value="privadas">Privadas</option>
+                    <option value="ambas">Ambas</option>
+                  </select>
+                </div>
 
-              <!-- Orden -->
-              <div class="filter-section">
-                <h3>Ordenar por</h3>
-                <select v-model="orden">
-                  <option value="popularidad_as">Popularidad ascendente</option>
-                  <option value="popularidad_des">Popularidad descendente</option>
-                  <option value="precio_as" v-if="filtrar != 'publicas'">Precio ascendente</option>
-                  <option value="precio_des" v-if="filtrar != 'publicas'">Precio descendente</option>
-                </select>
-              </div>
-              <div class="button-filtrar">
-                <button @click="aplicarFiltros">Cerrar</button>
+                <!-- Orden -->
+                <div class="filter-section">
+                  <h3>Ordenar por</h3>
+                  <select v-model="orden">
+                    <option value="popularidad_as">Popularidad ascendente</option>
+                    <option value="popularidad_des">Popularidad descendente</option>
+                    <option value="precio_as" v-if="filtrar != 'publicas'">Precio ascendente</option>
+                    <option value="precio_des" v-if="filtrar != 'publicas'">Precio descendente</option>
+                  </select>
+                </div>
+                <div class="button-filtrar">
+                  <button @click="aplicarFiltros">Cerrar</button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Galería de imágenes -->
-      <div class="gallery">
-        <div class="row">
-          <!-- Imágenes aleatorias -->
-          <div v-for="imagen in mostrarImagenesFiltradas()" :key="imagen.id" class="col-md-4">
-            <div class="card">
-              <div class="usuario-info">
-              👤 <!-- Este es el emoji de usuario -->
-              <span>{{ imagen.user_id }}</span>
-              </div>
-              <img class="card-img-top" :src="require('@/assets/' + imagen.url)" alt="">
-              <div class="card-body">
-                <h5 class="card-title">{{ imagen.title }}</h5>
-                <p class="card-text">{{ imagen.price }}🪙</p>
-                <p class="card-text">{{ imagen.likes}}❤</p>
+        <!-- Galería de imágenes -->
+        <div class="gallery">
+          <div class="row">
+            <!-- Imágenes aleatorias -->
+            <div v-for="imagen in mostrarImagenesFiltradas()" :key="imagen.id" class="col-md-4">
+              <div class="card">
+                <div class="usuario-info">
+                👤 <!-- Este es el emoji de usuario -->
+                <span>{{ imagen.user_id }}</span>
+                </div>
+                <img class="card-img-top" :src="require('@/assets/' + imagen.url)" alt="">
+                <div class="card-body">
+                  <h5 class="card-title">{{ imagen.title }}</h5>
+                  <p class="card-text">{{ imagen.price }}🪙</p>
+                  <p class="card-text">{{ imagen.likes}}❤</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-  </body>
-  <div>
+    </body>
     <footer-view/>
-  </body>
+  </div>
 </template>
 
 <script>
@@ -86,9 +86,11 @@ export default {
   methods: {
     mostrarFiltrosDialog(){
       this.mostrarFiltros = true;
+      console.log('mostrarFiltros:', this.mostrarFiltros);
     },
     aplicarFiltros(){
       this.mostrarFiltros = false;
+      console.log('mostrarFiltros:', this.mostrarFiltros);
     },
     backendPhotos(){
       try{
@@ -143,6 +145,11 @@ export default {
 
 <style scoped>
 /* Estilos CSS */
+
+.inicio {
+    font-family: 'Arial', sans-serif;
+    /* Add your overall styles for the profile page here */
+  }
 
 .button-filtrar{
   margin-top: 20px;
