@@ -46,7 +46,7 @@
                 👤 <!-- Este es el emoji de usuario -->
                 <span>{{ imagen.user_id }}</span>
                 </div>
-                <img class="card-img-top" :src="require('@/assets/' + imagen.url)" alt="">
+                <img class="card-img-top" :src="imagen.url" alt="">
                 <div class="card-body">
                   <h5 class="card-title">{{ imagen.title }}</h5>
                   <p class="card-text">{{ imagen.price }}🪙</p>
