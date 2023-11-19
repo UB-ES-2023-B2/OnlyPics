@@ -36,7 +36,7 @@
          <br><br>
 
         <label for="birthDate">BirthDate:</label>
-        <input type="date" id="birthDate" v-model="birthDate">
+        <input type="date" id="birthDate" v-model="date_birth">
         <br><br>
 
         <button @click="saveInformation">Save Information</button>
@@ -68,7 +68,7 @@ export default {
       lastname: userState.user.lastname,
       biography: userState.user.biography,
       username: userState.user.username,
-      birthDate: userState.user.birthDate,
+      date_birth: userState.user.date_birth,
       profile_pic: userState.user.profile_pic,
       email: userState.user.email,
       password: userState.user.password
@@ -83,7 +83,7 @@ export default {
         name: this.name,
         lastname: this.lastname,
         biography: this.biography,
-        birthDate: this.birthDate,
+        date_birth: this.date_birth,
         password: this.password,
         profile_pic: this.profile_pic,
         available_money: userState.user.available_money
@@ -103,7 +103,7 @@ export default {
             lastname: res.data.lastname,
             biography: res.data.biography,
             name: res.data.name,
-            birthDate: res.data.birthDate,
+            date_birth: res.data.date_birth,
             profile_pic: res.data.profile_pic
           }
         })
