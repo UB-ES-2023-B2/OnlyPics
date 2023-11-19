@@ -1,6 +1,6 @@
 <template>
   <div>
-    <HeaderMenu title="Random" :money="userState.user.available_money"/>
+    <HeaderMenu title="Settings" :money="userState.user.available_money"/>
     <!-- Botón para ir a la ventana de Inicio -->
 
     <div class="bloque">
@@ -30,12 +30,12 @@
         <textarea id="biography" v-model="biography" rows="5"></textarea>
          <br><br>
 
-        <label for="ProfilePhoto">Profile:</label>
+        <label for="ProfilePhoto">Profile Photo:</label>
         <label for="ProfilePhoto" class="custom-file-button">Select a File</label>
         <input type="file" id="ProfilePhoto" style="display: none" @change="handleFileUpload">
          <br><br>
 
-        <label for="birthDate">BirthDate:</label>
+        <label for="birthDate">Birth Date:</label>
         <input type="date" id="birthDate" v-model="date_birth">
         <br><br>
 
@@ -113,13 +113,16 @@ export default {
         })
     },
     deleteAccount () {
-      const path = 'http://127.0.0.1:8000/user' // Reemplaza con la URL de tu servidor para eliminar cuentas
+      const path = '/userN/' + userState.user.username // Reemplaza con la URL de tu servidor para eliminar cuentas
       const username = this.username // O cualquier otra forma de identificar al usuario
 
       if (confirm('¿Are you sure you want to delete your account??')) {
         axios.delete(path, { data: { username } })
           .then((res) => {
             console.log('Deleted account')
+            this.$router.push({
+              path: '/'
+            })
             alert('Your account has been successfully deleted.')
             // Realiza cualquier otra acción que desees después de eliminar la cuenta, como redirigir o limpiar datos.
           })
