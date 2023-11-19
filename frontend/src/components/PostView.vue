@@ -78,6 +78,12 @@ export default {
       console.log('URL de la imagen:', this.selectedImage);
     },
     async uploadImage () {
+      // Verifica que todos los campos estén llenos
+      if (!this.selectedImage || !this.imageTitle) {
+        console.error('All fields must be filled in.');
+        alert('All fields must be filled in.');
+        return;
+      }
       const parameters = {
         url: this.selectedImage,
         title: this.imageTitle,
