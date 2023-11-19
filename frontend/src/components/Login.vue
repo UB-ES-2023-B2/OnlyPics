@@ -85,6 +85,7 @@ export default {
       // Send a request to get the user's information
       axios.get(path)
         .then((res) => {
+          console.error(res)
           // Check if the provided password matches the user's password
           if (this.addUserForm.password === res.data.password) {
             // Password is correct, navigate to the "/inicio" page
@@ -126,7 +127,7 @@ export default {
         .then((res) => {
           console.log('Account created')
           alert('Account created successfully')
-          this.$router.push({path: '/inicio'})
+          this.$router.push({path: '/'})
           window.location.reload()
         })
         .catch((error) => {

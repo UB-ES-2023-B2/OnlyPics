@@ -1,93 +1,114 @@
 <template>
   <div>
-    <!-- Encabezado -->
-
+    <HeaderMenu title="Random" :money="userState.user.available_money"/>
     <!-- Botón para ir a la ventana de Inicio -->
 
     <div class="bloque">
       <div class="user-info-form">
-        <br>
+        <br><br>
         <label for="username">Username:</label>
         <input type="text" id="username" v-model="username">
-         <br>
+         <br><br>
 
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" v-model="nombre">
-         <br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" v-model="password">
+        <br><br>
 
-        <label for="apellido">Apellido:</label>
-        <input type="text" id="apellido" v-model="apellido">
-         <br>
+        <label for="name">Name:</label>
+        <input type="text" id="name" v-model="name">
+         <br><br>
+
+        <label for="lastname">Lastname:</label>
+        <input type="text" id="lastname" v-model="lastname">
+         <br><br>
 
         <label for="email">Email:</label>
         <input type="email" id="email" v-model="email">
-         <br>
+         <br><br>
 
-        <label for="biografia">Biografía:</label>
-        <textarea id="biografia" v-model="biografia" rows="5"></textarea>
-         <br>
+        <label for="biography">Biography:</label>
+        <textarea id="biography" v-model="biography" rows="5"></textarea>
+         <br><br>
 
-        <label for="fotoPerfil">Foto de Perfil:</label>
-        <input type="file" id="fotoPerfil" @change="handleFileUpload">
-         <br>
+        <label for="ProfilePhoto">Profile:</label>
+        <label for="ProfilePhoto" class="custom-file-button">Select a File</label>
+        <input type="file" id="ProfilePhoto" style="display: none" @change="handleFileUpload">
+         <br><br>
 
-        <button @click="guardarInformacion">Guardar Información</button>
-        <button @click="borrarCuenta">Borrar Cuenta</button>
+        <label for="birthDate">BirthDate:</label>
+        <input type="date" id="birthDate" v-model="birthDate">
+        <br><br>
+
+        <button @click="saveInformation">Save Information</button>
+        <button @click="deleteAccount">Delete Account</button>
+        <br><br>
       </div>
     </div>
+    <footer-view />
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import HeaderMenu from '@/components/HeaderMenu.vue'
+import FooterView from '@/components/FooterView.vue'
+import userState from '@/userState'
 
 export default {
   name: 'Settings',
+  components: {HeaderMenu, FooterView},
   data () {
     return {
-      nombre: '',
-      apellido: '',
-      biografia: '',
-      username: '',
-      fechaNacimiento: '',
-      perfil: '',
-      email: ''
+      name: userState.user.name,
+      lastname: userState.user.lastname,
+      biography: userState.user.biography,
+      username: userState.user.username,
+      birthDate: userState.user.birthDate,
+      profile_pic: userState.user.profile_pic,
+      email: userState.user.email,
+      password: userState.user.password
     }
   },
   methods: {
-    guardarInformacion () {
-      const path = 'http://127.0.0.1:8000/user' // Reemplaza con la URL de tu servidor para actualizar la información
-      const usuarioActualizado = {
+    saveInformation () {
+      const path = '/userN/' + userState.user.username // Reemplaza con la URL de tu servidor para actualizar la información
+      const updateUser = {
         email: this.email,
-        username: this.username
+        username: this.username,
+        name: this.name,
+        lastname: this.lastname,
+        biography: this.biography,
+        birthDate: this.birthDate,
+        password: this.password,
+        profile_pic: this.profile_pic
         // Agrega otros campos que desees actualizar
       }
 
-      axios.put(path, usuarioActualizado) // Puedes usar axios.post si corresponde
+      axios.put(path, updateUser) // Puedes usar axios.post si corresponde
         .then((res) => {
-          console.log('Información guardada')
-          alert('Tu información ha sido actualizada exitosamente.')
+          console.log('Saved information')
+          alert('Your information has been successfully updated.')
           // Realiza cualquier otra acción que desees después de guardar la información, como redirigir o actualizar datos en el componente.
         })
         .catch((error) => {
-          console.error('Error al guardar la información', error)
-          alert('Se produjo un error al guardar la información.')
+          console.error('Error saving information', error)
+          alert('An error occurred while saving information.')
         })
     },
-    borrarCuenta () {
-      const path = 'http://127.0.0.1:8000/user' // Reemplaza con la URL de tu servidor para eliminar cuentas
+    deleteAccount () {
+      const path = '/user' // Reemplaza con la URL de tu servidor para eliminar cuentas
       const email = this.email // O cualquier otra forma de identificar al usuario
 
-      if (confirm('¿Estás seguro de que deseas eliminar tu cuenta?')) {
+      if (confirm('¿Are you sure you want to delete your account??')) {
         axios.delete(path, { data: { email } })
           .then((res) => {
-            console.log('Cuenta eliminada')
-            alert('Tu cuenta ha sido eliminada exitosamente.')
+            console.log('Deleted account')
+            alert('Your account has been successfully deleted.')
             // Realiza cualquier otra acción que desees después de eliminar la cuenta, como redirigir o limpiar datos.
           })
           .catch((error) => {
-            console.error('Error al eliminar la cuenta', error)
-            alert('Se produjo un error al eliminar la cuenta.')
+            console.error('Error deleting account', error)
+            alert('An error occurred while deleting the account.')
           })
       }
     }
@@ -108,6 +129,25 @@ export default {
   justify-content: center; /* Centra las imágenes */
   max-width: 1000px; /* Ancho máximo de la galería */
   margin: 0 auto; /* Centra la galería en la página */
-  background-color: rgb(128, 128, 128);
 }
+
+header {
+  background-color: #365b6d;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.custom-file-button {
+  cursor: pointer;
+  padding: 10px 20px;
+  background-color: #007BFF;
+  color: #fff;
+  border: 1px solid #007BFF;
+  border-radius: 5px;
+}
+
+.custom-file-button:hover {
+  background-color: #0056b3;
+}
+
 </style>

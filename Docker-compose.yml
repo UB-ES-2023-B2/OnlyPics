@@ -3,6 +3,7 @@ version: '3.8'
 services:
 
   backend:
+    image: joanmaceo/onlypicsbackend8:latest
     build: ./backend
     ports:
       - 8000:8000
@@ -11,8 +12,6 @@ services:
       - PYTHONPATH=/app/src
     volumes:
       - ./backend:/app
-      - ./frontend/dist:/app/dist
-    command: uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
     depends_on:
       - db
     networks:
@@ -23,7 +22,6 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules
-      - /app/dist
     ports:
       - 8080:8080
     networks:

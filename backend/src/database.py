@@ -5,8 +5,8 @@ import os
 
 
 #SQLALCHEMY_DATABASE_URL = "sqlite:///./data.db"
-SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
-#SQLALCHEMY_DATABASE_URL = "postgresql://postgres:postgres@db:5432/appdb"
+#SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
+SQLALCHEMY_DATABASE_URL = "postgresql://postgres:Onlypicsdatabase1@db.pnrmoqedbmcpxehltqvy.supabase.co:5432/postgres"
 
 
 engine = create_engine(

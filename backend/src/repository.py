@@ -1,24 +1,6 @@
 from sqlalchemy.orm import Session
 import models, schemas
 
-'''Ejemplos
-def get_team(db: Session, team_id: int):
-    return db.query(models.Team).filter(models.Team.id == team_id).first()
-
-def get_team_by_name(db: Session, name: str):
-    return db.query(models.Team).filter(models.Team.name == name).first()
-
-def get_teams(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Team).offset(skip).limit(limit).all()
-
-def create_team(db: Session, team: schemas.TeamCreate):
-    db_team = models.Team(name=team.name, country=team.country, description=team.description)
-    db.add(db_team)
-    db.commit()
-    db.refresh(db_team)
-    return db_team
-'''
-
 
 # Get user by his ID
 def get_user(db: Session, user_id: int):
@@ -61,6 +43,11 @@ def update_user(db: Session, db_user: models.User, user: schemas.UserCreate):
         db_user.password = user.password
         db_user.email = user.email
         db_user.available_money = user.available_money
+        #db_user.name = user.name
+        #db_user.lastname = user.lastname
+        #db_user.biography = user.biography
+        #db_user.date_birth = user.birthDate
+        #db_user.profile_pic = user.profile_pic
         db.commit()
         db.refresh(db_user)
         return db_user
@@ -104,7 +91,7 @@ def get_user_by_photo(db: Session, photo: models.Photo):
 
 
 def create_photo(db: Session, photo: schemas.PhotoCreate, user_id: str):
-    db_photo = models.Photo(url=photo.url, title=photo.title, price=photo.price, user_id=user_id)
+    db_photo = models.Photo(url=photo.url, title=photo.title, price=photo.price, user_id=user_id, likes=photo.likes)
     db_user = db.query(models.User).filter(models.User.username == user_id).first()
     try:
         db_user.photos.append(db_photo)

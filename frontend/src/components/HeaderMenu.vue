@@ -4,18 +4,20 @@
       <div class="nav-bar">
         <h1><router-link to="/inicio">OnlyPics</router-link></h1>
         <div class="search-bar">
-            <div class="search-bar">
-              <input type="text" placeholder="Search..." class="search-input">
-              <button class="search-button">Search</button>
-            </div>
+          <div class="search-bar">
+            <input type="text" placeholder="Search..." class="search-input">
+            <button class="search-button">Search</button>
+          </div>
         </div>
-         <div class="shopping-cart" style="margin-top: 10px">
+        <div class="shopping-cart" style="margin-top: 10px">
           <a href="#"><i class="fa-sharp fas fa-cart-shopping fa-xl" style="margin-left: 10px"></i></a>
-         </div>
-          <p class="nav-money">{{ money }}<i class="fa-solid fa-sack-dollar fa-bounce" style="margin-left: 7px"></i></p>
-        <!--<router-link to="/">Log In</router-link>-->
+        </div>
+        <p class="nav-money">{{ money }}<i class="fa-solid fa-sack-dollar fa-bounce" style="margin-left: 7px"></i></p>
+
+        <button @click="toggleOverlay()" class="round-button">+</button>
+        <PostView v-if="showOverlay" @cancel="toggleOverlay()"/>
         <div class="dropdown">
-          <button class="dropbtn">{{ userState.user.username }} <i class="fas fa-user" style="margin-left: 7px"></i></button>
+          <button class="dropbtn">{{ userState.user.username }} </button>
           <div class="dropdown-content">
             <router-link to="/profile">Profile <i class="fas fa-circle-user" style="margin-left: 20px"></i></router-link>
             <router-link to="/settings">Settings <i class="fas fa-cog" style="margin-left: 10px"></i></router-link>
@@ -27,8 +29,8 @@
         <h2>{{ title }}</h2>
         <nav>
           <router-link to="/inicio">Home</router-link> /
-          <a href ="#">Search</a> /
-          <a href="#">{{ title }}</a>
+          <router-link to="/account">Search</router-link> /
+          <router-link to="/">{{ title }}</router-link>
         </nav>
       </div>
     </header>
@@ -36,6 +38,7 @@
 </template>
 <script>
 import userState from '@/userState'
+import PostView from '@/components/PostView.vue'
 
 export default {
   name: 'HeaderMenu',
@@ -47,6 +50,17 @@ export default {
     userState () {
       return userState
     }
+  },
+  data () {
+    return {
+      showOverlay: false
+    }
+  },
+  components: { PostView },
+  methods: {
+    toggleOverlay () {
+      this.showOverlay = !this.showOverlay
+    }
   }
 }
 </script>
@@ -54,12 +68,10 @@ export default {
 <style scoped>
 h1 {
   color: white;
-  font-family: 'Courgette', cursive;
 }
 
 h2 {
   color: #a2c0c0;
-  font-family: 'Courgette', cursive;
 }
 
 .nav-bar {
@@ -68,7 +80,6 @@ h2 {
   justify-content: center;
   gap: 50px;
   height: 80px;
-  font-family: 'Courgette', cursive;
 }
 
 header {
@@ -81,7 +92,6 @@ header a{
   text-decoration: none;
   list-style: none;
   color: white;
-  font-family: 'Courgette', cursive;
 }
 
 /*SEARCH-BAR*/
@@ -117,7 +127,7 @@ header a{
   background-color: #568591;
   border-radius: 4px;
   color: white;
-  padding: 10px;
+  padding: 8px;
   border: none;
   cursor: pointer;
 }
@@ -157,11 +167,28 @@ header a{
 .dropdown:hover .dropdown-content {
   display: block;
 }
-.nav-money {
-  color: white; /* Set the text color to white */
-  margin-top: 30px;
-  margin-left: -15px;
-  font-size: 17px;
-  font-family: 'Courgette', cursive;
+
+.buy-button {
+  width: 30px;
 }
+
+/* Botó per pública imatge*/
+.round-button {
+  display: inline-block;
+  background-color: #568591;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;
+}
+
+.round-button:hover {
+background-color: #0c5460;
+}
+
 </style>
