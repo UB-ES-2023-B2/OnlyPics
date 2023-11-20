@@ -41,7 +41,7 @@
           <div class="row">
             <!-- Imágenes aleatorias -->
             <div v-for="imagen in mostrarImagenesFiltradas()" :key="imagen.id" class="col-md-4">
-              <div class="card">
+              <div class="card" @click="openPopup(imagen)">
                 <div class="usuario-info">
                 👤 <!-- Este es el emoji de usuario -->
                 <span>{{ imagen.user_id }}</span>
@@ -55,6 +55,7 @@
               </div>
             </div>
           </div>
+          <PopUp v-if="selectedImage" :selectedImage="selectedImage" @close="closePopup" />
         </div>
     </body>
     <footer-view/>
@@ -64,6 +65,7 @@
 <script>
 import HeaderMenu from '@/components/HeaderMenu.vue'
 import FooterView from '@/components/FooterView.vue'
+import PopUp from "@/components/PopUp.vue";
 import userState from '@/userState'
 import axios from 'axios'
 
@@ -74,10 +76,11 @@ export default {
       return userState
     }
   },
-  components: {FooterView, HeaderMenu},
+  components: {FooterView, HeaderMenu, PopUp},
   data () {
     return {
       mostrarFiltros: false, //Variable para controlar la visibilidad de los filtros
+      selectedImage: null,
       filtrar: null,
       orden: null,
       photos: []
@@ -134,7 +137,15 @@ export default {
         imagenesMostrar.sort((a, b) => b.price - a.price);
       }
       return imagenesMostrar;
-    }
+    },
+    openPopup(imagen) {
+      // Abrir el popup y establecer la imagen seleccionada
+      this.selectedImage = imagen;
+    },
+    closePopup() {
+      // Cerrar el popup y restablecer la imagen seleccionada
+      this.selectedImage = null;
+    },
   },
   created(){
     this.backendPhotos()
@@ -167,6 +178,11 @@ export default {
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   overflow: hidden;
   background-color: rgba(255, 255, 255, 0.2);
+}
+
+.card:hover {
+  transform: scale(1.025); /* Ajusta el valor según sea necesario para el aumento de tamaño en el hover */
+  background-color: rgba(255, 255, 255, 0.6);
 }
 
 .card-img-top {
