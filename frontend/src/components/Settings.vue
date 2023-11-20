@@ -30,7 +30,7 @@
         <br><br>
 
         <label for="ProfilePhoto" class="custom-file-button">Select Profile Photo</label>
-        <input type="file" id="ProfilePhoto" style="display: none" @change="handleFileUpload">
+        <input type="file" id="ProfilePhoto" style="display: none">
         <br><br>
 
         <label for="birthDate">Birth Date:</label>
@@ -55,13 +55,9 @@ import userState from '@/userState'
 export default {
   name: 'Settings',
   components: {HeaderMenu, FooterView},
-  computed: {
-    userState () {
-      return userState
-    }
-  },
   data () {
     return {
+      userState: userState,
       name: userState.user.name,
       lastname: userState.user.lastname,
       biography: userState.user.biography,
@@ -75,6 +71,7 @@ export default {
   methods: {
     saveInformation () {
       const path = '/userN/' + userState.user.username // Reemplaza con la URL de tu servidor para actualizar la información
+      const formattedDate = this.formatDate(this.date_birth)
       const updateUser = {
         email: this.email,
         username: this.username,
@@ -102,18 +99,26 @@ export default {
             lastname: res.data.lastname,
             biography: res.data.biography,
             name: res.data.name,
-            date_birth: res.data.date_birth,
+            // Convert date_birth to "aaaa/mm/dd" format
+            date_birth: formattedDate,
             profile_pic: res.data.profile_pic
           }
           this.$router.push({
               path: '/profile'
             })
-            window.location.reload()
         })
         .catch((error) => {
           console.error('Error saving information', error)
           alert('An error occurred while saving information.')
         })
+    },
+    formatDate(inputDate) {
+      // Convert date to "aaaa/mm/dd" format
+      const dateObj = new Date(inputDate)
+      const year = dateObj.getFullYear()
+      const month = String(dateObj.getMonth() + 1).padStart(2, '0')
+      const day = String(dateObj.getDate()).padStart(2, '0')
+      return `${year}-${month}-${day}`
     },
     deleteAccount () {
       const path = '/user/' + userState.user.username // Reemplaza con la URL de tu servidor para eliminar cuentas
