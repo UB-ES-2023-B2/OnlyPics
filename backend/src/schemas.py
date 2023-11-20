@@ -5,11 +5,12 @@ from typing import Optional, List
 #from datetime import date
 
 class PhotoBase(BaseModel):
+    user_id: str
     url: str
     title: str
     price: int
     likes: int
-    @validator("url")
+    """2@validator("url")
     def validate_photo_url(cls, value):
         # Regular expression pattern for a valid image URL
         image_url_pattern = r'\.(jpg|jpeg|png|gif|bmp|tiff)$'
@@ -18,7 +19,7 @@ class PhotoBase(BaseModel):
         if not re.search(image_url_pattern, value, re.IGNORECASE):
             raise ValueError("Invalid image URL format. Supported formats: jpg, jpeg, png, gif, bmp, tiff")
 
-        return value
+        return value"""
 
 
 class PhotoCreate(PhotoBase):
@@ -27,7 +28,6 @@ class PhotoCreate(PhotoBase):
 
 class Photo(PhotoBase):
     id: int
-    user_id: str
 
     class Config:
         from_attributes = True
