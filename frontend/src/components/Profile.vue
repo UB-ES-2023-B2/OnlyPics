@@ -24,11 +24,12 @@
     <!-- Uploaded Pics Grid -->
     <div class="pics-grid" v-if="photos">
       <div v-for="photo in photos" :key="photo.id" class="photo">
-          <img class="card-img-top" :src="photo.url" alt="">
+          <img class="card-img-top" :src="photo.url" alt="" @click="openPopup(photo)">
         <div class="image-container">
           <p>{{ photo.title }}</p>
         </div>
       </div>
+      <PopUpProfileDelete v-if="selectedImage" :selectedImage="selectedImage" @close="closePopup" />
     </div>
     <footer-view />
   </div>
@@ -38,18 +39,28 @@
 import FooterView from '@/components/FooterView.vue'
 import userState from '@/userState'
 import HeaderMenu from '@/components/HeaderMenu.vue'
+import PopUpProfileDelete from "@/components/PopUpProfileDelete.vue";
 import axios from 'axios'
 
 export default {
   name: 'Profile',
-  components: {HeaderMenu, FooterView},
+  components: {HeaderMenu, FooterView, PopUpProfileDelete},
   data () {
     return {
+      selectedImage: null,
       userState: userState,
       photos: []
     }
   },
   methods: {
+    openPopup(imagen) {
+      // Abrir el popup y establecer la imagen seleccionada
+      this.selectedImage = imagen;
+    },
+    closePopup() {
+      // Cerrar el popup y restablecer la imagen seleccionada
+      this.selectedImage = null;
+    },
     fetchUserPhotos (username) {
       try {
         const path = '/user/' + username + '/photos'
@@ -176,6 +187,11 @@ export default {
   text-align: center; /* Center the image within the container */
   padding: 10px 20px; /* Add padding around the image for separation */
   color: #a2c0c0
+}
+
+.card-img-top:hover {
+  transform: scale(1.025); /* Ajusta el valor según sea necesario para el aumento de tamaño en el hover */
+  background-color: rgba(255, 255, 255, 0.6);
 }
 
 img {
