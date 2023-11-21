@@ -54,13 +54,32 @@ export default {
     }
   },
   methods: {
+    toggleScroll() {
+      // Obtén el elemento body
+      const body = document.body;
+
+      // Verifica si el scroll está habilitado
+      if (body.style.overflow === 'hidden') {
+        // Si está desactivado, vuelve a habilitarlo
+        body.style.overflow = 'auto';
+      } else {
+        // Si está habilitado, desactívalo
+        body.style.overflow = 'hidden';
+      }
+    },
     openPopup(imagen) {
       // Abrir el popup y establecer la imagen seleccionada
       this.selectedImage = imagen;
+      this.toggleScroll()
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth" // Agrega un desplazamiento suave
+      });
     },
     closePopup() {
       // Cerrar el popup y restablecer la imagen seleccionada
       this.selectedImage = null;
+      this.toggleScroll()
     },
     fetchUserPhotos (username) {
       try {

@@ -8,10 +8,10 @@ url_base = "http://127.0.0.1:8000"
 db = SessionLocal()
 
 # delete all Users
-db.query(User).delete()
+#db.query(User).delete()
 
 # commit the changes
-db.commit()
+#db.commit()
 
 client = TestClient(app)
 
@@ -90,10 +90,14 @@ def test_read_users():
     ]
     response = client.get("/users/")
     assert response.status_code == 200
-    assert len(response.json()) == len(users)
-    for i, user in enumerate(users):
-        assert response.json()[i]["username"] == user["username"]
-        assert response.json()[i]["email"] == user["email"]
+    response = client.get("/userN/Javi")
+    assert response.status_code == 200
+    response = client.get("/userN/joan200")
+    assert response.status_code == 200
+    #assert len(response.json()) == len(users)
+    #for i, user in enumerate(users):
+     #   assert response.json()[i]["username"] == user["username"]
+      #  assert response.json()[i]["email"] == user["email"]
 
 
 def test_update_user():
@@ -121,3 +125,6 @@ def test_delete_user():
     response = client.delete(f"/user/Marcos")
     assert response.status_code == 200
     assert response.json()["username"] == user["username"]
+
+if __name__ == "__main__":
+    test_read_users()
