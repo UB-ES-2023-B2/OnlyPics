@@ -49,7 +49,7 @@
                 <img class="card-img-top" :src="imagen.url" :alt="imagen.title" @contextmenu.prevent="preventRightClick">
                 <div class="card-body">
                   <h5 class="card-title">{{ imagen.title }}</h5>
-                  <p class="card-text">{{ imagen.price }}🪙</p>
+                  <p class="card-text">{{ imagen.price }}<i class="fa-solid fa-coins"></i></p>
                   <p class="card-text">{{ imagen.likes}}❤</p>
                 </div>
               </div>
