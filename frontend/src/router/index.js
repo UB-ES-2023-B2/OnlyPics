@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Inicio from '@/components/Inicio'
 import Login from '@/components/Login'
-import Settings from '@/components/Settings'
+import Settings from '@/components/Settings.vue'
 import Profile from '@/components/Profile.vue'
 
 Vue.use(Router)

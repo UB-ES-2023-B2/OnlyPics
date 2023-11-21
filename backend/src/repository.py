@@ -24,7 +24,7 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
 
 # Add new user
 def create_user(db: Session, user: schemas.UserCreate):
-    db_user = models.User(username=user.username, available_money=user.available_money, email=user.email)
+    db_user = models.User(username=user.username, available_money=user.available_money, email=user.email, name=user.name, lastname=user.lastname, biography=user.biography, profile_pic=user.profile_pic, date_birth=user.date_birth)
     db_user.password = user.password
 
     try:
@@ -43,11 +43,11 @@ def update_user(db: Session, db_user: models.User, user: schemas.UserCreate):
         db_user.password = user.password
         db_user.email = user.email
         db_user.available_money = user.available_money
-        #db_user.name = user.name
-        #db_user.lastname = user.lastname
-        #db_user.biography = user.biography
-        #db_user.date_birth = user.birthDate
-        #db_user.profile_pic = user.profile_pic
+        db_user.name = user.name
+        db_user.lastname = user.lastname
+        db_user.biography = user.biography
+        db_user.date_birth = user.date_birth
+        db_user.profile_pic = user.profile_pic
         db.commit()
         db.refresh(db_user)
         return db_user
@@ -90,9 +90,9 @@ def get_user_by_photo(db: Session, photo: models.Photo):
     return photo.user
 
 
-def create_photo(db: Session, photo: schemas.PhotoCreate, user_id: str):
-    db_photo = models.Photo(url=photo.url, title=photo.title, price=photo.price, user_id=user_id, likes=photo.likes)
-    db_user = db.query(models.User).filter(models.User.username == user_id).first()
+def create_photo(db: Session, photo: schemas.PhotoCreate):
+    db_photo = models.Photo(user_id=photo.user_id, url=photo.url, title=photo.title, price=photo.price, likes=photo.likes)
+    db_user = db.query(models.User).filter(models.User.username == db_photo.user_id).first()
     try:
         db_user.photos.append(db_photo)
         db.add(db_photo)

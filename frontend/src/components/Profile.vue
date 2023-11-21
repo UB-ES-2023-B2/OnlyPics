@@ -8,12 +8,13 @@
       <!-- Profile Pic -->
       <div class="profile-pic">
         <img :src="userState.user.profile_pic || null">
-        <i v-if="!userState.user.profile_pic" class="fas fa-circle-user fa-10x"></i>
+        <i v-if="!userState.user.profile_pic || userState.user.profile_pic=='profile_pic.jpg'" class="fas fa-circle-user fa-10x"></i>
       </div>
 
       <!-- User Info -->
       <div class="user-info">
         <h1 class="username"> {{ userState.user.username }} </h1>
+        <p class="name" v-if=userState.user.name>{{ userState.user.name }} {{userState.user.lastname}}</p>
         <p class="biography" v-if=userState.user.biography>{{ userState.user.biography }}</p>
         <p class="biography" v-else>Biography</p>
       </div>
@@ -24,11 +25,12 @@
     <!-- Uploaded Pics Grid -->
     <div class="pics-grid" v-if="photos">
       <div v-for="photo in photos" :key="photo.id" class="photo">
-          <img class="card-img-top" :src="photo.url" alt="">
+          <img class="card-img-top" :src="photo.url" alt="" @click="openPopup(photo)">
         <div class="image-container">
           <p>{{ photo.title }}</p>
         </div>
       </div>
+      <PopUpProfileDelete v-if="selectedImage" :selectedImage="selectedImage" @close="closePopup" />
     </div>
     <footer-view />
   </div>
@@ -38,18 +40,47 @@
 import FooterView from '@/components/FooterView.vue'
 import userState from '@/userState'
 import HeaderMenu from '@/components/HeaderMenu.vue'
+import PopUpProfileDelete from "@/components/PopUpProfileDelete.vue";
 import axios from 'axios'
 
 export default {
   name: 'Profile',
-  components: {HeaderMenu, FooterView},
+  components: {HeaderMenu, FooterView, PopUpProfileDelete},
   data () {
     return {
+      selectedImage: null,
       userState: userState,
       photos: []
     }
   },
   methods: {
+    toggleScroll() {
+      // Obtén el elemento body
+      const body = document.body;
+
+      // Verifica si el scroll está habilitado
+      if (body.style.overflow === 'hidden') {
+        // Si está desactivado, vuelve a habilitarlo
+        body.style.overflow = 'auto';
+      } else {
+        // Si está habilitado, desactívalo
+        body.style.overflow = 'hidden';
+      }
+    },
+    openPopup(imagen) {
+      // Abrir el popup y establecer la imagen seleccionada
+      this.selectedImage = imagen;
+      this.toggleScroll()
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth" // Agrega un desplazamiento suave
+      });
+    },
+    closePopup() {
+      // Cerrar el popup y restablecer la imagen seleccionada
+      this.selectedImage = null;
+      this.toggleScroll()
+    },
     fetchUserPhotos (username) {
       try {
         const path = '/user/' + username + '/photos'
@@ -145,7 +176,6 @@ export default {
   .biography {
     font-family: 'Courgette', cursive;
     margin-top: 20px;
-    margin-left: 10px;
     /* Add styles for the biography here */
   }
 
@@ -176,6 +206,11 @@ export default {
   text-align: center; /* Center the image within the container */
   padding: 10px 20px; /* Add padding around the image for separation */
   color: #a2c0c0
+}
+
+.card-img-top:hover {
+  transform: scale(1.025); /* Ajusta el valor según sea necesario para el aumento de tamaño en el hover */
+  background-color: rgba(255, 255, 255, 0.6);
 }
 
 img {
