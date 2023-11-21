@@ -84,7 +84,11 @@ export default {
         available_money: userState.user.available_money
         // Agrega otros campos que desees actualizar
       }
-
+      // Verify all fields before update.
+      if (!this.email || !this.username || !this.name || !this.lastname || !this.biography || !this.date_birth || !this.password){
+        alert('Complete the form before updating')
+        return
+      }
       axios.put(path, updateUser) // Puedes usar axios.post si corresponde
         .then((res) => {
           console.log(updateUser)
