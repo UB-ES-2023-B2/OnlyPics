@@ -162,9 +162,9 @@ def create_photo(photo: schemas.PhotoCreate, db: Session = Depends(get_db)):
     return repository.create_photo(db=db, photo=photo)
 
 
-@app.delete("/photos/{photo_id}/", response_model=schemas.Photo)
-def delete_photo(photo_id: int, db: Session = Depends(get_db)):
-    photo = repository.get_photo(db, photo_id)
+@app.delete("/photos/{photo_title}/", response_model=schemas.Photo)
+def delete_photo(photo_title: str, db: Session = Depends(get_db)):
+    photo = repository.get_photo_by_title(db, photo_title)
     if not photo:
         raise HTTPException(status_code=404, detail="Photo not found")
     else:
