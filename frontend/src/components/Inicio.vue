@@ -46,7 +46,7 @@
                 👤 <!-- Este es el emoji de usuario -->
                 <span>{{ imagen.user_id }}</span>
                 </div>
-                <img class="card-img-top" :src="imagen.url" alt="">
+                <img class="card-img-top" :src="imagen.url" :alt="imagen.title" @contextmenu.prevent="preventRightClick">
                 <div class="card-body">
                   <h5 class="card-title">{{ imagen.title }}</h5>
                   <p class="card-text">{{ imagen.price }}🪙</p>
@@ -55,7 +55,7 @@
               </div>
             </div>
           </div>
-          <PopUp v-if="selectedImage" :selectedImage="selectedImage" @close="closePopup" />
+          <PopUp v-if="selectedImage" :selectedImage="selectedImage" :userMoney="userState.user.available_money" @close="closePopup"/>
         </div>
     </body>
     <footer-view/>
@@ -146,6 +146,10 @@ export default {
       // Cerrar el popup y restablecer la imagen seleccionada
       this.selectedImage = null;
     },
+    // Mètode per prevenir el clic dret
+    preventRightClick(event) {
+      event.preventDefault();
+    }
   },
   created(){
     this.backendPhotos()
@@ -167,6 +171,7 @@ export default {
 }
 
 .card {
+  z-index: 1;
   flex: 1;
   width: 300px;
   height: 400px;

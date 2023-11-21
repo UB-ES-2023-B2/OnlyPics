@@ -115,6 +115,7 @@ export default {
 <style scoped>
 
 .main-container {
+  z-index: 100;
   position: absolute;
   top: 0;
   left: 0;
