@@ -8,12 +8,13 @@
       <!-- Profile Pic -->
       <div class="profile-pic">
         <img :src="userState.user.profile_pic || null">
-        <i v-if="!userState.user.profile_pic" class="fas fa-circle-user fa-10x"></i>
+        <i v-if="!userState.user.profile_pic || userState.user.profile_pic=='profile_pic.jpg'" class="fas fa-circle-user fa-10x"></i>
       </div>
 
       <!-- User Info -->
       <div class="user-info">
         <h1 class="username"> {{ userState.user.username }} </h1>
+        <p class="name" v-if=userState.user.name>{{ userState.user.name }} {{userState.user.lastname}}</p>
         <p class="biography" v-if=userState.user.biography>{{ userState.user.biography }}</p>
         <p class="biography" v-else>Biography</p>
       </div>
@@ -156,7 +157,6 @@ export default {
   .biography {
     font-family: 'Courgette', cursive;
     margin-top: 20px;
-    margin-left: 10px;
     /* Add styles for the biography here */
   }
 
