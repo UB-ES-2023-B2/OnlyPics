@@ -6,6 +6,7 @@ from datetime import date
 
 
 class PhotoBase(BaseModel):
+    user_id: str
     url: str
     title: str
     price: int
@@ -29,7 +30,6 @@ class PhotoCreate(PhotoBase):
 
 class Photo(PhotoBase):
     id: int
-    user_id: str
 
     class Config:
         from_attributes = True
