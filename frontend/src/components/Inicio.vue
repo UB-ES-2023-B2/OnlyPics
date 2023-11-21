@@ -1,7 +1,7 @@
 <template>
   <div class="inicio">
+    <HeaderMenu title="Inicio" :money="userState.user.available_money"/>
     <body style="background-color: #EEA3FF;">
-        <HeaderMenu title="Random" :money="userState.user.available_money"/>
         <!-- Encabezado -->
         <div class="header">
           <div class="filter-button-container">
