@@ -5,7 +5,7 @@
       <h2>{{ selectedImage.title }}</h2>
       <img :src="selectedImage.url" alt="" class="popup-image">
       <div style="text-align: center;">
-        <p style="display: inline-block; margin-right: 15px;">{{ selectedImage.price }}🪙</p>
+        <p style="display: inline-block; margin-right: 15px;">{{ selectedImage.price }}<i class="fa-solid fa-coins"></i></p>
         <p style="display: inline-block;">{{ selectedImage.likes }}❤</p>
         <button @click="DeleteImage">DELETE</button>
       </div>

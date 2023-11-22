@@ -5,7 +5,7 @@
       <h2>{{ selectedImage.title }}</h2>
       <img :src="selectedImage.url" :alt="selectedImage.title" class="popup-image" @contextmenu.prevent="preventRightClick">
       <div style="text-align: center;">
-        <p style="display: inline-block; margin-right: 15px;">{{ selectedImage.price }}🪙</p>
+        <p style="display: inline-block; margin-right: 15px;">{{ selectedImage.price }}<i class="fa-solid fa-coins"></i></p>
         <p style="display: inline-block;">{{ selectedImage.likes }}❤</p>
       </div>
       <button v-if="userMoney >= selectedImage.price" @click="downloadImage" class="download-button">Download Image</button>
