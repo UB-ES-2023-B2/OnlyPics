@@ -277,4 +277,18 @@ textarea.styled-input {
   max-height: 150px;
   margin-top: 10px;
 }
+
+button {
+  margin-top: 10px;
+  background-color: #568591;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+button:hover {
+  background-color: #0c5460;
+}
 </style>
