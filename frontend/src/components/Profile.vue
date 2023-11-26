@@ -205,7 +205,7 @@ export default {
   background-color: #365b6d;
   text-align: center; /* Center the image within the container */
   padding: 10px 20px; /* Add padding around the image for separation */
-  color: #a2c0c0
+  color: #a2c0c0;
 }
 
 .card-img-top:hover {
