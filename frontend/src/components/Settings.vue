@@ -172,13 +172,22 @@ export default {
       this.selectedImage = rutaAssets + rutaEnStorage
       console.log('URL de la imagen:', this.selectedImage);
 
-      // Verificar si la imagen ya existe en el almacenamiento de Supabase
-      const { data: existingImage, error: existingImageError } = await supabase
+      // Obtener la lista de archivos en el almacenamiento de Supabase
+      const { data: fileList, error: fileListError } = await supabase
         .storage
         .from('ProfileAssets')
-        .getMetadata([rutaEnStorage]);
+        .list();
 
-      if (existingImage && existingImage.length > 0) {
+      if (fileListError) {
+        console.error('Error al obtener la lista de archivos:', fileListError.message);
+        alert(fileListError.message);
+        return;
+      }
+
+      // Verificar si la imagen ya existe en la lista de archivos
+      const existingImage = fileList.find(fileInfo => fileInfo.name === rutaEnStorage);
+
+      if (existingImage) {
         console.log('La imagen ya existe. No es necesario subirla de nuevo.');
         // Puedes realizar acciones adicionales o simplemente salir de la función.
         return;
@@ -265,7 +274,7 @@ textarea.styled-input {
 
 .max-width-image {
   max-width: 100%;
-  max-height: 100px;
+  max-height: 150px;
   margin-top: 10px;
 }
 </style>

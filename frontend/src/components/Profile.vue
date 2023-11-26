@@ -146,8 +146,8 @@ export default {
 }
   .profile-pic img {
     border-radius: 50%;
-    width: 100px;
-    height: 100px;
+    width: 200px;
+    height: 200px;
     /* Add styles for the profile pic here */
   }
 .text-latest{
