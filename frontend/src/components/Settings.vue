@@ -167,12 +167,27 @@ export default {
     async handleFileSelect (event) {
       const file = event.target.files[0]
       const rutaEnStorage = file.name
-      const rutaAssets = 'https://pnrmoqedbmcpxehltqvy.supabase.co/storage/v1/object/public/Assets/'
+      const rutaAssets = 'https://pnrmoqedbmcpxehltqvy.supabase.co/storage/v1/object/public/ProfileAssets/'
+
+      this.selectedImage = rutaAssets + rutaEnStorage
+      console.log('URL de la imagen:', this.selectedImage);
+
+      // Verificar si la imagen ya existe en el almacenamiento de Supabase
+      const { data: existingImage, error: existingImageError } = await supabase
+        .storage
+        .from('ProfileAssets')
+        .getMetadata([rutaEnStorage]);
+
+      if (existingImage && existingImage.length > 0) {
+        console.log('La imagen ya existe. No es necesario subirla de nuevo.');
+        // Puedes realizar acciones adicionales o simplemente salir de la función.
+        return;
+      }
 
       // Subir la imagen al almacenamiento de Supabase
       const { data, error } = await supabase
         .storage
-        .from('Assets')
+        .from('ProfileAssets')
         .upload(rutaEnStorage, file);
 
       if (error) {
@@ -183,8 +198,6 @@ export default {
 
       console.log('Imagen subida exitosamente:', data.Key);
 
-      this.selectedImage = rutaAssets + rutaEnStorage
-      console.log('URL de la imagen:', this.selectedImage);
     }
   }
 }
