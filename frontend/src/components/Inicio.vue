@@ -1,37 +1,31 @@
 <template>
   <div class="inicio">
-    <HeaderMenu title="Inicio" :money="userState.user.available_money"/>
-    <body style="background-color: #EEA3FF;">
+    <HeaderMenu title="Home" :money="userState.user.available_money"/>
+    <body style="background-color: #FFFFFF;">
         <!-- Encabezado -->
-        <div class="header">
-          <div class="filter-button-container">
-            <button v-if="!mostrarFiltros" @click="mostrarFiltrosDialog">Filtrar y Ordenar</button>
-            <div v-if="mostrarFiltros" class="filter-modal">
-              <div class="filter-content">
-                <!-- Filtrado -->
-                <div class="filter-selection">
-                  <h3>Filtrar por</h3>
-                  <select v-model="filtrar">
-                    <option value="publicas">Públicas</option>
-                    <option value="privadas">Privadas</option>
-                    <option value="ambas">Ambas</option>
-                  </select>
-                </div>
-
-                <!-- Orden -->
-                <div class="filter-section">
-                  <h3>Ordenar por</h3>
-                  <select v-model="orden">
-                    <option value="popularidad_as">Popularidad ascendente</option>
-                    <option value="popularidad_des">Popularidad descendente</option>
-                    <option value="precio_as" v-if="filtrar != 'publicas'">Precio ascendente</option>
-                    <option value="precio_des" v-if="filtrar != 'publicas'">Precio descendente</option>
-                  </select>
-                </div>
-                <div class="button-filtrar">
-                  <button @click="aplicarFiltros">Cerrar</button>
-                </div>
-              </div>
+        <div class="filter-container">
+          <div class="dropdown" v-if="!mostrarFiltros">
+            <button class="btn btn-secondary dropdown-toggle custom-button" type="button" @click="mostrarFiltrosDialog">
+              Filter and Sort
+            </button>
+          </div>
+          <div class="filter-modal" :class="{ 'show-filters': mostrarFiltros }">
+            <div class="filter-content">
+              <!-- Contenido del filtro -->
+              <h3>Filter by</h3>
+              <select v-model="filtrar">
+                <option value="publicas">Public</option>
+                <option value="privadas">Private</option>
+                <option value="ambas">Both</option>
+              </select>
+              <h3>Sort by</h3>
+              <select v-model="orden">
+                <option value="popularidad_as">Rising popularity</option>
+                <option value="popularidad_des">Declining popularity</option>
+                <option value="precio_as" v-if="filtrar !== 'publicas'">Ascending price</option>
+                <option value="precio_des" v-if="filtrar !== 'publicas'">Declining price</option>
+              </select>
+              <button class="close-button" @click="mostrarFiltros = false">×</button>
             </div>
           </div>
         </div>
@@ -185,10 +179,6 @@ export default {
     /* Add your overall styles for the profile page here */
   }
 
-.button-filtrar{
-  margin-top: 20px;
-}
-
 .card {
   z-index: 1;
   flex: 1;
@@ -201,12 +191,10 @@ export default {
   box-sizing: border-box; /* Asegura que el borde se incluya en el ancho total */
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   overflow: hidden;
-  background-color: rgba(255, 255, 255, 0.2);
 }
 
 .card:hover {
   transform: scale(1.025); /* Ajusta el valor según sea necesario para el aumento de tamaño en el hover */
-  background-color: rgba(255, 255, 255, 0.6);
 }
 
 .card-img-top {
@@ -233,7 +221,6 @@ export default {
   position: relative;
   top: 0;
   right: 20px;
-  background: rgba(255, 255, 255, 0.2);
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -241,7 +228,6 @@ export default {
 }
 
 .filter-content {
-  background-color: rgba(255, 255, 255, 0.2);
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -289,6 +275,77 @@ select{
   height: auto;
   width: 100%; /* Asegura que la imagen ocupe el 100% del contenedor */
   height: 150px; /* Establece una altura específica */
+}
+
+.filter-container {
+  position: relative;
+  z-index: 2; /* Asegura que el filtro se superponga al contenido */
+}
+
+.dropdown {
+  margin-left: 20px; /* Espaciado entre el borde izquierdo y el botón de filtro */
+}
+
+.filter-modal {
+  position: absolute;
+  top: 0;
+  right: 100%; /* Cambio a la derecha del elemento padre */
+  width: calc(100% - 20px);
+  max-width: 300px;
+  background-color: #365b6d; /* Cambio de color del filtro */
+  color: white;
+  padding: 20px;
+  transition: left 0.3s ease; /* Cambio en la animación de transición */
+  z-index: 3;
+  box-sizing: border-box;
+  margin-top: 10px; /* Margen superior */
+  margin-left: 10px; /* Margen izquierdo */
+}
+
+.filter-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.close-button,
+.apply-button {
+  border: none;
+  background-color: transparent;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.close-button {
+  position: absolute;
+  top: 4px;
+  right: 10px;
+  border: none;
+  background-color: #365b6d; /* Cambio de color del botón */
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.apply-button {
+  align-self: flex-start;
+}
+
+.show-filters {
+  left: 0;
+}
+
+.custom-button {
+  background-color: #365b6d; /* Cambio de color del botón "Filtrar y Ordenar" */
+  border-color: #365b6d; /* Cambio de color del borde del botón */
+  margin-top: 10px; /* Margen superior */
+  margin-left: 10px; /* Margen izquierdo */
+}
+
+.custom-button:hover {
+  background-color: #4e7490; /* Cambio de color al pasar el cursor por encima del botón */
+  border-color: #4e7490; /* Cambio de color del borde al pasar el cursor por encima del botón */
 }
 
 </style>
