@@ -161,7 +161,7 @@ export default {
   flex-wrap: wrap;
   justify-content: center;
   max-width: 1000px;
-  margin: 0 auto;
+  margin: 20px auto;
 }
 
 .user-info-form {
