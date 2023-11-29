@@ -38,11 +38,11 @@
               <div class="card" @click="openPopup(imagen)">
                 <div class="usuario-info">
                 👤 <!-- Este es el emoji de usuario -->
-                <span>{{ imagen.user_id }}</span>
+                <span class="img-user">{{ imagen.user_id }}</span>
                 </div>
                 <img class="card-img-top" :src="imagen.url" :alt="imagen.title" @contextmenu.prevent="preventRightClick">
                 <div class="card-body">
-                  <h5 class="card-title">{{ imagen.title }}</h5>
+                  <h4 class="card-title">{{ imagen.title }}</h4>
                   <p class="card-text">{{ imagen.price }}<i class="fa-solid fa-coins"></i></p>
                   <p class="card-text">{{ imagen.likes}}❤</p>
                 </div>
@@ -171,13 +171,11 @@ export default {
 }
 </script>
 
-<style scoped>
-/* Estilos CSS */
+<style>
 
-.inicio {
+* {
     font-family: 'Arial', sans-serif;
-    /* Add your overall styles for the profile page here */
-  }
+}
 
 .card {
   z-index: 1;
@@ -199,7 +197,7 @@ export default {
 
 .card-img-top {
   width: 100%; /* Ajusta la imagen al 100% del contenedor */
-  height: 200px;
+  height: 180px;
   object-fit: cover; /* Ajusta la imagen sin deformarla */
 }
 
@@ -346,6 +344,10 @@ select{
 .custom-button:hover {
   background-color: #4e7490; /* Cambio de color al pasar el cursor por encima del botón */
   border-color: #4e7490; /* Cambio de color del borde al pasar el cursor por encima del botón */
+}
+
+.img-user{
+  font-size: 20px;
 }
 
 </style>
