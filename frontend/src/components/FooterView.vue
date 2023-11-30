@@ -1,5 +1,5 @@
 <template>
-  <footer>
+  <footer class="footer">
     <div class="footer-content">
       <div class="footer-section">
         <h2>Navigation</h2>
@@ -63,5 +63,16 @@ ul li {
 a {
   text-decoration: none;
   color: #fff;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #2c3e50;
+  color: #fff;
+  padding: 20px 0;
+  font-family: 'Courgette', cursive;
+  z-index: 9999;
 }
 </style>
