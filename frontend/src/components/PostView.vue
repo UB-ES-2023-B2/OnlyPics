@@ -156,12 +156,6 @@ button:hover {
   margin-top: 10px;
 }
 
-.max-width-image {
-  max-width: 100%;
-  max-height: 350px;
-  margin-top: 10px;
-}
-
 .checkboxes {
   margin-top: 20px;
   display: flex;
