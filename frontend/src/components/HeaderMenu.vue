@@ -5,7 +5,8 @@
         <h1><router-link to="/inicio">OnlyPics</router-link></h1>
         <div class="search-bar">
           <div class="search-bar">
-            <input type="text" v-model="titleSearch" placeholder="Search..." class="search-input">
+            <input type="text" v-model="titleSearch" placeholder="Search..." class="search-input" @keyup.enter="searchImages">
+            <span v-if="titleSearch" @click="clearSearch" class="clear-icon">&#10006;</span>
             <button class="search-button" @click="searchImages">Search</button>
           </div>
         </div>
@@ -65,6 +66,10 @@ export default {
     },
     searchImages() {
       this.$emit("filtrar-imagenes", this.titleSearch);
+    },
+    clearSearch() {
+      this.titleSearch = "";
+      this.searchImages()
     }
   }
 }
@@ -107,6 +112,7 @@ header a{
 /*SEARCH-BAR*/
 .search-bar {
     display: flex;
+    align-items: center;
     background-color: white;
     border-radius: 4px;
     padding: 2px;
@@ -135,6 +141,11 @@ header a{
 
 .search-button:hover {
   background-color: #39535b;
+}
+
+.clear-icon {
+  cursor: pointer;
+  margin-right: 10px; /* Espacio a la derecha del botón */
 }
 
 /*DESPLEGABLE*/
