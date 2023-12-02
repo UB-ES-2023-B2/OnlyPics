@@ -1,6 +1,6 @@
 <template>
   <div class="inicio">
-    <HeaderMenu title="Inicio" :money="userState.user.available_money"/>
+    <HeaderMenu title="Inicio" @filtrar-imagenes="assignSearch" :money="userState.user.available_money"/>
     <body style="background-color: #EEA3FF;">
         <!-- Encabezado -->
         <div class="header">
@@ -83,6 +83,7 @@ export default {
       selectedImage: null,
       filtrar: null,
       orden: null,
+      searchFilter: "",
       photos: []
     }
   },
@@ -120,6 +121,13 @@ export default {
     mostrarImagenesFiltradas(){
       let imagenesMostrar = [...this.photos]
 
+      this.$parent.$on("buscar-imagenes", this.assignSearch);
+
+      //Buscador de imagenes
+      if (this.searchFilter !== "") {
+        imagenesMostrar = imagenesMostrar.filter(imagen => imagen.title.toLowerCase().includes(this.searchFilter.toLowerCase()));
+      }
+
       if (this.filtrar === 'publicas') {
         imagenesMostrar = imagenesMostrar.filter(imagen => imagen.price === 0);
       } else if (this.filtrar === 'privadas') {
@@ -137,6 +145,9 @@ export default {
         imagenesMostrar.sort((a, b) => b.price - a.price);
       }
       return imagenesMostrar;
+    },
+    assignSearch(titleSearch) {
+      this.searchFilter = titleSearch
     },
     toggleScroll() {
       // Obtén el elemento body
