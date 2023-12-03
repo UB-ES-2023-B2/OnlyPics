@@ -5,9 +5,9 @@
         <h1><router-link to="/inicio">OnlyPics</router-link></h1>
         <div class="search-bar">
           <div class="search-bar">
-            <input type="text" v-model="titleSearch" placeholder="Search..." class="search-input" @keyup.enter="searchImages">
+            <input type="text" v-model="titleSearch" placeholder="Search by title..." class="search-input" @input="searchImages">
             <span v-if="titleSearch" @click="clearSearch" class="clear-icon">&#10006;</span>
-            <button class="search-button" @click="searchImages">Search</button>
+            <!-- <button class="search-button" @click="searchImages">Search</button> -->
           </div>
         </div>
         <div class="shopping-cart" style="margin-top: 10px">
@@ -116,6 +116,7 @@ header a{
     background-color: white;
     border-radius: 4px;
     padding: 2px;
+    width: 200px;
 }
 .nav-money {
   color: white; /* Set the text color to white */
@@ -145,7 +146,7 @@ header a{
 
 .clear-icon {
   cursor: pointer;
-  margin-right: 10px; /* Espacio a la derecha del botón */
+  margin-right: 5px;
 }
 
 /*DESPLEGABLE*/

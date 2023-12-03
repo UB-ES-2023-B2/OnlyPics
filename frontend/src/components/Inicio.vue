@@ -40,7 +40,7 @@
         <div class="gallery">
           <div class="row">
             <!-- Imágenes aleatorias -->
-            <div v-for="imagen in mostrarImagenesFiltradas()" :key="imagen.id" class="col-md-4">
+            <div v-for="imagen in mostrarImagenesFiltradas()" :key="imagen.id" class="col-md-4" :class="{ 'col-md-6': mostrarImagenesFiltradas().length === 2 }">
               <div class="card" @click="openPopup(imagen)">
                 <div class="usuario-info">
                 👤 <!-- Este es el emoji de usuario -->
