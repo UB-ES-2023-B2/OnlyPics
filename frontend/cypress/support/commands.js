@@ -41,7 +41,7 @@ Cypress.Commands.add('login', () => {
     // Assert the URL after successful login
     cy.url().should('include', '/inicio')
 })
-Cypress.Commands.add('login', (username,password) => {
+Cypress.Commands.add('login_2', (username,password) => {
    // Visit the login page
     cy.visit('/')
     // Switch to registration view
