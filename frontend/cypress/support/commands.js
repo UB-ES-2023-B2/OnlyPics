@@ -35,9 +35,28 @@ Cypress.Commands.add('login', () => {
     // Click the "SIGN UP" button
     cy.get('.btn-primary').click()
     // Verify alert
-     cy.on('window:alert',(txt)=>
+     cy.once('window:alert',(txt)=>
        //Mocha assertions
        expect(txt).to.contains('Succesfully logged'))
     // Assert the URL after successful login
     cy.url().should('include', '/inicio')
 })
+Cypress.Commands.add('login', (username,password) => {
+   // Visit the login page
+    cy.visit('/')
+    // Switch to registration view
+    cy.contains('Log In').click()
+
+    // Fill out the registration form
+    cy.get('#username').type(username)
+    cy.get('#password').type(password)
+    // Click the "SIGN UP" button
+    cy.get('.btn-primary').click()
+    // Verify alert
+    cy.once('window:alert',(txt)=>
+       //Mocha assertions
+       expect(txt).to.contains('Succesfully logged'))
+    // Assert the URL after successful login
+    cy.url().should('include', '/inicio')
+})
+
