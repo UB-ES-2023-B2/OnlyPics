@@ -2,7 +2,14 @@
   <div class="inicio">
     <HeaderMenu title="Home" @filtrar-imagenes="assignSearch" :money="userState.user.available_money"/>
     <body>
-        <!-- Encabezado -->
+        <div class="dropdown_users" :class="{ 'none': this.searchUser.length === 0 }">
+          <div v-for="user in mostrarUsuariosFiltrados().slice(0, 5)" :key="user.username">
+            <div class="info_user">
+              <img :src="getUserPic(user.username)" alt="Imagen de perfil del usuario">
+              <span>{{ user.username }}</span>
+            </div>
+          </div>
+        </div>
         <div class="filter-container">
           <div class="dropdown" v-if="!mostrarFiltros">
             <button class="btn btn-secondary dropdown-toggle custom-button" type="button" @click="mostrarFiltrosDialog">
@@ -80,7 +87,8 @@ export default {
       orden: null,
       photos: [],
       users: [],
-      searchFilter: ""
+      searchFilter: "",
+      searchUser: ""
     }
   },
   methods: {
@@ -165,8 +173,20 @@ export default {
       }
       return imagenesMostrar;
     },
+    mostrarUsuariosFiltrados() {
+      let usuariosMostrar = [...this.users]
+
+      this.$parent.$on("buscar-imagenes", this.assignSearch);
+
+      //Buscador de usuarios
+      if (this.searchUser !== "") {
+        usuariosMostrar = usuariosMostrar.filter(user => user.username.toLowerCase().includes(this.searchFilter.toLowerCase()));
+      }
+      return usuariosMostrar
+    },
     assignSearch(titleSearch) {
       this.searchFilter = titleSearch
+      this.searchUser = titleSearch
     },
     toggleScroll() {
       // Obtén el elemento body
@@ -410,6 +430,39 @@ select{
   height: 40px; /* Ajusta la altura de la imagen según tus preferencias */
   border-radius: 50%; /* Hace la imagen redonda */
   margin: 10px 15px;
+}
+
+.dropdown_users {
+  position: absolute;
+  left: 620px;
+  top: 90px;
+  z-index: 5;
+}
+
+.info_user {
+  display: flex;
+  align-items: center;
+  border: 1px grey solid;
+  border-radius: 4px;
+  margin: 1px 0;
+  width: 250px;
+  height: 50px;
+  background-color: white;
+}
+
+.info_user:hover {
+  background-color: #dcdcdc;
+}
+
+.info_user img {
+  width: 40px; /* Ajusta el ancho de la imagen según tus preferencias */
+  height: 40px; /* Ajusta la altura de la imagen según tus preferencias */
+  border-radius: 50%; /* Hace la imagen redonda */
+  margin: 10px 15px;
+}
+
+.none {
+  display: none;
 }
 
 </style>
