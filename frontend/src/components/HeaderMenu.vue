@@ -116,7 +116,7 @@ header a{
     background-color: white;
     border-radius: 4px;
     padding: 2px;
-    width: 200px;
+    width: 250px;
 }
 .nav-money {
   color: white; /* Set the text color to white */

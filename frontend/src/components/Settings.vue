@@ -276,6 +276,7 @@ textarea.styled-input {
   max-width: 100%;
   max-height: 150px;
   margin-top: 10px;
+  object-fit: cover;
 }
 
 button {
