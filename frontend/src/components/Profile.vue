@@ -1,7 +1,7 @@
 <template>
   <div class="profile">
     <!-- Header Menu -->
-    <HeaderMenu title="Profile" :money="userState.user.available_money" />
+    <HeaderMenu title="Profile" @filtrar-imagenes="assignSearch" :money="userState.user.available_money" />
 
     <!-- Profile Container -->
     <div class="profile-container">
@@ -24,7 +24,7 @@
     </div>
     <!-- Uploaded Pics Grid -->
     <div class="pics-grid" v-if="photos">
-      <div v-for="photo in photos" :key="photo.id" class="photo">
+      <div v-for="photo in mostrarImagenesFiltradas()" :key="photo.id" class="photo">
           <img class="card-img-top" :src="photo.url" alt="" @click="openPopup(photo)">
         <div class="image-container">
           <p>{{ photo.title }}</p>
@@ -50,6 +50,7 @@ export default {
     return {
       selectedImage: null,
       userState: userState,
+      searchFilter: "",
       photos: []
     }
   },
@@ -80,6 +81,22 @@ export default {
       // Cerrar el popup y restablecer la imagen seleccionada
       this.selectedImage = null;
       this.toggleScroll()
+    },
+    assignSearch(titleSearch) {
+      this.searchFilter = titleSearch
+    },
+    mostrarImagenesFiltradas() {
+      let imagenesMostrar = [...this.photos]
+
+      this.$parent.$on("buscar-imagenes", this.assignSearch);
+
+      console.log(this.searchFilter)
+      //Buscador de imagenes
+      if (this.searchFilter !== "") {
+        imagenesMostrar = imagenesMostrar.filter(photo => photo.title.toLowerCase().includes(this.searchFilter.toLowerCase()));
+      }
+
+      return imagenesMostrar
     },
     fetchUserPhotos (username) {
       try {
@@ -143,8 +160,8 @@ export default {
 }
   .profile-pic img {
     border-radius: 50%;
-    width: 100px;
-    height: 100px;
+    width: 200px;
+    height: 200px;
     /* Add styles for the profile pic here */
   }
 .text-latest{
@@ -203,7 +220,7 @@ export default {
   background-color: #365b6d;
   text-align: center; /* Center the image within the container */
   padding: 10px 20px; /* Add padding around the image for separation */
-  color: #a2c0c0
+  color: #a2c0c0;
 }
 
 .card-img-top:hover {
