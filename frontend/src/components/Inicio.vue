@@ -1,7 +1,7 @@
 <template>
   <div class="inicio">
     <HeaderMenu title="Home" :money="userState.user.available_money"/>
-    <body style="background-color: #FFFFFF;">
+    <body>
         <!-- Encabezado -->
         <div class="filter-container">
           <div class="dropdown" v-if="!mostrarFiltros">
@@ -37,8 +37,9 @@
             <div v-for="imagen in mostrarImagenesFiltradas()" :key="imagen.id" class="col-md-4">
               <div class="card" @click="openPopup(imagen)">
                 <div class="usuario-info">
-                👤 <!-- Este es el emoji de usuario -->
-                <span class="img-user">{{ imagen.user_id }}</span>
+                  <!-- 👤  Este es el emoji de usuario -->
+                  <img :src="getUserPic(imagen.user_id)" alt="Imagen de perfil del usuario">
+                  <span class="img-user">{{ imagen.user_id }}</span>
                 </div>
                 <img class="card-img-top" :src="imagen.url" :alt="imagen.title" @contextmenu.prevent="preventRightClick">
                 <div class="card-body">
@@ -77,7 +78,8 @@ export default {
       selectedImage: null,
       filtrar: null,
       orden: null,
-      photos: []
+      photos: [],
+      users: []
     }
   },
   methods: {
@@ -97,11 +99,34 @@ export default {
           .then((response) => {
             //Check if the request was successful
             if(response.status === 200){
-              //Assuming the photos are in response.data.photos, replace this with the actual data structure
+              //Assuming the photos are in response.data.photos
               this.photos = response.data
               console.log(this.photos)
             } else{
               console.error('Error getting the backend photos: Invalid response status')
+            }
+          })
+          .catch((error) => {
+            console.error('Error getting the backend photos', error)
+          })
+      } catch (error) {
+        console.error('Error in the try-catch block', error)
+      }
+    },
+    backendUsers() {
+      try{
+        const path = '/users/?skip=0&limit=1000'
+
+        axios.get(path)
+          .then((response) => {
+            //Check if the request was successful
+            console.log('response', response)
+            if(response.status === 200){
+              //Assuming the photos are in response.data.users
+              this.users = response.data
+              console.log(this.users)
+            } else{
+              console.error('Error getting the backend users: Invalid response status')
             }
           })
           .catch((error) => {
@@ -162,11 +187,19 @@ export default {
     // Mètode per prevenir el clic dret
     preventRightClick(event) {
       event.preventDefault();
+    },
+    getUserPic(userId) {
+      const defaultProfileImage = 'https://pnrmoqedbmcpxehltqvy.supabase.co/storage/v1/object/public/ProfileAssets/user_icon_149851.png'
+      const userToFind = this.users.find(u => u.username === userId)
+      if (userToFind.profile_pic === null) {
+        return defaultProfileImage
+      }
+      return userToFind.profile_pic
     }
   },
   created(){
     this.backendPhotos()
-    console.log(this.photos)
+    this.backendUsers()
   }
 }
 </script>
@@ -175,6 +208,11 @@ export default {
 
 * {
     font-family: 'Arial', sans-serif;
+}
+
+body {
+  background-color: #FFFFFF;
+  margin-bottom: 30px;
 }
 
 .card {
@@ -348,6 +386,18 @@ select{
 
 .img-user{
   font-size: 20px;
+}
+
+.usuario-info {
+  display: flex;
+  align-items: center; /* Alinea verticalmente en el centro */
+}
+
+.usuario-info img {
+  width: 40px; /* Ajusta el ancho de la imagen según tus preferencias */
+  height: 40px; /* Ajusta la altura de la imagen según tus preferencias */
+  border-radius: 50%; /* Hace la imagen redonda */
+  margin: 10px 15px;
 }
 
 </style>
