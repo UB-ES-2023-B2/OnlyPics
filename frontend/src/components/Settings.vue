@@ -53,7 +53,7 @@
 import axios from 'axios'
 import HeaderMenu from '@/components/HeaderMenu.vue'
 import FooterView from '@/components/FooterView.vue'
-import userState from '@/userState'
+import { userState, setUserState } from '@/userState'
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = 'https://pnrmoqedbmcpxehltqvy.supabase.co';
@@ -122,6 +122,8 @@ export default {
             date_birth: formattedDate,
             profile_pic: res.data.profile_pic
           }
+          const newUserState = userState
+          setUserState(newUserState)
           this.$router.push({
               path: '/profile'
             })

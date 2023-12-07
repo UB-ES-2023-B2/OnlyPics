@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import userState from '@/userState'
+import {userState} from '@/userState'
 
 export default {
   name: 'FooterView',

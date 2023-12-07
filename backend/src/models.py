@@ -15,7 +15,7 @@ class User(Base):
     lastname = Column(String(20), nullable=True)
     biography = Column(String(150), nullable=True)
     date_birth = Column(Date, nullable=True)
-    profile_pic = Column(String(50), nullable=False)
+    profile_pic = Column(String(50), nullable=True)
 
     photos = relationship('Photo', back_populates='user')
 
