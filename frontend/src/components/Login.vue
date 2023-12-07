@@ -111,7 +111,7 @@ export default {
             this.$router.push({
               path: '/inicio'
             })
-            alert('Succesfully logged')
+            alert('Successfully logged')
           } else {
             // Password is incorrect, show an error message
             alert('Incorrect Password')
