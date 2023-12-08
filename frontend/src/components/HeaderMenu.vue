@@ -22,7 +22,7 @@
           <div class="dropdown-content">
             <router-link to="/profile">Profile <i class="fas fa-circle-user" style="margin-left: 20px"></i></router-link>
             <router-link to="/settings">Settings <i class="fas fa-cog" style="margin-left: 10px"></i></router-link>
-            <a href="/">Log Out <i class="fas fa-sign-out-alt" style="margin-left: 13px"></i></a>
+            <a href="/" @click="logOut">Log Out <i class="fas fa-sign-out-alt" style="margin-left: 13px"></i></a>
           </div>
         </div>
       </div>
@@ -39,8 +39,8 @@
 </template>
 
 <script>
-import userState from '@/userState'
 import PostView from '@/components/PostView.vue'
+import { userState, setUserState } from "@/userState";
 
 export default {
   name: 'HeaderMenu',
@@ -63,6 +63,23 @@ export default {
   methods: {
     toggleOverlay () {
       this.showOverlay = !this.showOverlay
+    },
+    logOut () {
+      const newUserState = {
+        user: {
+          available_money: 0,
+          password: null,
+          username: null,
+          email: null,
+          profile_pic: null,
+          biography: null,
+          name: null,
+          lastname: null,
+          date_birth: null
+        },
+        logged: false
+      }
+      setUserState(newUserState)
     },
     searchImages() {
       this.$emit("filtrar-imagenes", this.titleSearch);
