@@ -11,7 +11,7 @@
       <div class="footer-section">
         <h2>Contact</h2>
         <p>Barcelona, Spain<i class="fa-solid fa-location-dot" style="margin-left: 10px"></i></p>
-        <p style="margin-left: 30px">{{userState.user.email}} <i class="fa-solid fa-envelope" style="margin-left: 7px"></i></p>
+        <p class="email" style="margin-left: 30px">{{userState.user.email}} <i class="fa-solid fa-envelope" style="margin-left: 7px"></i></p>
       </div>
     </div>
   </footer>

@@ -5,8 +5,9 @@
         <h1><router-link to="/inicio">OnlyPics</router-link></h1>
         <div class="search-bar">
           <div class="search-bar">
-            <input type="text" placeholder="Search..." class="search-input">
-            <button class="search-button">Search</button>
+            <input type="text" v-model="titleSearch" placeholder="Search by title..." class="search-input" @input="searchImages">
+            <span v-if="titleSearch" @click="clearSearch" class="clear-icon">&#10006;</span>
+            <!-- <button class="search-button" @click="searchImages">Search</button> -->
           </div>
         </div>
         <div class="shopping-cart" style="margin-top: 10px">
@@ -36,6 +37,7 @@
     </header>
   </div>
 </template>
+
 <script>
 import userState from '@/userState'
 import PostView from '@/components/PostView.vue'
@@ -53,13 +55,21 @@ export default {
   },
   data () {
     return {
-      showOverlay: false
+      showOverlay: false,
+      titleSearch: ""
     }
   },
   components: { PostView },
   methods: {
     toggleOverlay () {
       this.showOverlay = !this.showOverlay
+    },
+    searchImages() {
+      this.$emit("filtrar-imagenes", this.titleSearch);
+    },
+    clearSearch() {
+      this.titleSearch = "";
+      this.searchImages()
     }
   }
 }
@@ -102,9 +112,11 @@ header a{
 /*SEARCH-BAR*/
 .search-bar {
     display: flex;
+    align-items: center;
     background-color: white;
     border-radius: 4px;
     padding: 2px;
+    width: 200px;
 }
 .nav-money {
   color: white; /* Set the text color to white */
@@ -130,6 +142,11 @@ header a{
 
 .search-button:hover {
   background-color: #39535b;
+}
+
+.clear-icon {
+  cursor: pointer;
+  margin-right: 5px;
 }
 
 /*DESPLEGABLE*/
