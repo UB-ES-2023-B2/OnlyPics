@@ -154,11 +154,11 @@ export default {
     openPopup(imagen) {
       // Abrir el popup y establecer la imagen seleccionada
       this.selectedImage = imagen;
-      this.toggleScroll();
       window.scrollTo({
         top: 0,
         behavior: "smooth" // Agrega un desplazamiento suave
       });
+      this.toggleScroll();
     },
     closePopup() {
       // Cerrar el popup y restablecer la imagen seleccionada
