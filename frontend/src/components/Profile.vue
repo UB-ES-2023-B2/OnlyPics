@@ -38,7 +38,7 @@
 
 <script>
 import FooterView from '@/components/FooterView.vue'
-import userState from '@/userState'
+import {userState} from '@/userState'
 import HeaderMenu from '@/components/HeaderMenu.vue'
 import PopUpProfileDelete from "@/components/PopUpProfileDelete.vue";
 import axios from 'axios'

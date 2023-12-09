@@ -66,7 +66,7 @@
 import HeaderMenu from '@/components/HeaderMenu.vue'
 import FooterView from '@/components/FooterView.vue'
 import PopUp from "@/components/PopUp.vue";
-import userState from '@/userState'
+import { userState } from "@/userState"
 import axios from 'axios'
 
 export default {
