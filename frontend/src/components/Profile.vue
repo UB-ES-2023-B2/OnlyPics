@@ -132,15 +132,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 * {
   box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
 }
 
-  .profile {
-    font-family: 'Arial', sans-serif;
-    /* Add your overall styles for the profile page here */
-  }
 .profile-container {
   display: flex;
   align-items: flex-start;
@@ -173,30 +170,30 @@ export default {
   font-size: 20px;
   text-align: left;
   margin-left: 30px;
-
 }
-  .username {
-    font-family: 'Courgette', cursive;
-    font-size: 27px;
-    margin-left: 10px;
-    margin-top: 25px;
-    font-weight: 650;
-    /* Add styles for the username here */
-  }
 
-  .name {
-    font-family: 'Courgette', cursive;
-    font-size: 18px;
-    /* Add styles for the name here */
-  }
+.username {
+  font-family: 'Courgette', cursive;
+  font-size: 27px;
+  margin-left: 10px;
+  margin-top: 25px;
+  font-weight: 650;
+  /* Add styles for the username here */
+}
 
-  .biography {
-    font-family: 'Courgette', cursive;
-    margin-top: 20px;
-    /* Add styles for the biography here */
-  }
+.name {
+  font-family: 'Courgette', cursive;
+  font-size: 18px;
+  /* Add styles for the name here */
+}
 
-  .pics-grid {
+.biography {
+  font-family: 'Courgette', cursive;
+  margin-top: 20px;
+  /* Add styles for the biography here */
+}
+
+.pics-grid {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -206,7 +203,8 @@ export default {
   font-size: 20px;
   text-align: right;
   margin-left: 28px;
-    margin-right: 30px;
+  margin-right: 30px;
+  height: 100%;
 }
 
 .photo {

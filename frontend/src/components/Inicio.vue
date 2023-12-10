@@ -1,37 +1,31 @@
 <template>
   <div class="inicio">
-    <HeaderMenu title="Inicio" @filtrar-imagenes="assignSearch" :money="userState.user.available_money"/>
-    <body style="background-color: #EEA3FF;">
+    <HeaderMenu title="Home" @filtrar-imagenes="assignSearch" :money="userState.user.available_money"/>
+    <body>
         <!-- Encabezado -->
-        <div class="header">
-          <div class="filter-button-container">
-            <button v-if="!mostrarFiltros" @click="mostrarFiltrosDialog">Filtrar y Ordenar</button>
-            <div v-if="mostrarFiltros" class="filter-modal">
-              <div class="filter-content">
-                <!-- Filtrado -->
-                <div class="filter-selection">
-                  <h3>Filtrar por</h3>
-                  <select v-model="filtrar">
-                    <option value="publicas">Públicas</option>
-                    <option value="privadas">Privadas</option>
-                    <option value="ambas">Ambas</option>
-                  </select>
-                </div>
-
-                <!-- Orden -->
-                <div class="filter-section">
-                  <h3>Ordenar por</h3>
-                  <select v-model="orden">
-                    <option value="popularidad_as">Popularidad ascendente</option>
-                    <option value="popularidad_des">Popularidad descendente</option>
-                    <option value="precio_as" v-if="filtrar != 'publicas'">Precio ascendente</option>
-                    <option value="precio_des" v-if="filtrar != 'publicas'">Precio descendente</option>
-                  </select>
-                </div>
-                <div class="button-filtrar">
-                  <button @click="aplicarFiltros">Cerrar</button>
-                </div>
-              </div>
+        <div class="filter-container">
+          <div class="dropdown" v-if="!mostrarFiltros">
+            <button class="btn btn-secondary dropdown-toggle custom-button" type="button" @click="mostrarFiltrosDialog">
+              Filter and Sort
+            </button>
+          </div>
+          <div class="filter-modal" :class="{ 'show-filters': mostrarFiltros }">
+            <div class="filter-content">
+              <!-- Contenido del filtro -->
+              <h3>Filter by</h3>
+              <select v-model="filtrar">
+                <option value="publicas">Public</option>
+                <option value="privadas">Private</option>
+                <option value="ambas">Both</option>
+              </select>
+              <h3>Sort by</h3>
+              <select v-model="orden">
+                <option value="popularidad_as">Rising popularity</option>
+                <option value="popularidad_des">Declining popularity</option>
+                <option value="precio_as" v-if="filtrar !== 'publicas'">Ascending price</option>
+                <option value="precio_des" v-if="filtrar !== 'publicas'">Declining price</option>
+              </select>
+              <button class="close-button" @click="mostrarFiltros = false">×</button>
             </div>
           </div>
         </div>
@@ -43,12 +37,13 @@
             <div v-for="imagen in mostrarImagenesFiltradas()" :key="imagen.id" class="col-md-4" :class="{ 'col-md-6': mostrarImagenesFiltradas().length === 2 }">
               <div class="card" @click="openPopup(imagen)">
                 <div class="usuario-info">
-                👤 <!-- Este es el emoji de usuario -->
-                <span>{{ imagen.user_id }}</span>
+                  <!-- 👤  Este es el emoji de usuario -->
+                  <img :src="getUserPic(imagen.user_id)" alt="Imagen de perfil del usuario">
+                  <span class="img-user">{{ imagen.user_id }}</span>
                 </div>
                 <img class="card-img-top" :src="imagen.url" :alt="imagen.title" @contextmenu.prevent="preventRightClick">
                 <div class="card-body">
-                  <h5 class="card-title">{{ imagen.title }}</h5>
+                  <h4 class="card-title">{{ imagen.title }}</h4>
                   <p class="card-text">{{ imagen.price }}<i class="fa-solid fa-coins"></i></p>
                   <p class="card-text">{{ imagen.likes}}❤</p>
                 </div>
@@ -83,8 +78,9 @@ export default {
       selectedImage: null,
       filtrar: null,
       orden: null,
-      searchFilter: "",
-      photos: []
+      photos: [],
+      users: [],
+      searchFilter: ""
     }
   },
   methods: {
@@ -104,11 +100,34 @@ export default {
           .then((response) => {
             //Check if the request was successful
             if(response.status === 200){
-              //Assuming the photos are in response.data.photos, replace this with the actual data structure
+              //Assuming the photos are in response.data.photos
               this.photos = response.data
               console.log(this.photos)
             } else{
               console.error('Error getting the backend photos: Invalid response status')
+            }
+          })
+          .catch((error) => {
+            console.error('Error getting the backend photos', error)
+          })
+      } catch (error) {
+        console.error('Error in the try-catch block', error)
+      }
+    },
+    backendUsers() {
+      try{
+        const path = '/users/?skip=0&limit=1000'
+
+        axios.get(path)
+          .then((response) => {
+            //Check if the request was successful
+            console.log('response', response)
+            if(response.status === 200){
+              //Assuming the photos are in response.data.users
+              this.users = response.data
+              console.log(this.users)
+            } else{
+              console.error('Error getting the backend users: Invalid response status')
             }
           })
           .catch((error) => {
@@ -179,25 +198,32 @@ export default {
     // Mètode per prevenir el clic dret
     preventRightClick(event) {
       event.preventDefault();
+    },
+    getUserPic(userId) {
+      const defaultProfileImage = 'https://pnrmoqedbmcpxehltqvy.supabase.co/storage/v1/object/public/ProfileAssets/user_icon_149851.png'
+      const userToFind = this.users.find(u => u.username === userId)
+      if (userToFind.profile_pic === null) {
+        return defaultProfileImage
+      }
+      return userToFind.profile_pic
     }
   },
   created(){
     this.backendPhotos()
-    console.log(this.photos)
+    this.backendUsers()
   }
 }
 </script>
 
-<style scoped>
-/* Estilos CSS */
+<style>
 
-.inicio {
+* {
     font-family: 'Arial', sans-serif;
-    /* Add your overall styles for the profile page here */
-  }
+}
 
-.button-filtrar{
-  margin-top: 20px;
+body {
+  background-color: #FFFFFF;
+  margin-bottom: 30px;
 }
 
 .card {
@@ -217,12 +243,11 @@ export default {
 
 .card:hover {
   transform: scale(1.025); /* Ajusta el valor según sea necesario para el aumento de tamaño en el hover */
-  background-color: rgba(255, 255, 255, 0.6);
 }
 
 .card-img-top {
   width: 100%; /* Ajusta la imagen al 100% del contenedor */
-  height: 200px;
+  height: 190px;
   object-fit: cover; /* Ajusta la imagen sin deformarla */
 }
 
@@ -244,7 +269,6 @@ export default {
   position: relative;
   top: 0;
   right: 20px;
-  background: rgba(255, 255, 255, 0.2);
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -252,7 +276,6 @@ export default {
 }
 
 .filter-content {
-  background-color: rgba(255, 255, 255, 0.2);
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -300,6 +323,93 @@ select{
   height: auto;
   width: 100%; /* Asegura que la imagen ocupe el 100% del contenedor */
   height: 150px; /* Establece una altura específica */
+}
+
+.filter-container {
+  position: relative;
+  z-index: 2; /* Asegura que el filtro se superponga al contenido */
+}
+
+.dropdown {
+  margin-left: 20px; /* Espaciado entre el borde izquierdo y el botón de filtro */
+}
+
+.filter-modal {
+  position: absolute;
+  top: 0;
+  right: 100%; /* Cambio a la derecha del elemento padre */
+  width: calc(100% - 20px);
+  max-width: 300px;
+  background-color: #365b6d; /* Cambio de color del filtro */
+  color: white;
+  padding: 20px;
+  transition: left 0.3s ease; /* Cambio en la animación de transición */
+  z-index: 3;
+  box-sizing: border-box;
+  margin-top: 10px; /* Margen superior */
+  margin-left: 10px; /* Margen izquierdo */
+}
+
+.filter-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.close-button,
+.apply-button {
+  border: none;
+  background-color: transparent;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.close-button {
+  position: absolute;
+  top: 4px;
+  right: 10px;
+  border: none;
+  background-color: #365b6d; /* Cambio de color del botón */
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.apply-button {
+  align-self: flex-start;
+}
+
+.show-filters {
+  left: 0;
+}
+
+.custom-button {
+  background-color: #365b6d; /* Cambio de color del botón "Filtrar y Ordenar" */
+  border-color: #365b6d; /* Cambio de color del borde del botón */
+  margin-top: 10px; /* Margen superior */
+  margin-left: 10px; /* Margen izquierdo */
+}
+
+.custom-button:hover {
+  background-color: #4e7490; /* Cambio de color al pasar el cursor por encima del botón */
+  border-color: #4e7490; /* Cambio de color del borde al pasar el cursor por encima del botón */
+}
+
+.img-user{
+  font-size: 20px;
+}
+
+.usuario-info {
+  display: flex;
+  align-items: center; /* Alinea verticalmente en el centro */
+}
+
+.usuario-info img {
+  width: 40px; /* Ajusta el ancho de la imagen según tus preferencias */
+  height: 40px; /* Ajusta la altura de la imagen según tus preferencias */
+  border-radius: 50%; /* Hace la imagen redonda */
+  margin: 10px 15px;
 }
 
 </style>

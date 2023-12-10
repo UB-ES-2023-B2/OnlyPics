@@ -240,7 +240,7 @@ export default {
   flex-wrap: wrap;
   justify-content: center;
   max-width: 1000px;
-  margin: 0 auto;
+  margin: 20px auto;
 }
 
 .user-info-form {
@@ -293,6 +293,7 @@ textarea.styled-input {
   max-width: 100%;
   max-height: 150px;
   margin-top: 10px;
+  object-fit: cover;
 }
 
 button {
