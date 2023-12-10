@@ -4,12 +4,13 @@
     <body>
         <div class="dropdown_users" :class="{ 'none': this.searchUser.length === 0 }">
           <div v-for="user in mostrarUsuariosFiltrados().slice(0, 5)" :key="user.username">
-            <div class="info_user">
+            <div class="info_user" @click="openOtherUsers(user)">
               <img :src="getUserPic(user.username)" alt="Imagen de perfil del usuario">
               <span>{{ user.username }}</span>
             </div>
           </div>
         </div>
+        <OtherUsers v-if="showOtherUsers" :user="localUser" :userImages="userImages"/>
         <div class="filter-container">
           <div class="dropdown" v-if="!mostrarFiltros">
             <button class="btn btn-secondary dropdown-toggle custom-button" type="button" @click="mostrarFiltrosDialog">
@@ -70,6 +71,7 @@ import FooterView from '@/components/FooterView.vue'
 import PopUp from "@/components/PopUp.vue";
 import userState from '@/userState'
 import axios from 'axios'
+import OtherUsers from "@/components/OtherUsers.vue";
 
 export default {
   name: 'PaginaInicio',
@@ -78,7 +80,7 @@ export default {
       return userState
     }
   },
-  components: {FooterView, HeaderMenu, PopUp},
+  components: {FooterView, HeaderMenu, PopUp, OtherUsers},
   data () {
     return {
       mostrarFiltros: false, //Variable para controlar la visibilidad de los filtros
@@ -88,7 +90,10 @@ export default {
       photos: [],
       users: [],
       searchFilter: "",
-      searchUser: ""
+      searchUser: "",
+      showOtherUsers: false,
+      userImages: [],
+      localUser: []
     }
   },
   methods: {
@@ -173,7 +178,7 @@ export default {
       }
       return imagenesMostrar;
     },
-    mostrarUsuariosFiltrados() {
+    mostrarUsuariosFiltrados(user) {
       let usuariosMostrar = [...this.users]
 
       this.$parent.$on("buscar-imagenes", this.assignSearch);
@@ -226,6 +231,16 @@ export default {
         return defaultProfileImage
       }
       return userToFind.profile_pic
+    },
+    openOtherUsers (user) {
+      this.userImages = []
+      this.localUser = []
+      this.userImages = this.photos.filter(img => img.user_id === user.username);
+      this.localUser = user
+      console.log(this.userImages)
+      console.log(this.localUser)
+      this.showOtherUsers = true;
+
     }
   },
   created(){
