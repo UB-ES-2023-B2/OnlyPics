@@ -10,7 +10,7 @@
             </div>
           </div>
         </div>
-        <OtherUsers v-if="showOtherUsers" :user="localUser" :userImages="userImages"/>
+        <OtherUsers v-if="showOtherUsers" :user="localUser" :userImages="userImages" @close-container="closeContainer" @filtrar-imagenes="assignSearch"/>
         <div class="filter-container">
           <div class="dropdown" v-if="!mostrarFiltros">
             <button class="btn btn-secondary dropdown-toggle custom-button" type="button" @click="mostrarFiltrosDialog">
@@ -218,6 +218,11 @@ export default {
     closePopup() {
       // Cerrar el popup y restablecer la imagen seleccionada
       this.selectedImage = null;
+      this.toggleScroll();
+    },
+    closeContainer () {
+      this.showOtherUsers= false;
+      this.sear
       this.toggleScroll();
     },
     // Mètode per prevenir el clic dret

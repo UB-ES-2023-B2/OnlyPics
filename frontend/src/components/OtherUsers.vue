@@ -1,14 +1,14 @@
 <template>
-  <div class="back-container">
-    <div class="front-container">
-      <div class="profile">
-        <img :src="user.profile_pic" alt="Imagen de perfil del usuario">
-        <div class="profile-user">
-          <h3 class="title">@{{ user.username }} - {{ user.name }} {{ user.lastname }}</h3>
-          <h5>{{ user.biography }}</h5>
+  <div class="back-container" @click="handlePopupClick">
+    <div class="front-container" @click.stop>
+      <div class="profile-container">
+        <img :src="user.profile_pic" alt="Imagen de perfil del usuario" class="profile-pic">
+        <div class="profile-details">
+          <h3 class="title">@{{ user.username }}</h3>
+          <p class="full-name-other-profile">{{ user.name }} {{ user.lastname }}</p>
+          <p class="biography">{{ user.biography }}</p>
         </div>
       </div>
-
       <div class="gallery">
           <div class="row">
             <!-- Imágenes aleatorias -->
@@ -30,8 +30,6 @@
           </div>
           <PopUp v-if="selectedImage" :selectedImage="selectedImage" :userMoney="user.available_money" @close="closePopup"/>
         </div>
-
-
     </div>
   </div>
 </template>
@@ -57,9 +55,7 @@ export default {
       return user.profile_pic
     },
     closePopup() {
-      // Cerrar el popup y restablecer la imagen seleccionada
       this.selectedImage = null;
-      this.toggleScroll();
     },
     // Mètode per prevenir el clic dret
     preventRightClick(event) {
@@ -86,6 +82,22 @@ export default {
         // Si está habilitado, desactívalo
         body.style.overflow = 'hidden';
       }
+    },
+    handlePopupClick(event) {
+      // Comprobar si el clic ocurrió dentro del contenedor
+      if (!event.target.closest('.front-container')) {
+        // Si el clic fue fuera del contenedor, cerrar el popup
+        this.closePopup();
+        this.clearSearch();
+      }
+    },
+    searchImages() {
+      this.$emit("filtrar-imagenes", this.titleSearch);
+      this.$emit("close-container");
+    },
+    clearSearch() {
+      this.titleSearch = "";
+      this.searchImages()
     }
   }
 }
@@ -109,6 +121,7 @@ export default {
   display: flex;
   background-color: white;
   max-width: 80%;
+  min-width: 1000px;
   text-align: center;
   padding: 20px;
   border-radius: 10px;
@@ -116,21 +129,44 @@ export default {
   justify-content: center;
   flex-direction: column;
 }
-
-.profile img {
-  width: 70px; /* Ajusta el ancho de la imagen según tus preferencias */
-  border-radius: 50%; /* Hace la imagen redonda */
-  margin: 10px 15px;
+.profile-container p {
+  margin: 0;
 }
 
-.profile{
+.profile-container {
   display: flex;
-  margin: 20px auto;
+  align-items: center;
+  background-color: rgb(52 58 64 / 10%);
+  border-radius: 5px;
+  border: 1px #ccc solid;
+  margin: 10px auto 30px;
 }
 
-.profile-user {
+.profile-pic {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin: auto 30px;
+}
+
+.profile-details {
   display: flex;
   flex-direction: column;
+  align-items: center; /* Alinea verticalmente dentro del .profile-details */
+  margin: 25px 15px;
 }
 
+.title {
+  font-size: 1.8em;
+  margin-bottom: 5px;
+}
+
+.full-name-other-profile {
+  font-weight: bold;
+  padding-bottom: 5px;
+}
+
+.biography {
+  color: #555;
+}
 </style>
