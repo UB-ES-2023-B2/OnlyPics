@@ -13,7 +13,7 @@
             <span v-else>❤</span>
         </span></p>
       </div>
-      <button v-if="userMoney >= selectedImage.price" @click="downloadImage" class="download-button">Download Image</button>
+      <button v-if="userMoney >= selectedImage.price" @click="descargarArchivo" class="download-button">Download Image</button>
     </div>
   </div>
 </template>
@@ -52,19 +52,49 @@ export default {
       // Método para cerrar el popup
       this.$emit('close');
     },
-    downloadImage() {
-      // Crea un element <a> amb l'atribut de descàrrega
-      const link = document.createElement('a');
-      link.href = this.selectedImage.url;
-      link.download = 'nom_de_la_imatge.jpg';
-      link.target = '_blank';
+    async descargarArchivo() {
+      // URL de la imagen
+      const urlImagen = this.selectedImage.url;
 
-      // Simula un clic al botó per iniciar la descàrrega
-      document.body.appendChild(link);
-      link.click();
+      // Realiza una solicitud para obtener el contenido de la imagen
+      const respuesta = await fetch(urlImagen);
+      const contenidoImagen = await respuesta.blob();
 
-      // Elimina l'element <a> després de la descàrrega
-      document.body.removeChild(link);
+      // Crea un objeto Blob con el contenido de la imagen y un tipo MIME
+      const blob = new Blob([contenidoImagen], {type: 'image/jpeg'}); // Ajusta el tipo MIME según el formato de la imagen
+
+      // Crea una URL del blob
+      const urlBlob = window.URL.createObjectURL(blob);
+
+      // Extraer la parte de la URL que necesitas
+      const shortUrlImagen = this.extraerParteDeURL(this.selectedImage.url);
+
+      // Crea un enlace invisible y haz clic en él para iniciar la descarga
+      const enlaceDescarga = document.createElement('a');
+      enlaceDescarga.href = urlBlob;
+      enlaceDescarga.download = shortUrlImagen;
+      enlaceDescarga.style.display = 'none';
+
+      // Agrega el enlace al DOM y haz clic en él
+      document.body.appendChild(enlaceDescarga);
+      enlaceDescarga.click();
+
+      // Elimina el enlace del DOM después de la descarga
+      document.body.removeChild(enlaceDescarga);
+
+      // Libera los recursos del blob y la URL
+      window.URL.revokeObjectURL(urlBlob);
+
+      this.closePopup()
+    },
+    extraerParteDeURL(urlCompleta) {
+      // Encuentra la última aparición de "/" en la URL
+      const ultimaBarra = urlCompleta.lastIndexOf('/');
+
+      // Extrae la parte de la URL que necesitas
+      const parteNecesaria = urlCompleta.substring(ultimaBarra + 1);
+
+      return parteNecesaria;
     },
     // Mètode per prevenir el clic dret
     preventRightClick(event) {
@@ -221,7 +251,7 @@ export default {
 
 .popup-image {
   max-width: 100%;
-  max-height: 700px;
+  max-height: 500px;
   margin: 10px 0;
 }
 

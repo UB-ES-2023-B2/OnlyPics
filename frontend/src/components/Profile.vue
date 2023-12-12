@@ -1,7 +1,7 @@
 <template>
   <div class="profile">
     <!-- Header Menu -->
-    <HeaderMenu title="Profile" :money="userState.user.available_money" />
+    <HeaderMenu title="Profile" @filtrar-imagenes="assignSearch" :money="userState.user.available_money" />
 
     <!-- Profile Container -->
     <div class="profile-container">
@@ -24,7 +24,7 @@
     </div>
     <!-- Uploaded Pics Grid -->
     <div class="pics-grid" v-if="photos">
-      <div v-for="photo in photos" :key="photo.id" class="photo">
+      <div v-for="photo in mostrarImagenesFiltradas()" :key="photo.id" class="photo">
           <img class="card-img-top" :src="photo.url" alt="" @click="openPopup(photo)">
         <div class="image-container">
           <p>{{ photo.title }}</p>
@@ -38,7 +38,7 @@
 
 <script>
 import FooterView from '@/components/FooterView.vue'
-import userState from '@/userState'
+import {userState} from '@/userState'
 import HeaderMenu from '@/components/HeaderMenu.vue'
 import PopUpProfileDelete from "@/components/PopUpProfileDelete.vue";
 import axios from 'axios'
@@ -50,6 +50,7 @@ export default {
     return {
       selectedImage: null,
       userState: userState,
+      searchFilter: "",
       photos: []
     }
   },
@@ -80,6 +81,22 @@ export default {
       // Cerrar el popup y restablecer la imagen seleccionada
       this.selectedImage = null;
       this.toggleScroll()
+    },
+    assignSearch(titleSearch) {
+      this.searchFilter = titleSearch
+    },
+    mostrarImagenesFiltradas() {
+      let imagenesMostrar = [...this.photos]
+
+      this.$parent.$on("buscar-imagenes", this.assignSearch);
+
+      console.log(this.searchFilter)
+      //Buscador de imagenes
+      if (this.searchFilter !== "") {
+        imagenesMostrar = imagenesMostrar.filter(photo => photo.title.toLowerCase().includes(this.searchFilter.toLowerCase()));
+      }
+
+      return imagenesMostrar
     },
     fetchUserPhotos (username) {
       try {
@@ -115,15 +132,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 * {
   box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
 }
 
-  .profile {
-    font-family: 'Arial', sans-serif;
-    /* Add your overall styles for the profile page here */
-  }
 .profile-container {
   display: flex;
   align-items: flex-start;
@@ -146,8 +160,8 @@ export default {
 }
   .profile-pic img {
     border-radius: 50%;
-    width: 100px;
-    height: 100px;
+    width: 200px;
+    height: 200px;
     /* Add styles for the profile pic here */
   }
 .text-latest{
@@ -156,30 +170,30 @@ export default {
   font-size: 20px;
   text-align: left;
   margin-left: 30px;
-
 }
-  .username {
-    font-family: 'Courgette', cursive;
-    font-size: 27px;
-    margin-left: 10px;
-    margin-top: 25px;
-    font-weight: 650;
-    /* Add styles for the username here */
-  }
 
-  .name {
-    font-family: 'Courgette', cursive;
-    font-size: 18px;
-    /* Add styles for the name here */
-  }
+.username {
+  font-family: 'Courgette', cursive;
+  font-size: 27px;
+  margin-left: 10px;
+  margin-top: 25px;
+  font-weight: 650;
+  /* Add styles for the username here */
+}
 
-  .biography {
-    font-family: 'Courgette', cursive;
-    margin-top: 20px;
-    /* Add styles for the biography here */
-  }
+.name {
+  font-family: 'Courgette', cursive;
+  font-size: 18px;
+  /* Add styles for the name here */
+}
 
-  .pics-grid {
+.biography {
+  font-family: 'Courgette', cursive;
+  margin-top: 20px;
+  /* Add styles for the biography here */
+}
+
+.pics-grid {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -189,7 +203,8 @@ export default {
   font-size: 20px;
   text-align: right;
   margin-left: 28px;
-    margin-right: 30px;
+  margin-right: 30px;
+  height: 100%;
 }
 
 .photo {
@@ -205,7 +220,7 @@ export default {
   background-color: #365b6d;
   text-align: center; /* Center the image within the container */
   padding: 10px 20px; /* Add padding around the image for separation */
-  color: #a2c0c0
+  color: #a2c0c0;
 }
 
 .card-img-top:hover {

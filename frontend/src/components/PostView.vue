@@ -3,9 +3,9 @@
     <div class="container">
       <h2 class="title">POST IMAGE</h2>
       <input type="file" ref="fileInput" style="display: none" @change="handleFileSelect" />
-      <button @click="openFileSelector">Seleccionar una imagen</button>
+      <button @click="openFileSelector">Choose an image</button>
       <img :src="selectedImage" v-if="selectedImage" alt="Imagen seleccionada" class="max-width-image" />
-      <input type="text" v-model="imageTitle" placeholder="Título de la imagen" />
+      <input type="text" v-model="imageTitle" placeholder="Title of the image" />
 
       <div class="checkboxes">
         <label>
@@ -23,8 +23,8 @@
 
       <!-- Botones al final de la página -->
       <div class="botones">
-        <button @click="uploadImage">POST</button>
-        <button @click="cancel">Cancel</button>
+        <button class="post" @click="uploadImage">POST</button>
+        <button class="delete" @click="cancel">Cancel</button>
       </div>
     </div>
   </div>
@@ -33,7 +33,7 @@
 <script>
 
 import axios from 'axios'
-import userState from '@/userState'
+import {userState} from '@/userState'
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = 'https://pnrmoqedbmcpxehltqvy.supabase.co';
@@ -153,12 +153,6 @@ button:hover {
 .max-width-image {
   max-width: 100%;
   max-height: 300px;
-  margin-top: 10px;
-}
-
-.max-width-image {
-  max-width: 100%;
-  max-height: 350px;
   margin-top: 10px;
 }
 

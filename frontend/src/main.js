@@ -5,7 +5,7 @@ import '@/../bootstrap/css/bootstrap.css'
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import userState from './userState'
+import {userState} from "@/userState"
 import axios from 'axios'
 import { createClient } from '@supabase/supabase-js';
 
@@ -19,8 +19,11 @@ Vue.config.productionTip = false
 userState.user.available_money = 0
 
 axios.defaults.withCredentials = true
-//axios.defaults.baseURL = 'https://onlypics.onrender.com'
-axios.defaults.baseURL = 'http://localhost:8000'
+
+
+axios.defaults.baseURL = 'https://onlypics.onrender.com'
+//axios.defaults.baseURL = 'http://localhost:8000'
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
