@@ -14,8 +14,20 @@
 </template>
 
 <script>
+import {userState, setUserState} from '@/userState'
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = 'https://pnrmoqedbmcpxehltqvy.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBucm1vcWVkYm1jcHhlaGx0cXZ5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwMDI1NDgxMywiZXhwIjoyMDE1ODMwODEzfQ.VkkazTWbRULNBVgwu56bjdHqSwzUnHriNNOs_6PpqEQ';
+const supabase = createClient(supabaseUrl, supabaseKey);
 export default {
   name: "PopUp",
+  data () {
+    return {
+      userId: userState.user.username,
+      available_money: userState.user.available_money
+    }
+  },
   props: {
     selectedImage: Object, // Objeto de imagen seleccionada,
     userMoney: Number
@@ -65,6 +77,8 @@ export default {
       // Libera los recursos del blob y la URL
       window.URL.revokeObjectURL(urlBlob);
 
+      this.available_money = this.available_money - this.selectedImage.price
+      this.fetchUpdatedMoney(this.available_money)
       this.closePopup()
     },
     extraerParteDeURL(urlCompleta) {
@@ -75,6 +89,22 @@ export default {
       const parteNecesaria = urlCompleta.substring(ultimaBarra + 1);
 
       return parteNecesaria;
+    },
+    fetchUpdatedMoney(available_money){
+      const parameters = {
+        available_money: available_money
+      };
+      supabase
+        .from('users')
+        .update(parameters)
+        .eq('username', this.userId)
+        .then((response) => {
+          console.log('Money updated successfully', response.data);})
+        .catch((error) => {
+          console.error('Error updating money:', error);
+        });
+      userState.user.available_money = available_money;
+      setUserState(userState);
     },
     // Mètode per prevenir el clic dret
     preventRightClick(event) {
