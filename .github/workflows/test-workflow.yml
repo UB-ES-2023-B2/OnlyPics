@@ -8,7 +8,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Change to project directory
-        run: cd Onlypics/frontend
+        run: cd Onlypics
         # Replace "/ruta/a/tu/proyecto" with the actual path to your project.
 
       - name: Clear npm cache
@@ -18,7 +18,7 @@ jobs:
         run: npm install
 
       - name: Check project directory
-        run: ls Onlypics/frontend
+        run: ls Onlypics
         # Replace "/ruta/a/tu/proyecto" with the actual path to your project.
 
       # Your existing Cypress run step
