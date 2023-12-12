@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 import models, schemas
 import repository
+from typing import List
 import os
 import sys
 
@@ -171,9 +172,51 @@ def delete_photo(photo_title: str, db: Session = Depends(get_db)):
         return repository.delete_photo(db, photo)
 
 @app.put("/photos/{photo_id}/", response_model=schemas.Photo)
-def update_photo(photo_id: int, photo_update: schemas.PhotoBase, user_id: str, db: Session = Depends(get_db)):
+def update_photo(photo_id: int, photo_update: schemas.PhotoBase, db: Session = Depends(get_db)):
     photo = repository.get_photo(db, photo_id)
     if photo:
-        return repository.update_photo(db, photo=photo, photo_update=photo_update, user_id=user_id)
+        return repository.update_photo(db, db_photo=photo, photo=photo_update)
     else:
         return repository.create_photo(db=db, photo=photo, user_id=user_id)
+
+
+@app.get("/like/{username}/{title}")
+def read_like_by_user_and_photo(username: str, title: str, db: Session = Depends(get_db)):
+    db_user = repository.get_user_by_username(db, username=username)
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    db_photo = repository.get_photo_by_title(db, title=title)
+    if not db_photo:
+        raise HTTPException(status_code=404, detail="Photo not found")
+
+    return repository.get_like_by_user_and_photo(db, db_user=db_user, db_photo=db_photo)
+
+@app.delete("/like/{username}/{title}", response_model=schemas.Like)
+def delete_like_by_user_and_photo(username: str, title: str, db: Session = Depends(get_db)):
+    db_user = repository.get_user_by_username(db, username=username)
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    db_photo = repository.get_photo_by_title(db, title=title)
+    if not db_photo:
+        raise HTTPException(status_code=404, detail="Photo not found")
+
+    db_like = repository.get_like_by_user_and_photo(db, db_user=db_user, db_photo=db_photo)
+    if not db_like:
+        raise HTTPException(status_code=404, detail="Like not found")
+
+    return repository.delete_like(db, db_like=db_like)
+
+@app.post("/like/{username}/{title}", response_model=schemas.Like)
+def create_like_by_user_and_photo(username: str, title: str, db: Session = Depends(get_db)):
+    db_user = repository.get_user_by_username(db, username=username)
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    db_photo = repository.get_photo_by_title(db, title=title)
+    if not db_photo:
+        raise HTTPException(status_code=404, detail="Photo not found")
+
+    return repository.create_like(db, db_user=db_user, db_photo=db_photo)
+

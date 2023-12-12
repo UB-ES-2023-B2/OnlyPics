@@ -1,3 +1,5 @@
+Inicio.vue
+
 <template>
   <div class="inicio">
     <HeaderMenu title="Home" @filtrar-imagenes="assignSearch" :money="userState.user.available_money"/>
@@ -53,12 +55,21 @@
                 <div class="card-body">
                   <h4 class="card-title">{{ imagen.title }}</h4>
                   <p class="card-text">{{ imagen.price }}<i class="fa-solid fa-coins"></i></p>
-                  <p class="card-text">{{ imagen.likes}}❤</p>
+                  <p style="display: inline-block;">{{ imagen.likes }}
+                    <span v-if="imagen.isLiked">❤</span>
+                    <span v-else>🖤</span>
+                  </p>
                 </div>
               </div>
             </div>
           </div>
-          <PopUp v-if="selectedImage" :selectedImage="selectedImage" :userMoney="userState.user.available_money" @close="closePopup"/>
+          <PopUp v-if="selectedImage"
+                 :selectedImage="selectedImage"
+                 :userMoney="userState.user.available_money"
+                 :user="userState.user"
+                 @likes-updated="updateLikesStatus"
+                 @close="closePopup"/>
+
         </div>
     </body>
     <footer-view/>
@@ -88,6 +99,7 @@ export default {
       filtrar: null,
       orden: null,
       photos: [],
+      like: null,
       users: [],
       searchFilter: "",
       searchUser: "",
@@ -116,6 +128,9 @@ export default {
               //Assuming the photos are in response.data.photos
               this.photos = response.data
               console.log(this.photos)
+              this.photos.forEach(imagen => {
+                this.likedImage(userState.user.username, imagen.title, imagen);
+              });
             } else{
               console.error('Error getting the backend photos: Invalid response status')
             }
@@ -228,6 +243,32 @@ export default {
     preventRightClick(event) {
       event.preventDefault();
     },
+    likedImage(username, title, imagen){
+       try{
+        const path = '/like/'+username+'/'+title
+
+        axios.get(path)
+          .then((response) => {
+            //Check if the request was successful
+            if(response.status === 200){
+              //Assuming the photos are in response.data.photos, replace this with the actual data structure
+              imagen.isLiked = response.data !== false;
+              console.log("imagen.isLiked: "+imagen.isLiked)
+              this.updateLikesStatus(imagen.isLiked,imagen)
+            } else{
+              console.error('Error getting the liked photos: Invalid response status')
+            }
+          })
+          .catch((error) => {
+            console.error('Error getting the liked photos', error)
+          })
+      } catch (error) {
+        console.error('Error in the try-catch block', error)
+      }
+    },
+    updateLikesStatus(newLiked, image){
+      this.$set(image,image.isLiked, newLiked)
+    },
     getUserPic(userId) {
       const defaultProfileImage = 'https://pnrmoqedbmcpxehltqvy.supabase.co/storage/v1/object/public/ProfileAssets/user_icon_149851.png'
       const userToFind = this.users.find(u => u.username === userId)
@@ -244,7 +285,6 @@ export default {
       console.log(this.userImages)
       console.log(this.localUser)
       this.showOtherUsers = true;
-
     }
   },
   created(){
