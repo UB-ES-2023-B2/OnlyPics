@@ -29,21 +29,17 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default {
   name: "PopUp",
-  data () {
-    return {
-      userId: userState.user.username,
-      available_money: userState.user.available_money
-    }
-  },
   props: {
     selectedImage: Object, // Objeto de imagen seleccionada,
     userMoney: Number,
     user: Object
   },
-    data() {
+  data() {
     return {
       response_like: null,
-      like: null
+      like: null,
+      userId: userState.user.username,
+      available_money: userState.user.available_money
     }
   },
   methods: {
@@ -176,25 +172,25 @@ export default {
           console.error('Error updating image:', error);
         });
     },
-    sumarLike(username, title){
+    sumarLike(username, title) {
       console.log("He entrado en el método sumarLike")
-      console.log("Usuario: "+username)
-      console.log("Foto: "+title)
-      try{
-        const path = '/like/'+username+'/'+title
-        console.log("Path: "+path)
+      console.log("Usuario: " + username)
+      console.log("Foto: " + title)
+      try {
+        const path = '/like/' + username + '/' + title
+        console.log("Path: " + path)
         axios.post(path)
           .then((response) => {
             //Check if the request was successful
-            if(response.status === 200){
+            if (response.status === 200) {
               //Assuming the photos are in response.data.photos, replace this with the actual data structure
               this.response_like = true
               this.selectedImage.likes = this.selectedImage.likes + 1
               this.fetchUpdatedLikes(this.selectedImage.likes)
               console.log("Nuevo valor de response_like:", this.response_like);
               this.selectedImage.isLiked = this.response_like
-              this.$emit('likes-updated',this.selectedImage.isLiked,this.selectedImage)
-            } else{
+              this.$emit('likes-updated', this.selectedImage.isLiked, this.selectedImage)
+            } else {
               console.error('Error creating the liked photos: Invalid response status')
             }
           })
@@ -204,6 +200,8 @@ export default {
       } catch (error) {
         console.error('Error in the try-catch block', error)
       }
+      this.available_money = this.available_money + 1
+      this.fetchUpdatedMoney(this.available_money)
     },
     eliminarLike(username, title){
       console.log("He entrado en el método eliminarLike")
@@ -233,6 +231,8 @@ export default {
       } catch (error) {
         console.error('Error in the try-catch block', error)
       }
+      this.available_money = this.available_money - 1
+      this.fetchUpdatedMoney(this.available_money)
     }
   },
   created() {
