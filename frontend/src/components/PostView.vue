@@ -3,9 +3,9 @@
     <div class="container">
       <h2 class="title">POST IMAGE</h2>
       <input type="file" ref="fileInput" style="display: none" @change="handleFileSelect" />
-      <button @click="openFileSelector">Seleccionar una imagen</button>
+      <button @click="openFileSelector">Choose an image</button>
       <img :src="selectedImage" v-if="selectedImage" alt="Imagen seleccionada" class="max-width-image" />
-      <input type="text" v-model="imageTitle" placeholder="Título de la imagen" />
+      <input type="text" v-model="imageTitle" placeholder="Title of the image" />
 
       <div class="checkboxes">
         <label>
@@ -23,8 +23,8 @@
 
       <!-- Botones al final de la página -->
       <div class="botones">
-        <button @click="uploadImage">POST</button>
-        <button @click="cancel">Cancel</button>
+        <button class="post" @click="uploadImage">POST</button>
+        <button class="delete" @click="cancel">Cancel</button>
       </div>
     </div>
   </div>
@@ -33,7 +33,7 @@
 <script>
 
 import axios from 'axios'
-import userState from '@/userState'
+import {userState,setUserState} from '@/userState'
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = 'https://pnrmoqedbmcpxehltqvy.supabase.co';
@@ -48,7 +48,8 @@ export default {
       selectedOption: 'public',
       imageTitle: '',
       imagePrice: 0,
-      userId: userState.user.username
+      userId: userState.user.username,
+      available_money: userState.user.available_money
     }
   },
   methods: {
@@ -98,12 +99,30 @@ export default {
       axios.post(path, parameters)
         .then((response) => {
           console.log('Image posted successfully', response.data)
+          this.available_money = this.available_money + 10
+          this.fetchUpdatedMoney(this.available_money)
         })
         .catch((error) => {
           console.error('Error', error)
           console.error(parameters)
         })
       this.$emit('cancel')
+    },
+    fetchUpdatedMoney(available_money){
+      const parameters = {
+        available_money: available_money
+      };
+      supabase
+        .from('users')
+        .update(parameters)
+        .eq('username', this.userId)
+        .then((response) => {
+          console.log('Money updated successfully', response.data);})
+        .catch((error) => {
+          console.error('Error updating money:', error);
+        });
+      userState.user.available_money = available_money;
+      setUserState(userState);
     },
     cancel () {
       this.$emit('cancel')

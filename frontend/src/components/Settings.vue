@@ -53,7 +53,7 @@
 import axios from 'axios'
 import HeaderMenu from '@/components/HeaderMenu.vue'
 import FooterView from '@/components/FooterView.vue'
-import userState from '@/userState'
+import { userState, setUserState } from '@/userState'
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = 'https://pnrmoqedbmcpxehltqvy.supabase.co';
@@ -104,6 +104,8 @@ export default {
         alert('Complete the form before updating')
         return
       }
+      // Password validation
+      const passwordToCheck = updateUser.password
       axios.put(path, updateUser) // Puedes usar axios.post si corresponde
         .then((res) => {
           console.log(updateUser)
@@ -122,13 +124,19 @@ export default {
             date_birth: formattedDate,
             profile_pic: res.data.profile_pic
           }
+          const newUserState = userState
+          setUserState(newUserState)
           this.$router.push({
               path: '/profile'
             })
         })
         .catch((error) => {
           console.error('Error saving information', error)
-          alert('An error occurred while saving information.')
+           if (!this.isPasswordValid(passwordToCheck)) {
+             alert('Password must contain an upper letter, lower letter, and a special character')
+           }else {
+             alert('An error occurred while saving information.')
+           }
         })
     },
     formatDate(inputDate) {
@@ -138,6 +146,15 @@ export default {
       const month = String(dateObj.getMonth() + 1).padStart(2, '0')
       const day = String(dateObj.getDate()).padStart(2, '0')
       return `${year}-${month}-${day}`
+    },
+    // Password validation function
+    isPasswordValid(password) {
+      // Check if the password contains an upper letter, a lower letter, and a special character
+      const hasUpperLetter = /[A-Z]/.test(password)
+      const hasLowerLetter = /[a-z]/.test(password)
+      const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password)
+
+      return hasUpperLetter && hasLowerLetter && hasSpecialChar
     },
     deleteAccount () {
       const path = '/user/' + userState.user.username // Reemplaza con la URL de tu servidor para eliminar cuentas
@@ -223,7 +240,7 @@ export default {
   flex-wrap: wrap;
   justify-content: center;
   max-width: 1000px;
-  margin: 0 auto;
+  margin: 20px auto;
 }
 
 .user-info-form {
@@ -276,6 +293,7 @@ textarea.styled-input {
   max-width: 100%;
   max-height: 150px;
   margin-top: 10px;
+  object-fit: cover;
 }
 
 button {

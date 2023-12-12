@@ -79,3 +79,19 @@ class User(UserBase):
     class Config:
         from_attributes = True
 
+
+class LikeBase(BaseModel):
+    user_id: str
+    photo_id: int
+
+
+class LikeCreate(LikeBase):
+    pass
+
+
+class Like(LikeBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+

@@ -50,9 +50,16 @@
 <script>
 
 import axios from 'axios'
-import userState from '@/userState'
+import { userState, setUserState } from "@/userState"
 
 export default {
+  mounted() {
+    if ( userState.logged ) {
+      this.$router.push({
+        path: '/inicio'
+      })
+    }
+  },
   name: 'LogIn',
   data () {
     return {
@@ -108,10 +115,13 @@ export default {
               profile_pic: res.data.profile_pic,
               data_birth: res.data.date_birth
             }
+            userState.logged = true
+            const newUserState = userState
+            setUserState(newUserState)
             this.$router.push({
               path: '/inicio'
             })
-            alert('Succesfully logged')
+            alert('Successfully logged')
           } else {
             // Password is incorrect, show an error message
             alert('Incorrect Password')
