@@ -16,7 +16,7 @@ models.Base.metadata.create_all(bind=engine)  # Creem la base de dades amb els m
 
 app = FastAPI()
 
-origins = ["https://blue-grass-0a70c6f03.4.azurestaticapps.net", "http://localhost:8080"]
+origins = ["https://pre-main--superlative-ganache-0e40d4.netlify.app", "http://localhost:8080"]
 
 app.add_middleware(
     CORSMiddleware,
