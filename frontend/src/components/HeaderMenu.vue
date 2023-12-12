@@ -169,6 +169,7 @@ header a{
 /*DESPLEGABLE*/
 /* Estils per al botó desplegable */
 .dropbtn {
+  font-family: 'Courgette', cursive;
   background-color: #568591;
   border-radius: 4px;
   color: white;
