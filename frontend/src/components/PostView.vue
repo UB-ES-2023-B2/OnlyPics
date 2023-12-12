@@ -48,7 +48,8 @@ export default {
       selectedOption: 'public',
       imageTitle: '',
       imagePrice: 0,
-      userId: userState.user.username
+      userId: userState.user.username,
+      available_money: userState.user.available_money
     }
   },
   methods: {
@@ -98,12 +99,30 @@ export default {
       axios.post(path, parameters)
         .then((response) => {
           console.log('Image posted successfully', response.data)
+          this.available_money = this.available_money + 10
+          this.fetchUpdatedMoney(this.available_money)
         })
         .catch((error) => {
           console.error('Error', error)
           console.error(parameters)
         })
       this.$emit('cancel')
+    },
+    fetchUpdatedMoney(available_money){
+      const parameters = {
+        available_money: available_money
+      };
+      supabase
+        .from('users')
+        .update(parameters)
+        .eq('username', this.userId)
+        .then((response) => {
+          console.log('Money updated successfully', response.data);})
+        .catch((error) => {
+          console.error('Error updating money:', error);
+        });
+      userState.user.available_money = available_money;
+      setUserState(userState);
     },
     cancel () {
       this.$emit('cancel')

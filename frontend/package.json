@@ -12,7 +12,7 @@
     "serve": "serve -s dist -p 8080"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.38.4",
+    "@supabase/supabase-js": "^2.39.0",
     "axios": "^1.6.0",
     "bootstrap-vue": "^2.23.1",
     "font-awesome": "^4.7.0",
