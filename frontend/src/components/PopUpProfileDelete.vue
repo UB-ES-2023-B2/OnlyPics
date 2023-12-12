@@ -43,12 +43,6 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const supabase = createClient(supabaseUrl, supabaseKey);
 export default {
   name: "PopUp",
-  data () {
-    return {
-      userId: userState.user.username,
-      available_money: userState.user.available_money
-    }
-  },
   props: {
     selectedImage: Object, // Objeto de imagen seleccionada,
   },
@@ -58,7 +52,9 @@ export default {
       isSaving: false,
       editedTitle: this.selectedImage.title,
       selectedOption: 'public',
-      imagePrice: 0
+      imagePrice: 0,
+      userId: userState.user.username,
+      available_money: userState.user.available_money
     };
   },
   methods: {
