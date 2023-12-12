@@ -33,7 +33,7 @@
 <script>
 
 import axios from 'axios'
-import {userState} from '@/userState'
+import {userState,setUserState} from '@/userState'
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = 'https://pnrmoqedbmcpxehltqvy.supabase.co';
