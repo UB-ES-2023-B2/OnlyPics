@@ -8,6 +8,8 @@ describe('Settings Page', () => {
 
   it('should update user information', () => {
     // Type valid information in the form fields
+    const fixtureFile = 'cypress/fixtures/testPrivate.jpg'
+    cy.get('input[type="file"]').selectFile(fixtureFile,{force:true})
     cy.get('#username').clear().type('nametest')
     cy.get('#password').clear().type('.12345aA')
     cy.get('#name').clear().type('NewName')
@@ -48,6 +50,8 @@ describe('Settings Page', () => {
   })
 
   it('should show an error if the password is invalid', () => {
+    const fixtureFile = 'cypress/fixtures/testPrivate.jpg'
+    cy.get('input[type="file"]').selectFile(fixtureFile,{force:true})
     // Type valid information in the form fields
     cy.get('#username').clear().type('newUsername')
     cy.get('#password').clear().type('invalidpassword')
@@ -62,7 +66,7 @@ describe('Settings Page', () => {
 
     // Assert that an alert appears with the invalid password message
     cy.once('window:alert', (str) => {
-      expect(str).to.equal('An error occurred while saving information.')
+      expect(str).to.equal('Password must contain an upper letter, lower letter, and a special character')
     })
   })
 })

@@ -37,7 +37,7 @@ Cypress.Commands.add('login', () => {
     // Verify alert
      cy.once('window:alert',(txt)=>
        //Mocha assertions
-       expect(txt).to.contains('Succesfully logged'))
+       expect(txt).to.contains('Successfully logged'))
     // Assert the URL after successful login
     cy.url().should('include', '/inicio')
 })
