@@ -5,14 +5,14 @@
         <h1><router-link to="/inicio">OnlyPics</router-link></h1>
         <div class="search-bar">
           <div class="search-bar">
-            <input type="text" v-model="titleSearch" placeholder="Search by title..." class="search-input" @input="searchImages">
+            <input type="text" v-model="titleSearch" placeholder="Search by title or username ..." class="search-input" @input="searchImages">
             <span v-if="titleSearch" @click="clearSearch" class="clear-icon">&#10006;</span>
             <!-- <button class="search-button" @click="searchImages">Search</button> -->
           </div>
         </div>
-        <div class="shopping-cart" style="margin-top: 10px">
+        <!-- <div class="shopping-cart" style="margin-top: 10px">
           <a href="#"><i class="fa-sharp fas fa-cart-shopping fa-xl" style="margin-left: 10px"></i></a>
-        </div>
+        </div> -->
         <p class="nav-money">{{ money }}<i class="fa-solid fa-sack-dollar fa-bounce" style="margin-left: 7px"></i></p>
 
         <button @click="toggleOverlay()" class="round-button">+</button>
