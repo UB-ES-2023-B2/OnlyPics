@@ -2,12 +2,32 @@
   <div class="main-container" @click="handlePopupClick">
     <div class="container" @click.stop>
       <span class="close-popup" @click="closePopup">&times;</span>
-      <h2>{{ selectedImage.title }}</h2>
+      <h2 v-if="!isEditing">{{ selectedImage.title }}</h2>
+      <input v-else v-model="editedTitle" type="text" placeholder="Enter new title" />
       <img :src="selectedImage.url" alt="" class="popup-image">
       <div style="text-align: center;">
         <p style="display: inline-block; margin-right: 15px;">{{ selectedImage.price }}<i class="fa-solid fa-coins"></i></p>
         <p style="display: inline-block;">{{ selectedImage.likes }}❤</p>
+
+        <div class="radio-buttons">
+          <label>
+            <input type="radio" v-model="selectedOption" value="public" /> Public
+          </label>
+          <label>
+            <input type="radio" v-model="selectedOption" value="private" /> Private
+          </label>
+        </div>
+
+        <div class="price" v-if="selectedOption === 'private'">
+          <label>
+            Price:
+            <input type="number" v-model="imagePrice" min="0"/>
+          </label>
+        </div>
+
         <button @click="DeleteImage">DELETE</button>
+        <button v-if="!isEditing" @click="startEditing">Edit</button>
+        <button v-else @click="saveChanges">{{ isSaving ? 'Save' : 'Save' }}</button>
       </div>
     </div>
   </div>
@@ -31,6 +51,15 @@ export default {
   },
   props: {
     selectedImage: Object, // Objeto de imagen seleccionada,
+  },
+  data() {
+    return {
+      isEditing: false,
+      isSaving: false,
+      editedTitle: this.selectedImage.title,
+      selectedOption: 'public',
+      imagePrice: 0
+    };
   },
   methods: {
     handlePopupClick(event) {
@@ -71,6 +100,33 @@ export default {
         })
       this.$emit('cancel')
       this.closePopup()
+    },
+    startEditing() {
+      this.isEditing = true;
+      this.editedTitle = this.selectedImage.title;
+      this.selectedOption = this.selectedImage.price !== 0 ? 'private' : 'public';
+      this.imagePrice = this.selectedImage.price; // Asigna el precio actual
+    },
+    async saveChanges() {
+      this.isSaving = true;
+      const newTitle = this.editedTitle.trim();
+      const path = '/photos/' + this.selectedImage.id + '/';
+
+      if (newTitle !== "") {
+        const priceToSend = this.selectedOption === 'public' ? 0 : this.imagePrice;
+        axios.put(path, {
+          user_id: this.selectedImage.user_id,
+          url: this.selectedImage.url,
+          title: newTitle,
+          price: priceToSend,
+          likes: this.selectedImage.likes,
+        })
+        this.isEditing = false;
+        this.isSaving = false;
+        this.closePopup();
+      } else {
+        alert("Please enter a valid title.");
+      }
     },
     fetchUpdatedMoney(available_money){
       const parameters = {

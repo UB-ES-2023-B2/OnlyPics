@@ -118,6 +118,23 @@ def delete_photo(db: Session, photo: models.Photo):
         db.rollback()
         return {"message": "An error occurred deleting the photo.", "error": str(e)}, 500
 
+
+
+def update_photo(db: Session, db_photo: models.Photo, photo: schemas.PhotoCreate):
+    try:
+        db_photo.url = photo.url
+        db_photo.title = photo.title
+        db_photo.price = photo.price
+        db_photo.likes = photo.likes
+        db_photo.user_id = photo.user_id
+
+        db.commit()
+        db.refresh(db_user)
+        return db_user
+    except:
+        db.rollback()
+        return {"message": "An error occurred updating the photo."}, 500
+
 def put_photo(db: Session, photo: models.Photo, photo_2: schemas.PhotoCreate, user_id: str):
     if photo_2.user_id and photo_2.user_id != user_id:
         raise ValueError("No puedes cambiar el usuario asociado a la foto.")
@@ -157,3 +174,4 @@ def create_like(db: Session, db_user: models.User, db_photo: models.Photo):
     except Exception as e:
         db.rollback()
         return {"message": "An error occurred creating the like.", "error": str(e)}, 500
+
