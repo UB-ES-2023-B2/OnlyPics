@@ -2,6 +2,6 @@ const { defineConfig } = require("cypress");
 
 module.exports = defineConfig({
   e2e: {
-    baseUrl: 'http://localhost:8080',
+    baseUrl: 'https://pre-main--superlative-ganache-0e40d4.netlify.app',
   },
 });
