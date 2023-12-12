@@ -87,7 +87,7 @@ export default {
 <style scoped>
 
 .main-container {
-  z-index: 4;
+  z-index: 103;
   flex: 1;
   position: absolute;
   top: 0;
@@ -100,9 +100,9 @@ export default {
   background-color: rgba(255, 255, 255, 0.8);
 }
 .container {
-  background-color: white;
+  background-color: #fff;
   width: 80%;
-  max-width: 600px;
+  max-width: 700px;
   padding: 10px;
   text-align: center;
   border-radius: 10px;
@@ -110,8 +110,10 @@ export default {
 }
 
 .popup-image {
-  max-width: 100%;
-  max-height: 500px;
+  max-width: 650px;
+  max-height: 580px;
+  width: auto;
+  height: auto;
   margin: 10px 0;
 }
 
