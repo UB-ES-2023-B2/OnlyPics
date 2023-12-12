@@ -114,7 +114,8 @@ export default {
           console.error('Error updating money:', error);
         });
       userState.user.available_money = available_money;
-      setUserState(userState);
+      const newUserState = userState;
+      setUserState(newUserState);
     },
     // Mètode per prevenir el clic dret
     preventRightClick(event) {
