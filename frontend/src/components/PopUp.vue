@@ -19,7 +19,6 @@
 </template>
 
 <script>
-
 import {userState, setUserState} from '@/userState'
 import axios from "axios";
 import {createClient} from "@supabase/supabase-js";
