@@ -18,7 +18,6 @@ Vue.config.productionTip = false
 
 axios.defaults.withCredentials = true
 
-
 axios.defaults.baseURL = 'https://onlypics.onrender.com'
 //axios.defaults.baseURL = 'http://localhost:8000'
 
