@@ -1,5 +1,6 @@
 from sqlalchemy import Boolean, MetaData, Column, ForeignKey, Integer, String, Date, Float, Enum, UniqueConstraint, \
-    Table, DateTime
+    Table, DateTime, ARRAY
+from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import relationship
 
 from database import Base
@@ -18,6 +19,7 @@ class User(Base):
     profile_pic = Column(String(50), nullable=True)
 
     photos = relationship('Photo', back_populates='user')
+    like_r = relationship('Like', back_populates='user')
 
     def __init__(self, username, email, name, lastname, biography, date_birth, profile_pic, available_money=0,):
         self.username = username
@@ -41,10 +43,28 @@ class Photo(Base):
 
     user_id = Column(String, ForeignKey('users.username'), nullable=False)
     user = relationship('User', back_populates='photos')
-
+    like_r = relationship('Like', back_populates='photo')
     def __init__(self, url, title, price, user_id, likes):
         self.url = url
         self.title = title
         self.price = price
         self.likes = likes
         self.user_id = user_id
+
+
+class Like(Base):
+    __tablename__ = 'likes'
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey('users.username'), nullable=False)
+    photo_id = Column(Integer, ForeignKey('photos.id'), nullable=False)
+    user = relationship('User', back_populates='like_r')
+    photo = relationship('Photo', back_populates='like_r')
+
+    def __init__(self, user_id, photo_id):
+        self.user_id = user_id
+        self.photo_id = photo_id
+
+
+User.like_r = relationship('Like', back_populates='user')
+Photo.like_r = relationship('Like', back_populates='photo')
+
