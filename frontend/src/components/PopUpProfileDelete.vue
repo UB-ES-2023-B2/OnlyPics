@@ -9,7 +9,7 @@
         <p style="display: inline-block; margin-right: 15px;">{{ selectedImage.price }}<i class="fa-solid fa-coins"></i></p>
         <p style="display: inline-block;">{{ selectedImage.likes }}❤</p>
 
-        <div class="radio-buttons">
+        <div class="radio-buttons" v-if="isEditing">
           <label>
             <input type="radio" v-model="selectedOption" value="public" /> Public
           </label>
@@ -120,6 +120,9 @@ export default {
         this.isEditing = false;
         this.isSaving = false;
         this.closePopup();
+        this.$router.push({
+          path: '/profile'
+        })
       } else {
         alert("Please enter a valid title.");
       }
