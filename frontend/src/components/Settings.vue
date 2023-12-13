@@ -31,7 +31,7 @@
 
         <label for="ProfilePhoto">
           <input type="file" ref="fileInput" style="display: none" @change="handleFileSelect" />
-          <button @click="openFileSelector">Seleccionar una imagen</button>
+          <button @click="openFileSelector">Select an image</button>
           <img :src="selectedImage" v-if="selectedImage" alt="Imagen seleccionada" class="max-width-image" />
         </label>
         <br><br>
