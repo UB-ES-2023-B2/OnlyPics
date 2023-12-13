@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="left-container">
-      <h1 class="text-white">OnlyPics</h1>
+      <img src="@/assets/OnlyPics.png" alt="Logo de OnlyPics">
     </div>
     <div class="right-container">
       <div class="col-md-6">
@@ -174,6 +174,18 @@ export default {
 </script>
 
 <style scoped>
+label {
+  font-family: "Courgette", cursive;
+
+}
+
+p {
+  font-family: "Courgette", cursive;
+}
+
+h2 {
+  font-family: "Courgette", cursive;
+}
 .container {
   display: flex;
   justify-content: center;
@@ -188,7 +200,7 @@ export default {
 
 .left-container {
   flex: 1;
-  background-color: #404040;
+  background-color: #000000;
   text-align: center;
   display: flex;
   flex-direction: column;
