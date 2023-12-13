@@ -2,12 +2,32 @@
   <div class="main-container" @click="handlePopupClick">
     <div class="container" @click.stop>
       <span class="close-popup" @click="closePopup">&times;</span>
-      <h2>{{ selectedImage.title }}</h2>
+      <h2 v-if="!isEditing">{{ selectedImage.title }}</h2>
+      <input v-else v-model="editedTitle" type="text" placeholder="Enter new title" />
       <img :src="selectedImage.url" alt="" class="popup-image">
       <div style="text-align: center;">
-        <p style="display: inline-block; margin-right: 15px;">{{ selectedImage.price }}🪙</p>
+        <p style="display: inline-block; margin-right: 15px;">{{ selectedImage.price }}<i class="fa-solid fa-coins"></i></p>
         <p style="display: inline-block;">{{ selectedImage.likes }}❤</p>
+
+        <div class="radio-buttons" v-if="isEditing">
+          <label>
+            <input type="radio" v-model="selectedOption" value="public" /> Public
+          </label>
+          <label>
+            <input type="radio" v-model="selectedOption" value="private" /> Private
+          </label>
+        </div>
+
+        <div class="price" v-if="selectedOption === 'private'">
+          <label>
+            Price:
+            <input type="number" v-model="imagePrice" min="0"/>
+          </label>
+        </div>
+
         <button @click="DeleteImage">DELETE</button>
+        <button v-if="!isEditing" @click="startEditing">Edit</button>
+        <button v-else @click="saveChanges">{{ isSaving ? 'Save' : 'Save' }}</button>
       </div>
     </div>
   </div>
@@ -16,6 +36,7 @@
 <script>
 import axios from "axios";
 import {createClient} from "@supabase/supabase-js";
+import {userState,setUserState} from "@/userState";
 
 const supabaseUrl = 'https://pnrmoqedbmcpxehltqvy.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBucm1vcWVkYm1jcHhlaGx0cXZ5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwMDI1NDgxMywiZXhwIjoyMDE1ODMwODEzfQ.VkkazTWbRULNBVgwu56bjdHqSwzUnHriNNOs_6PpqEQ';
@@ -24,6 +45,17 @@ export default {
   name: "PopUp",
   props: {
     selectedImage: Object, // Objeto de imagen seleccionada,
+  },
+  data() {
+    return {
+      isEditing: false,
+      isSaving: false,
+      editedTitle: this.selectedImage.title,
+      selectedOption: 'public',
+      imagePrice: 0,
+      userId: userState.user.username,
+      available_money: userState.user.available_money
+    };
   },
   methods: {
     handlePopupClick(event) {
@@ -55,14 +87,61 @@ export default {
             alert(error.message)
             return;
           }
+          this.available_money = this.available_money - 10
+          this.fetchUpdatedMoney(this.available_money)
           console.log('Image Deleted successfully', response.data)
+          window.location.reload();
         })
         .catch((error) => {
           console.error('Error', error)
         })
       this.$emit('cancel')
       this.closePopup()
-    }
+    },
+    startEditing() {
+      this.isEditing = true;
+      this.editedTitle = this.selectedImage.title;
+      this.selectedOption = this.selectedImage.price !== 0 ? 'private' : 'public';
+      this.imagePrice = this.selectedImage.price; // Asigna el precio actual
+    },
+    async saveChanges() {
+      this.isSaving = true;
+      const newTitle = this.editedTitle.trim();
+      const path = '/photos/' + this.selectedImage.id + '/';
+
+      if (newTitle !== "") {
+        const priceToSend = this.selectedOption === 'public' ? 0 : this.imagePrice;
+        axios.put(path, {
+          user_id: this.selectedImage.user_id,
+          url: this.selectedImage.url,
+          title: newTitle,
+          price: priceToSend,
+          likes: this.selectedImage.likes,
+        })
+        this.isEditing = false;
+        this.isSaving = false;
+        this.closePopup();
+        window.location.reload();
+      } else {
+        alert("Please enter a valid title.");
+      }
+    },
+    fetchUpdatedMoney(available_money){
+      const parameters = {
+        available_money: available_money
+      };
+      supabase
+        .from('users')
+        .update(parameters)
+        .eq('username', this.userId)
+        .then((response) => {
+          console.log('Money updated successfully', response.data);})
+        .catch((error) => {
+          console.error('Error updating money:', error);
+        });
+      userState.user.available_money = available_money;
+      setUserState(userState);
+    },
   }
 }
 </script>
@@ -84,7 +163,7 @@ export default {
 .container {
   background-color: white;
   width: 80%;
-  max-width: 600px;
+  max-width: 700px;
   padding: 10px;
   text-align: center;
   border-radius: 10px;
@@ -92,8 +171,10 @@ export default {
 }
 
 .popup-image {
-  max-width: 100%;
-  max-height: 700px;
+  max-width: 650px;
+  max-height: 580px;
+  width: auto;
+  height: auto;
   margin: 10px 0;
 }
 

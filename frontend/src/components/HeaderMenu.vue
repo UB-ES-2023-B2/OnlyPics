@@ -5,13 +5,14 @@
         <h1><router-link to="/inicio">OnlyPics</router-link></h1>
         <div class="search-bar">
           <div class="search-bar">
-            <input type="text" placeholder="Search..." class="search-input">
-            <button class="search-button">Search</button>
+            <input type="text" v-model="titleSearch" placeholder="Search by title or username ..." class="search-input" @input="searchImages">
+            <span v-if="titleSearch" @click="clearSearch" class="clear-icon">&#10006;</span>
+            <!-- <button class="search-button" @click="searchImages">Search</button> -->
           </div>
         </div>
-        <div class="shopping-cart" style="margin-top: 10px">
+        <!-- <div class="shopping-cart" style="margin-top: 10px">
           <a href="#"><i class="fa-sharp fas fa-cart-shopping fa-xl" style="margin-left: 10px"></i></a>
-        </div>
+        </div> -->
         <p class="nav-money">{{ money }}<i class="fa-solid fa-sack-dollar fa-bounce" style="margin-left: 7px"></i></p>
 
         <button @click="toggleOverlay()" class="round-button">+</button>
@@ -21,7 +22,7 @@
           <div class="dropdown-content">
             <router-link to="/profile">Profile <i class="fas fa-circle-user" style="margin-left: 20px"></i></router-link>
             <router-link to="/settings">Settings <i class="fas fa-cog" style="margin-left: 10px"></i></router-link>
-            <a href="/">Log Out <i class="fas fa-sign-out-alt" style="margin-left: 13px"></i></a>
+            <a href="/" @click="logOut">Log Out <i class="fas fa-sign-out-alt" style="margin-left: 13px"></i></a>
           </div>
         </div>
       </div>
@@ -36,9 +37,10 @@
     </header>
   </div>
 </template>
+
 <script>
-import userState from '@/userState'
 import PostView from '@/components/PostView.vue'
+import { userState, setUserState } from "@/userState";
 
 export default {
   name: 'HeaderMenu',
@@ -53,13 +55,38 @@ export default {
   },
   data () {
     return {
-      showOverlay: false
+      showOverlay: false,
+      titleSearch: ""
     }
   },
   components: { PostView },
   methods: {
     toggleOverlay () {
       this.showOverlay = !this.showOverlay
+    },
+    logOut () {
+      const newUserState = {
+        user: {
+          available_money: 0,
+          password: null,
+          username: null,
+          email: null,
+          profile_pic: null,
+          biography: null,
+          name: null,
+          lastname: null,
+          date_birth: null
+        },
+        logged: false
+      }
+      setUserState(newUserState)
+    },
+    searchImages() {
+      this.$emit("filtrar-imagenes", this.titleSearch);
+    },
+    clearSearch() {
+      this.titleSearch = "";
+      this.searchImages()
     }
   }
 }
@@ -102,9 +129,11 @@ header a{
 /*SEARCH-BAR*/
 .search-bar {
     display: flex;
+    align-items: center;
     background-color: white;
     border-radius: 4px;
     padding: 2px;
+    width: 250px;
 }
 .nav-money {
   color: white; /* Set the text color to white */
@@ -132,9 +161,15 @@ header a{
   background-color: #39535b;
 }
 
+.clear-icon {
+  cursor: pointer;
+  margin-right: 5px;
+}
+
 /*DESPLEGABLE*/
 /* Estils per al botó desplegable */
 .dropbtn {
+  font-family: 'Courgette', cursive;
   background-color: #568591;
   border-radius: 4px;
   color: white;

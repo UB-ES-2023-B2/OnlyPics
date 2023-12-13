@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="left-container">
-      <h1 class="text-white">OnlyPics</h1>
+      <img src="@/assets/OnlyPics.png" alt="Logo de OnlyPics">
     </div>
     <div class="right-container">
       <div class="col-md-6">
@@ -50,9 +50,16 @@
 <script>
 
 import axios from 'axios'
-import userState from '@/userState'
+import { userState, setUserState } from "@/userState"
 
 export default {
+  mounted() {
+    if ( userState.logged ) {
+      this.$router.push({
+        path: '/inicio'
+      })
+    }
+  },
   name: 'LogIn',
   data () {
     return {
@@ -108,10 +115,13 @@ export default {
               profile_pic: res.data.profile_pic,
               data_birth: res.data.date_birth
             }
+            userState.logged = true
+            const newUserState = userState
+            setUserState(newUserState)
             this.$router.push({
               path: '/inicio'
             })
-            alert('Succesfully logged')
+            alert('Successfully logged')
           } else {
             // Password is incorrect, show an error message
             alert('Incorrect Password')
@@ -164,6 +174,18 @@ export default {
 </script>
 
 <style scoped>
+label {
+  font-family: "Courgette", cursive;
+
+}
+
+p {
+  font-family: "Courgette", cursive;
+}
+
+h2 {
+  font-family: "Courgette", cursive;
+}
 .container {
   display: flex;
   justify-content: center;
@@ -178,7 +200,7 @@ export default {
 
 .left-container {
   flex: 1;
-  background-color: #404040;
+  background-color: #000000;
   text-align: center;
   display: flex;
   flex-direction: column;

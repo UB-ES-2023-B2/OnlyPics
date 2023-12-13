@@ -1,24 +1,46 @@
-<template>
+<template xmlns="http://www.w3.org/1999/html">
   <div class="main-container" @click="handlePopupClick">
     <div class="container" @click.stop>
       <span class="close-popup" @click="closePopup">&times;</span>
       <h2>{{ selectedImage.title }}</h2>
-      <img :src="selectedImage.url" :alt="selectedImage.title" class="popup-image" @contextmenu.prevent="preventRightClick">
+      <img :src="selectedImage.url" :alt="this.selectedImage.title" class="popup-image" @contextmenu.prevent="preventRightClick">
       <div style="text-align: center;">
-        <p style="display: inline-block; margin-right: 15px;">{{ selectedImage.price }}🪙</p>
-        <p style="display: inline-block;">{{ selectedImage.likes }}❤</p>
+        <p style="display: inline-block; margin-right: 15px;">{{ selectedImage.price }}<i class="fa-solid fa-coins"></i></p>
+        <p style="display: inline-block;">
+          {{ selectedImage.likes }}
+          <span @click="toggleLike(response_like)">
+            <span v-if="response_like === false">🖤</span>
+            <span v-else>❤</span>
+        </span></p>
       </div>
-      <button v-if="userMoney >= selectedImage.price" @click="downloadImage" class="download-button">Download Image</button>
+      <button v-if="userMoney >= selectedImage.price" @click="descargarArchivo" class="download-button">Download Image</button>
     </div>
   </div>
 </template>
 
 <script>
+import {userState, setUserState} from '@/userState'
+import axios from "axios";
+import {createClient} from "@supabase/supabase-js";
+
+const supabaseUrl = 'https://pnrmoqedbmcpxehltqvy.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBucm1vcWVkYm1jcHhlaGx0cXZ5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwMDI1NDgxMywiZXhwIjoyMDE1ODMwODEzfQ.VkkazTWbRULNBVgwu56bjdHqSwzUnHriNNOs_6PpqEQ';
+const supabase = createClient(supabaseUrl, supabaseKey);
+
 export default {
   name: "PopUp",
   props: {
     selectedImage: Object, // Objeto de imagen seleccionada,
-    userMoney: Number
+    userMoney: Number,
+    user: Object
+  },
+  data() {
+    return {
+      response_like: null,
+      like: null,
+      userId: userState.user.username,
+      available_money: userState.user.available_money
+    }
   },
   methods: {
     handlePopupClick(event) {
@@ -32,24 +54,197 @@ export default {
       // Método para cerrar el popup
       this.$emit('close');
     },
-    downloadImage() {
-      // Crea un element <a> amb l'atribut de descàrrega
-      const link = document.createElement('a');
-      link.href = this.selectedImage.url;
-      link.download = 'nom_de_la_imatge.jpg';
-      link.target = '_blank';
+    async descargarArchivo() {
+      // URL de la imagen
+      const urlImagen = this.selectedImage.url;
 
-      // Simula un clic al botó per iniciar la descàrrega
-      document.body.appendChild(link);
-      link.click();
+      // Realiza una solicitud para obtener el contenido de la imagen
+      const respuesta = await fetch(urlImagen);
+      const contenidoImagen = await respuesta.blob();
 
-      // Elimina l'element <a> després de la descàrrega
-      document.body.removeChild(link);
+      // Crea un objeto Blob con el contenido de la imagen y un tipo MIME
+      const blob = new Blob([contenidoImagen], {type: 'image/jpeg'}); // Ajusta el tipo MIME según el formato de la imagen
+
+      // Crea una URL del blob
+      const urlBlob = window.URL.createObjectURL(blob);
+
+      // Extraer la parte de la URL que necesitas
+      const shortUrlImagen = this.extraerParteDeURL(this.selectedImage.url);
+
+      // Crea un enlace invisible y haz clic en él para iniciar la descarga
+      const enlaceDescarga = document.createElement('a');
+      enlaceDescarga.href = urlBlob;
+      enlaceDescarga.download = shortUrlImagen;
+      enlaceDescarga.style.display = 'none';
+
+      // Agrega el enlace al DOM y haz clic en él
+      document.body.appendChild(enlaceDescarga);
+      enlaceDescarga.click();
+
+      // Elimina el enlace del DOM después de la descarga
+      document.body.removeChild(enlaceDescarga);
+
+      // Libera los recursos del blob y la URL
+      window.URL.revokeObjectURL(urlBlob);
+
+      this.available_money = this.available_money - this.selectedImage.price
+      this.fetchUpdatedMoney(this.available_money)
+      this.closePopup()
+    },
+    extraerParteDeURL(urlCompleta) {
+      // Encuentra la última aparición de "/" en la URL
+      const ultimaBarra = urlCompleta.lastIndexOf('/');
+
+      // Extrae la parte de la URL que necesitas
+      const parteNecesaria = urlCompleta.substring(ultimaBarra + 1);
+
+      return parteNecesaria;
+    },
+    fetchUpdatedMoney(available_money){
+      const parameters = {
+        available_money: available_money
+      };
+      supabase
+        .from('users')
+        .update(parameters)
+        .eq('username', this.userId)
+        .then((response) => {
+          console.log('Money updated successfully', response.data);})
+        .catch((error) => {
+          console.error('Error updating money:', error);
+        });
+      userState.user.available_money = available_money;
+      const newUserState = userState;
+      setUserState(newUserState);
     },
     // Mètode per prevenir el clic dret
     preventRightClick(event) {
       event.preventDefault();
+    },
+    toggleLike(response_like){
+      console.log("ResponseLike recibido en toggle like: "+response_like)
+      if(response_like !== null){
+        if(response_like !== false){
+          this.eliminarLike(this.user.username, this.selectedImage.title);
+        }else{
+          this.sumarLike(this.user.username, this.selectedImage.title);
+        }
+      }else{
+        console.error("response_like es null: " + response_like);
+      }
+      this.$emit('likes-updated', response_like);
+      this.fetchUpdatedLikes();
+    },
+    likedImageFrontend(username, title){
+      console.log("He entrado en el método likedImageFrontend");
+      return new Promise((resolve, reject) => {
+        const path = '/like/' + username + '/' + title;
+        axios.get(path)
+          .then((response) => {
+            console.log("Response del método like popup: " + response.data);
+            if (response.status === 200) {
+              this.response_like = response.data;
+              console.log("Response likedImage PopUp: " + this.response_like);
+              resolve(this.response_like);
+            } else {
+              console.error('Error getting the liked photos: Invalid response status');
+              reject('Error getting the liked photos: Invalid response status');
+            }
+          })
+          .catch((error) => {
+            console.error('Error getting the liked photos', error);
+            reject('Error getting the liked photos');
+          });
+      });
+    },
+    fetchUpdatedLikes(likes){
+      const parameters = {
+        likes: likes
+      };
+
+      supabase
+        .from('photos')
+        .update(parameters)
+        .eq('id', this.selectedImage.id)
+        .then((response) => {
+          console.log('Image updated successfully', response.data);
+        })
+        .catch((error) => {
+          console.error('Error updating image:', error);
+        });
+    },
+    sumarLike(username, title) {
+      console.log("He entrado en el método sumarLike")
+      console.log("Usuario: " + username)
+      console.log("Foto: " + title)
+      try {
+        const path = '/like/' + username + '/' + title
+        console.log("Path: " + path)
+        axios.post(path)
+          .then((response) => {
+            //Check if the request was successful
+            if (response.status === 200) {
+              //Assuming the photos are in response.data.photos, replace this with the actual data structure
+              this.response_like = true
+              this.selectedImage.likes = this.selectedImage.likes + 1
+              this.fetchUpdatedLikes(this.selectedImage.likes)
+              console.log("Nuevo valor de response_like:", this.response_like);
+              this.selectedImage.isLiked = this.response_like
+              this.$emit('likes-updated', this.selectedImage.isLiked, this.selectedImage)
+            } else {
+              console.error('Error creating the liked photos: Invalid response status')
+            }
+          })
+          .catch((error) => {
+            console.error('Error creating the liked photos', error)
+          })
+      } catch (error) {
+        console.error('Error in the try-catch block', error)
+      }
+      this.available_money = this.available_money + 1
+      this.fetchUpdatedMoney(this.available_money)
+    },
+    eliminarLike(username, title){
+      console.log("He entrado en el método eliminarLike")
+      console.log("Usuario: "+username)
+      console.log("Foto: "+title)
+      try{
+        const path = '/like/'+username+'/'+title
+        console.log("Path: "+path)
+        axios.delete(path)
+          .then((response) => {
+            //Check if the request was successful
+            if(response.status === 200){
+              //Assuming the photos are in response.data.photos, replace this with the actual data structure
+              this.response_like = false
+              this.selectedImage.likes = this.selectedImage.likes - 1
+              this.fetchUpdatedLikes(this.selectedImage.likes)
+              console.log("Nuevo valor de response_like:", this.response_like);
+              this.selectedImage.isLiked = this.response_like
+              this.$emit('likes-updated',this.selectedImage.isLiked, this.selectedImage)
+            } else{
+              console.error('Error deleting the liked photos: Invalid response status')
+            }
+          })
+          .catch((error) => {
+            console.error('Error deleting the liked photos', error)
+          })
+      } catch (error) {
+        console.error('Error in the try-catch block', error)
+      }
+      this.available_money = this.available_money - 1
+      this.fetchUpdatedMoney(this.available_money)
     }
+  },
+  created() {
+    this.likedImageFrontend(this.user.username, this.selectedImage.title)
+      .then((response_like) => {
+        console.log("Initial response_like value:", response_like);
+        this.selectedImage.isLiked = response_like;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 }
 </script>
@@ -57,7 +252,7 @@ export default {
 <style scoped>
 
 .main-container {
-  z-index: 4;
+  z-index: 103;
   flex: 1;
   position: absolute;
   top: 0;
@@ -70,9 +265,9 @@ export default {
   background-color: rgba(255, 255, 255, 0.8);
 }
 .container {
-  background-color: white;
+  background-color: #fff;
   width: 80%;
-  max-width: 600px;
+  max-width: 700px;
   padding: 10px;
   text-align: center;
   border-radius: 10px;
@@ -80,8 +275,10 @@ export default {
 }
 
 .popup-image {
-  max-width: 100%;
-  max-height: 700px;
+  max-width: 650px;
+  max-height: 580px;
+  width: auto;
+  height: auto;
   margin: 10px 0;
 }
 
