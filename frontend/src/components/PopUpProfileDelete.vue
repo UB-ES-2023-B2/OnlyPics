@@ -90,6 +90,7 @@ export default {
           this.available_money = this.available_money - 10
           this.fetchUpdatedMoney(this.available_money)
           console.log('Image Deleted successfully', response.data)
+          window.location.reload();
         })
         .catch((error) => {
           console.error('Error', error)
@@ -120,9 +121,7 @@ export default {
         this.isEditing = false;
         this.isSaving = false;
         this.closePopup();
-        this.$router.push({
-          path: '/profile'
-        })
+        window.location.reload();
       } else {
         alert("Please enter a valid title.");
       }
