@@ -163,7 +163,7 @@ export default {
 .container {
   background-color: white;
   width: 80%;
-  max-width: 600px;
+  max-width: 700px;
   padding: 10px;
   text-align: center;
   border-radius: 10px;
@@ -171,8 +171,10 @@ export default {
 }
 
 .popup-image {
-  max-width: 100%;
-  max-height: 700px;
+  max-width: 650px;
+  max-height: 580px;
+  width: auto;
+  height: auto;
   margin: 10px 0;
 }
 

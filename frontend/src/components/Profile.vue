@@ -23,11 +23,13 @@
       <p class="text-latest"> Latest Pics </p>
     </div>
     <!-- Uploaded Pics Grid -->
-    <div class="pics-grid" v-if="photos">
-      <div v-for="photo in mostrarImagenesFiltradas()" :key="photo.id" class="photo">
+    <div class="gallery" v-if="photos">
+      <div class="row">
+        <div v-for="photo in mostrarImagenesFiltradas()" class="col-md-4" :class="{ 'col-md-6': mostrarImagenesFiltradas().length === 2 }">
           <img class="card-img-top" :src="photo.url" alt="" @click="openPopup(photo)">
-        <div class="image-container">
-          <p>{{ photo.title }}</p>
+          <div class="usuario-info">
+            <p>{{ photo.title }}</p>
+          </div>
         </div>
       </div>
       <PopUpProfileDelete v-if="selectedImage" :selectedImage="selectedImage" @close="closePopup" />
@@ -132,7 +134,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 * {
   box-sizing: border-box;
   font-family: 'Arial', sans-serif;
@@ -142,6 +144,7 @@ export default {
   display: flex;
   align-items: flex-start;
   justify-content: start;
+  margin: 20px;
 }
 
 .profile-pic {
@@ -158,12 +161,12 @@ export default {
 .biography {
   /* Add any desired styles for the biography here */
 }
-  .profile-pic img {
-    border-radius: 50%;
-    width: 200px;
-    height: 200px;
-    /* Add styles for the profile pic here */
-  }
+.profile-pic img {
+  border-radius: 50%;
+  width: 200px;
+  height: 200px;
+  /* Add styles for the profile pic here */
+}
 .text-latest{
   font-family: 'Courgette', cursive;
   margin-top: 60px;
@@ -207,6 +210,14 @@ export default {
   height: 100%;
 }
 
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Centra las imágenes */
+  max-width: 1000px; /* Ancho máximo de la galería */
+  margin: 0 auto; /* Centra la galería en la página */
+}
+
 .photo {
   width: calc(33.33% - 10px); /* 10px is the gap between columns, adjust as needed */
   margin-bottom: 20px; /* Add spacing between rows */
@@ -216,20 +227,43 @@ export default {
 }
 
 .image-container {
-  max-width: 100%;
+  max-width: 300px;
   background-color: #365b6d;
   text-align: center; /* Center the image within the container */
   padding: 10px 20px; /* Add padding around the image for separation */
   color: #a2c0c0;
 }
 
+.card-img-top {
+  width: 100%; /* Ajusta la imagen al 100% del contenedor */
+  height: 300px;
+  object-fit: cover; /* Ajusta la imagen sin deformarla */
+}
+
 .card-img-top:hover {
   transform: scale(1.025); /* Ajusta el valor según sea necesario para el aumento de tamaño en el hover */
   background-color: rgba(255, 255, 255, 0.6);
+  .usuario-info:hover {
+    transform: scale(1.025); /* Ajusta el valor según sea necesario para el aumento de tamaño en el hover */
+  }
 }
 
 img {
   width: 100%;
   height: auto; /* Maintain aspect ratio */
 }
+
+.usuario-info {
+  display: flex;
+  align-items: center; /* Alinea verticalmente en el centro */
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+  background-color: #0c5460;
+  width: 100%;
+  justify-content: center;
+  color: white;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
 </style>
