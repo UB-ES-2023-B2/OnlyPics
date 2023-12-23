@@ -45,13 +45,13 @@ Inicio.vue
           <div class="row">
             <!-- Imágenes aleatorias -->
             <div v-for="imagen in mostrarImagenesFiltradas()" :key="imagen.id" class="col-md-4" :class="{ 'col-md-6': mostrarImagenesFiltradas().length === 2 }">
-              <div class="card" @click="openPopup(imagen)" :class="{'blur': shouldApplyBlur}">
+              <div class="card" @click="openPopup(imagen)">
                 <div class="usuario-info">
                   <!-- 👤  Este es el emoji de usuario -->
                   <img :src="getUserPic(imagen.user_id)" alt="Imagen de perfil del usuario">
                   <span class="img-user">{{ imagen.user_id }}</span>
                 </div>
-                <img class="card-img-top" :src="imagen.url" :alt="imagen.title" @contextmenu.prevent="preventRightClick">
+                <img class="card-img-top" :src="imagen.url" :alt="imagen.title" @contextmenu.prevent="preventRightClick" :class="{'blur': shouldApplyBlur(imagen)}">
                 <div class="card-body">
                   <h4 class="card-title">{{ imagen.title }}</h4>
                   <p class="card-text">{{ imagen.price }}<i class="fa-solid fa-coins"></i></p>
@@ -525,8 +525,8 @@ select{
   border-radius: 50%; /* Hace la imagen redonda */
   margin: 10px 15px;
 }
-.blur {
-    filter: blur(5px); /* Adjust the blur intensity as needed */
+.card-img-top.blur {
+    filter: blur(10px); /* Adjust the blur intensity as needed */
   }
 
 .none {
