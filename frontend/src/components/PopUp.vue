@@ -1,9 +1,9 @@
 <template xmlns="http://www.w3.org/1999/html">
   <div class="main-container" @click="handlePopupClick">
-    <div class="container" :class="{'blur': shouldApplyBlurToPopup}" @click.stop>
+    <div class="container" @click.stop>
       <span class="close-popup" @click="closePopup">&times;</span>
       <h2>{{ selectedImage.title }}</h2>
-      <img :src="selectedImage.url" :alt="this.selectedImage.title" class="popup-image" @contextmenu.prevent="preventRightClick">
+      <img :src="selectedImage.url" :alt="this.selectedImage.title" class="popup-image" @contextmenu.prevent="preventRightClick" :class="{'blur': shouldApplyBlurToPopup}">
       <div style="text-align: center;">
         <p style="display: inline-block; margin-right: 15px;">{{ selectedImage.price }}<i class="fa-solid fa-coins"></i></p>
         <p style="display: inline-block;">
@@ -303,8 +303,8 @@ p {
 .close-popup:hover {
   color: #174048;
 }
-.container.blur{
-  filter: blur(25px)
+.popup-image.blur{
+  filter: blur(26px)
 }
 .container button {
   /* Estilos del botón para descargar la imagen */
