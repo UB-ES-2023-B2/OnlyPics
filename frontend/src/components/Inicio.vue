@@ -91,9 +91,6 @@ export default {
     userState () {
       return userState
     },
-    shouldApplyBlur(imagen){
-      return imagen.price > 0
-    }
   },
   components: {FooterView, HeaderMenu, PopUp, OtherUsers},
   data () {
@@ -113,6 +110,9 @@ export default {
     }
   },
   methods: {
+     shouldApplyBlur(imagen){
+      return imagen.price > 0
+    },
     mostrarFiltrosDialog(){
       this.mostrarFiltros = true;
       console.log('mostrarFiltros:', this.mostrarFiltros);
