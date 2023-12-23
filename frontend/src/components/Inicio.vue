@@ -91,8 +91,8 @@ export default {
     userState () {
       return userState
     },
-    shouldApplyBlur(){
-      return this.mostrarImagenesFiltradas().some(imagen => imagen.price > 0)
+    shouldApplyBlur(imagen){
+      return imagen.price > 0
     }
   },
   components: {FooterView, HeaderMenu, PopUp, OtherUsers},
