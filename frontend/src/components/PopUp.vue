@@ -9,8 +9,8 @@
         <p style="display: inline-block;">
           {{ selectedImage.likes }}
           <span @click="toggleLike(response_like)">
-            <span v-if="response_like === false">🖤</span>
-            <span v-else>❤</span>
+            <i v-if="response_like === false" class="fa-solid fa-heart" style="color: #000000;"></i>
+            <i v-else class="fa-solid fa-heart" style="color: #ff0000;"></i>
         </span></p>
       </div>
       <button v-if="userMoney >= selectedImage.price" @click="descargarArchivo" class="download-button">Download Image</button>

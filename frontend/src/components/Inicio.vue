@@ -45,7 +45,7 @@ Inicio.vue
           <div class="row">
             <!-- Imágenes aleatorias -->
             <div v-for="imagen in mostrarImagenesFiltradas()" :key="imagen.id" class="col-md-4" :class="{ 'col-md-6': mostrarImagenesFiltradas().length === 2 }">
-              <div class="card" @click="openPopup(imagen)">
+              <div class="card" @click="openPopup(imagen)" :class="{'blur': shouldApplyBlur}">
                 <div class="usuario-info">
                   <!-- 👤  Este es el emoji de usuario -->
                   <img :src="getUserPic(imagen.user_id)" alt="Imagen de perfil del usuario">
@@ -56,8 +56,9 @@ Inicio.vue
                   <h4 class="card-title">{{ imagen.title }}</h4>
                   <p class="card-text">{{ imagen.price }}<i class="fa-solid fa-coins"></i></p>
                   <p style="display: inline-block;">{{ imagen.likes }}
-                    <span v-if="imagen.isLiked">❤</span>
-                    <span v-else>🖤</span>
+                    <i v-if="imagen.isLiked" class="fa-solid fa-heart" style="color: #ff0000;"></i>
+                    <i v-else class="fa-solid fa-heart" style="color: #000000;"></i>
+
                   </p>
                 </div>
               </div>
@@ -89,6 +90,9 @@ export default {
   computed: {
     userState () {
       return userState
+    },
+    shouldApplyBlur(){
+      return this.mostrarImagenesFiltradas().some(imagen => imagen.price > 0)
     }
   },
   components: {FooterView, HeaderMenu, PopUp, OtherUsers},
@@ -521,9 +525,13 @@ select{
   border-radius: 50%; /* Hace la imagen redonda */
   margin: 10px 15px;
 }
+.blur {
+    filter: blur(5px); /* Adjust the blur intensity as needed */
+  }
 
 .none {
   display: none;
 }
+
 
 </style>
