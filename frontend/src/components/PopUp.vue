@@ -1,6 +1,6 @@
 <template xmlns="http://www.w3.org/1999/html">
   <div class="main-container" @click="handlePopupClick">
-    <div class="container" @click.stop>
+    <div class="container" :class="{'blur': shouldApplyBlurToPopup}" @click.stop>
       <span class="close-popup" @click="closePopup">&times;</span>
       <h2>{{ selectedImage.title }}</h2>
       <img :src="selectedImage.url" :alt="this.selectedImage.title" class="popup-image" @contextmenu.prevent="preventRightClick">
@@ -43,6 +43,9 @@ export default {
     }
   },
   methods: {
+    shouldApplyBlurToPopup() {
+      return this.selectedImage.price > 0
+    },
     handlePopupClick(event) {
       // Comprobar si el clic ocurrió dentro del contenedor
       if (!event.target.closest('.container')) {
@@ -300,7 +303,9 @@ p {
 .close-popup:hover {
   color: #174048;
 }
-
+.container.blur{
+  filter: blur(25px)
+}
 .container button {
   /* Estilos del botón para descargar la imagen */
   margin: 5px 0; /* Espaciado superior para separar el botón del contenido anterior */
