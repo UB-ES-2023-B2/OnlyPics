@@ -16,10 +16,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 Vue.config.productionTip = false
 
-userState.user.available_money = 0
-
 axios.defaults.withCredentials = true
-
 
 axios.defaults.baseURL = 'https://onlypics.onrender.com'
 //axios.defaults.baseURL = 'http://localhost:8000'

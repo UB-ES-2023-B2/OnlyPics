@@ -101,6 +101,7 @@ export default {
           console.log('Image posted successfully', response.data)
           this.available_money = this.available_money + 10
           this.fetchUpdatedMoney(this.available_money)
+          window.location.reload();
         })
         .catch((error) => {
           console.error('Error', error)

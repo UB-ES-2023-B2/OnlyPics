@@ -9,7 +9,7 @@
         <p style="display: inline-block; margin-right: 15px;">{{ selectedImage.price }}<i class="fa-solid fa-coins"></i></p>
         <p style="display: inline-block;">{{ selectedImage.likes }}❤</p>
 
-        <div class="radio-buttons">
+        <div class="radio-buttons" v-if="isEditing">
           <label>
             <input type="radio" v-model="selectedOption" value="public" /> Public
           </label>
@@ -43,12 +43,6 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const supabase = createClient(supabaseUrl, supabaseKey);
 export default {
   name: "PopUp",
-  data () {
-    return {
-      userId: userState.user.username,
-      available_money: userState.user.available_money
-    }
-  },
   props: {
     selectedImage: Object, // Objeto de imagen seleccionada,
   },
@@ -58,7 +52,9 @@ export default {
       isSaving: false,
       editedTitle: this.selectedImage.title,
       selectedOption: 'public',
-      imagePrice: 0
+      imagePrice: 0,
+      userId: userState.user.username,
+      available_money: userState.user.available_money
     };
   },
   methods: {
@@ -94,6 +90,7 @@ export default {
           this.available_money = this.available_money - 10
           this.fetchUpdatedMoney(this.available_money)
           console.log('Image Deleted successfully', response.data)
+          window.location.reload();
         })
         .catch((error) => {
           console.error('Error', error)
@@ -124,6 +121,7 @@ export default {
         this.isEditing = false;
         this.isSaving = false;
         this.closePopup();
+        window.location.reload();
       } else {
         alert("Please enter a valid title.");
       }
@@ -165,7 +163,7 @@ export default {
 .container {
   background-color: white;
   width: 80%;
-  max-width: 600px;
+  max-width: 700px;
   padding: 10px;
   text-align: center;
   border-radius: 10px;
@@ -173,8 +171,10 @@ export default {
 }
 
 .popup-image {
-  max-width: 100%;
-  max-height: 700px;
+  max-width: 650px;
+  max-height: 580px;
+  width: auto;
+  height: auto;
   margin: 10px 0;
 }
 

@@ -56,8 +56,9 @@ Inicio.vue
                   <h4 class="card-title">{{ imagen.title }}</h4>
                   <p class="card-text">{{ imagen.price }}<i class="fa-solid fa-coins"></i></p>
                   <p style="display: inline-block;">{{ imagen.likes }}
-                    <span v-if="imagen.isLiked">❤</span>
-                    <span v-else>🖤</span>
+                    <i v-if="imagen.isLiked" class="fa-solid fa-heart" style="color: #ff0000;"></i>
+                    <i v-else class="fa-solid fa-heart" style="color: #000000;"></i>
+
                   </p>
                 </div>
               </div>

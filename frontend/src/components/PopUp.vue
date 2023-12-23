@@ -9,8 +9,8 @@
         <p style="display: inline-block;">
           {{ selectedImage.likes }}
           <span @click="toggleLike(response_like)">
-            <span v-if="response_like === false">🖤</span>
-            <span v-else>❤</span>
+            <i v-if="response_like === false" class="fa-solid fa-heart" style="color: #000000;"></i>
+            <i v-else class="fa-solid fa-heart" style="color: #ff0000;"></i>
         </span></p>
       </div>
       <button v-if="userMoney >= selectedImage.price" @click="descargarArchivo" class="download-button">Download Image</button>
@@ -29,21 +29,17 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default {
   name: "PopUp",
-  data () {
-    return {
-      userId: userState.user.username,
-      available_money: userState.user.available_money
-    }
-  },
   props: {
     selectedImage: Object, // Objeto de imagen seleccionada,
     userMoney: Number,
     user: Object
   },
-    data() {
+  data() {
     return {
       response_like: null,
-      like: null
+      like: null,
+      userId: userState.user.username,
+      available_money: userState.user.available_money
     }
   },
   methods: {
@@ -118,7 +114,8 @@ export default {
           console.error('Error updating money:', error);
         });
       userState.user.available_money = available_money;
-      setUserState(userState);
+      const newUserState = userState;
+      setUserState(newUserState);
     },
     // Mètode per prevenir el clic dret
     preventRightClick(event) {
@@ -176,25 +173,25 @@ export default {
           console.error('Error updating image:', error);
         });
     },
-    sumarLike(username, title){
+    sumarLike(username, title) {
       console.log("He entrado en el método sumarLike")
-      console.log("Usuario: "+username)
-      console.log("Foto: "+title)
-      try{
-        const path = '/like/'+username+'/'+title
-        console.log("Path: "+path)
+      console.log("Usuario: " + username)
+      console.log("Foto: " + title)
+      try {
+        const path = '/like/' + username + '/' + title
+        console.log("Path: " + path)
         axios.post(path)
           .then((response) => {
             //Check if the request was successful
-            if(response.status === 200){
+            if (response.status === 200) {
               //Assuming the photos are in response.data.photos, replace this with the actual data structure
               this.response_like = true
               this.selectedImage.likes = this.selectedImage.likes + 1
               this.fetchUpdatedLikes(this.selectedImage.likes)
               console.log("Nuevo valor de response_like:", this.response_like);
               this.selectedImage.isLiked = this.response_like
-              this.$emit('likes-updated',this.selectedImage.isLiked,this.selectedImage)
-            } else{
+              this.$emit('likes-updated', this.selectedImage.isLiked, this.selectedImage)
+            } else {
               console.error('Error creating the liked photos: Invalid response status')
             }
           })
@@ -204,6 +201,8 @@ export default {
       } catch (error) {
         console.error('Error in the try-catch block', error)
       }
+      this.available_money = this.available_money + 1
+      this.fetchUpdatedMoney(this.available_money)
     },
     eliminarLike(username, title){
       console.log("He entrado en el método eliminarLike")
@@ -233,6 +232,8 @@ export default {
       } catch (error) {
         console.error('Error in the try-catch block', error)
       }
+      this.available_money = this.available_money - 1
+      this.fetchUpdatedMoney(this.available_money)
     }
   },
   created() {
@@ -251,7 +252,7 @@ export default {
 <style scoped>
 
 .main-container {
-  z-index: 4;
+  z-index: 103;
   flex: 1;
   position: absolute;
   top: 0;
@@ -264,9 +265,9 @@ export default {
   background-color: rgba(255, 255, 255, 0.8);
 }
 .container {
-  background-color: white;
+  background-color: #fff;
   width: 80%;
-  max-width: 600px;
+  max-width: 700px;
   padding: 10px;
   text-align: center;
   border-radius: 10px;
@@ -274,8 +275,10 @@ export default {
 }
 
 .popup-image {
-  max-width: 100%;
-  max-height: 500px;
+  max-width: 650px;
+  max-height: 580px;
+  width: auto;
+  height: auto;
   margin: 10px 0;
 }
 
