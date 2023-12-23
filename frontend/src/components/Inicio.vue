@@ -526,7 +526,8 @@ select{
   margin: 10px 15px;
 }
 .card-img-top.blur {
-    filter: blur(25px); /* Adjust the blur intensity as needed */
+    filter: blur(26px); /* Adjust the blur intensity as needed */
+
   }
 
 .none {
